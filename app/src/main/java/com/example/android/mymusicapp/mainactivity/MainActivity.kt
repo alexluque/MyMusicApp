@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         initProperties()
-        loadData(this)
+        loadData()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadData(mainActivity: MainActivity) {
+    private fun loadData() {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 presenter.getSongs("Eminem", viewAdapter, myDataset)

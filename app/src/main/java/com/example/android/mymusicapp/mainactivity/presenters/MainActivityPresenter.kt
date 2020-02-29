@@ -9,10 +9,11 @@ import com.example.android.mymusicapp.mainactivity.network.services.DeezerArtist
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
 
 class MainActivityPresenter(private val activity: MainActivity) {
 
-    val retrofit = RetrofitBuilder.instance
+    private val retrofit: Retrofit = RetrofitBuilder.instance
 
     fun getSongs(artist: String, viewAdapter: RecyclerView.Adapter<*>, myDataset: MutableList<Data>) {
         val service = retrofit.create(DeezerArtistService::class.java)
