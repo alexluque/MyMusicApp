@@ -1,43 +1,51 @@
 package com.example.android.mymusicapp.mainactivity
 
-import Data
+import ArtistData
+import android.Manifest
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android.mymusicapp.mainactivity.adapters.FavouriteArtistsAdapter
+import com.example.android.mymusicapp.mainactivity.contracts.MainActivityContract
+import com.example.android.mymusicapp.mainactivity.permission.listeners.LocationRecommendationsListener
 import com.example.android.mymusicapp.mainactivity.presenters.MainActivityPresenter
-import com.google.android.material.snackbar.Snackbar
+import com.karumi.dexter.Dexter
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class MainActivity : AppCompatActivity() {
 
-    private lateinit var presenter: MainActivityPresenter
+class MainActivity : AppCompatActivity(), MainActivityContract {
+
+    private val presenter: MainActivityPresenter by lazy { MainActivityPresenter() }
+    private val viewAdapter: RecyclerView.Adapter<*> by lazy { FavouriteArtistsAdapter(myDataSet) }
+    private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
+    private val myDataSet: MutableList<ArtistData> by lazy { loadData() }
+    private val recommendationButton: Button by lazy { recommend_button }
+
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
-    private lateinit var viewManager: RecyclerView.LayoutManager
-    private lateinit var myDataset: MutableList<Data>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        recyclerView = artists_recycler_view.apply {
+            layoutManager = viewManager
+            adapter = viewAdapter
         }
 
-        initProperties()
-        loadData()
+        setOnClickListeners()
+    }
+
+    private fun setOnClickListeners() {
+        recommendationButton.setOnClickListener {
+            Dexter.withActivity(this)
+                .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                .withListener(LocationRecommendationsListener(this, this)).check()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -52,44 +60,40 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initProperties() {
-        myDataset = mutableListOf()
-        presenter = MainActivityPresenter(this)
-        viewManager = LinearLayoutManager(this)
-        viewAdapter = MyAdapter(myDataset)
+    override fun showRandomRecommendations() = presenter.startRecommendationsActivity(this)
 
-        recyclerView = my_recycler_view.apply {
-            setHasFixedSize(true)
-            layoutManager = viewManager
-            adapter = viewAdapter
-
-        }
-    }
-
-    private fun loadData() {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                presenter.getSongs("Eminem", viewAdapter, myDataset)
-            }
-        }
-    }
-}
-
-private class MyAdapter(private val myDataset: MutableList<Data>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
-
-    class MyViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val textView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.my_text_view, parent, false) as TextView
-
-        return MyViewHolder(textView)
-    }
-
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.textView.text = myDataset[position].title
-    }
-
-    override fun getItemCount() = myDataset.size
-
+    // TODO: retrieves all artists with existing favourite songs within users database
+    private fun loadData(): MutableList<ArtistData> =
+        mutableListOf(
+            ArtistData(
+                119,
+                "Metallica",
+                "https://www.deezer.com/artist/119",
+                "https://api.deezer.com/artist/119/image",
+                "https://e-cdns-images.dzcdn.net/images/artist/b4719bc7a0ddb4a5be41277f37856ae6/56x56-000000-80-0-0.jpg",
+                "https://e-cdns-images.dzcdn.net/images/artist/b4719bc7a0ddb4a5be41277f37856ae6/250x250-000000-80-0-0.jpg",
+                "https://e-cdns-images.dzcdn.net/images/artist/b4719bc7a0ddb4a5be41277f37856ae6/500x500-000000-80-0-0.jpg",
+                "https://e-cdns-images.dzcdn.net/images/artist/b4719bc7a0ddb4a5be41277f37856ae6/1000x1000-000000-80-0-0.jpg",
+                31,
+                5573986,
+                true,
+                "https://api.deezer.com/artist/119/top?limit=50",
+                "artist"
+            ),
+            ArtistData(
+                1245,
+                "Trivium",
+                "https://www.deezer.com/artist/1245",
+                "https://api.deezer.com/artist/1245/image",
+                "https://cdns-images.dzcdn.net/images/artist/45a3d4384690950e830df0ca42fabc11/56x56-000000-80-0-0.jpg",
+                "https://cdns-images.dzcdn.net/images/artist/45a3d4384690950e830df0ca42fabc11/250x250-000000-80-0-0.jpg",
+                "https://cdns-images.dzcdn.net/images/artist/45a3d4384690950e830df0ca42fabc11/500x500-000000-80-0-0.jpg",
+                "https://cdns-images.dzcdn.net/images/artist/45a3d4384690950e830df0ca42fabc11/1000x1000-000000-80-0-0.jpg",
+                35,
+                236736,
+                true,
+                "https://api.deezer.com/artist/1245/top?limit=50",
+                "artist"
+            )
+        )
 }
