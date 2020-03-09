@@ -1,0 +1,12 @@
+<!-- TEXTOS CATALÀ -->
+<resources>
+    <string name="app_name">My Music App</string>
+    <string name="action_settings">Configuració</string>
+    <string name="artists_avatar">Avatar de l\'artista</string>
+    <string name="artists_name">Nom de l\'artista</string>
+    <string name="artists_fav_num">Preferits:</string>
+    <string name="artist_fav_num">0</string>
+    <string name="get_recommendations">Recomana\'m Artistes!</string>
+    <string name="artist_genere">Gènere musical</string>
+</resources>
+

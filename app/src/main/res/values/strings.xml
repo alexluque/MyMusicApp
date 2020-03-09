@@ -1,4 +1,11 @@
+<!-- ENGLISH TEXTS -->
 <resources>
     <string name="app_name">My Music App</string>
     <string name="action_settings">Settings</string>
+    <string name="artists_avatar">Artist\'s avatar</string>
+    <string name="artists_name">Artist\'s name</string>
+    <string name="artists_fav_num">Favourites:</string>
+    <string name="artist_fav_num">0</string>
+    <string name="get_recommendations">Get Recommendations!</string>
+    <string name="artist_genere">Artist\'s genere</string>
 </resources>
