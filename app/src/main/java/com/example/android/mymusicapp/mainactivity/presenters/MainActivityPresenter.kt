@@ -3,13 +3,12 @@ package com.example.android.mymusicapp.mainactivity.presenters
 import DeezerResponse
 import android.content.Context
 import android.content.Intent
-import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.util.Log
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.mymusicapp.mainactivity.RecommendationsActivity
-import com.example.android.mymusicapp.mainactivity.network.builders.RetrofitBuilder
-import com.example.android.mymusicapp.mainactivity.network.services.DeezerArtistService
+import com.example.android.mymusicapp.mainactivity.model.network.builders.RetrofitBuilder
+import com.example.android.mymusicapp.mainactivity.model.network.services.DeezerArtistService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -42,9 +41,7 @@ class MainActivityPresenter {
     }
 
     fun startRecommendationsActivity(context: Context) {
-        val intent = Intent(context, RecommendationsActivity::class.java).apply {
-            putExtra(EXTRA_MESSAGE, RecommendationsActivity.RECOMMEND)
-        }
+        val intent = Intent(context, RecommendationsActivity::class.java)
         startActivity(context, intent, null)
     }
 }

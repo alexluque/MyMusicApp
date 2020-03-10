@@ -4,8 +4,8 @@ import MusicoveryArtist
 import MusicoveryGetByCountryResponse
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.mymusicapp.mainactivity.network.builders.RetrofitBuilder
-import com.example.android.mymusicapp.mainactivity.network.services.MusicoveryArtistService
+import com.example.android.mymusicapp.mainactivity.model.network.builders.RetrofitBuilder
+import com.example.android.mymusicapp.mainactivity.model.network.services.MusicoveryArtistService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

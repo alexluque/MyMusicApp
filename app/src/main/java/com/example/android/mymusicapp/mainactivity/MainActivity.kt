@@ -9,13 +9,12 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.mymusicapp.mainactivity.adapters.FavouriteArtistsAdapter
-import com.example.android.mymusicapp.mainactivity.contracts.MainActivityContract
-import com.example.android.mymusicapp.mainactivity.permission.listeners.LocationRecommendationsListener
+import com.example.android.mymusicapp.mainactivity.ui.adapters.FavouriteArtistsAdapter
+import com.example.android.mymusicapp.mainactivity.ui.contracts.MainActivityContract
+import com.example.android.mymusicapp.mainactivity.model.listeners.LocationRecommendationsListener
 import com.example.android.mymusicapp.mainactivity.presenters.MainActivityPresenter
 import com.karumi.dexter.Dexter
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 class MainActivity : AppCompatActivity(), MainActivityContract {
 
@@ -62,8 +61,8 @@ class MainActivity : AppCompatActivity(), MainActivityContract {
 
     override fun showRandomRecommendations() = presenter.startRecommendationsActivity(this)
 
-    // TODO: retrieves all artists with existing favourite songs within users database
     private fun loadData(): MutableList<ArtistData> =
+        // TODO: retrieves all artists with existing favourite songs within users database
         mutableListOf(
             ArtistData(
                 119,

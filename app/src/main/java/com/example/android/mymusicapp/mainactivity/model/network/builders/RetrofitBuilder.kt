@@ -1,4 +1,4 @@
-package com.example.android.mymusicapp.mainactivity.network.builders
+package com.example.android.mymusicapp.mainactivity.model.network.builders
 
 import com.example.android.mymusicapp.mainactivity.BuildConfig
 import com.example.android.mymusicapp.mainactivity.extensions.getInstance

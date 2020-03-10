@@ -1,4 +1,4 @@
-package com.example.android.mymusicapp.mainactivity.adapters
+package com.example.android.mymusicapp.mainactivity.ui.adapters
 
 import MusicoveryArtist
 import android.view.LayoutInflater

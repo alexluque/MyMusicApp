@@ -1,10 +1,10 @@
-package com.example.android.mymusicapp.mainactivity.permission.listeners
+package com.example.android.mymusicapp.mainactivity.model.listeners
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Geocoder
 import android.location.LocationManager
-import com.example.android.mymusicapp.mainactivity.contracts.MainActivityContract
+import com.example.android.mymusicapp.mainactivity.ui.contracts.MainActivityContract
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse

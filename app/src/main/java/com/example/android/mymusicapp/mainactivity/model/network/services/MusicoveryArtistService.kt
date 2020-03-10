@@ -1,4 +1,4 @@
-package com.example.android.mymusicapp.mainactivity.network.services
+package com.example.android.mymusicapp.mainactivity.model.network.services
 
 import MusicoveryGetByCountryResponse
 import retrofit2.Call
