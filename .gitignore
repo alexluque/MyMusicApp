@@ -19,3 +19,4 @@ local.properties
 build/
 /out/
 /build/
+.idea/detekt.xml
