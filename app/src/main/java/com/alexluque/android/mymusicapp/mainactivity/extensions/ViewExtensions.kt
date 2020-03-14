@@ -1,7 +1,9 @@
 package com.alexluque.android.mymusicapp.mainactivity.extensions
 
+import android.view.View
 import android.widget.ImageView
 import com.alexluque.android.mymusicapp.mainactivity.R
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -16,3 +18,5 @@ fun ImageView.loadImage(url: String) {
             .into(view)
     }
 }
+
+fun View.makeShortSnackbar(msg: String) = Snackbar.make(this, msg, Snackbar.LENGTH_SHORT).show()

@@ -8,5 +8,6 @@
     <string name="artist_fav_num">0</string>
     <string name="get_recommendations">Recomiéndame Artistas!</string>
     <string name="artist_genere">Género musical</string>
+    <string name="no_internet">No hay conexión a Internet...</string>
 </resources>
 

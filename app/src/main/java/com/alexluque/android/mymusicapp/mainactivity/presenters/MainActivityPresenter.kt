@@ -17,7 +17,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivityPresenter {
+class MainActivityPresenter(context: Context) {
 
     fun getSongs(artist: String, viewAdapter: RecyclerView.Adapter<*>, myDataSet: MutableList<Any>) {
         GlobalScope.launch(Dispatchers.IO) {

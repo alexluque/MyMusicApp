@@ -5,10 +5,12 @@ import android.Manifest
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alexluque.android.mymusicapp.mainactivity.model.controllers.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.presenters.MainActivityPresenter
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.FavouriteArtistsAdapter
 import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.MainActivityContract
@@ -20,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), MainActivityContract {
 
-    private val presenter: MainActivityPresenter by lazy { MainActivityPresenter() }
+    private val presenter: MainActivityPresenter by lazy { MainActivityPresenter(this) }
     private val viewAdapter: RecyclerView.Adapter<*> by lazy { FavouriteArtistsAdapter(myDataSet) }
     private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
     private val myDataSet: MutableList<ArtistData> by lazy { loadData() }
@@ -40,14 +42,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract {
         }
 
         setOnClickListeners()
-    }
-
-    private fun setOnClickListeners() {
-        recommendationButton.setOnClickListener {
-            Dexter.withActivity(this)
-                .withPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                .withListener(LocationRecommendationsListener(this, this, fusedClient)).check()
-        }
+        registerConnectivityControllerCallbacks()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -65,6 +60,17 @@ class MainActivity : AppCompatActivity(), MainActivityContract {
     override fun showRecommendations(countryName: String) = presenter.startRecommendationsActivity(this, countryName)
 
     override fun showDefaultRecommendations(countryName: String) = presenter.startRecommendationsActivity(this, countryName)
+
+    private fun setOnClickListeners() {
+        val view = findViewById<View>(android.R.id.content)
+        recommendationButton.setOnClickListener {
+            Dexter.withActivity(this)
+                .withPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                .withListener(LocationRecommendationsListener(this, view, this, fusedClient)).check()
+        }
+    }
+
+    private fun registerConnectivityControllerCallbacks() = ConnectivityController.registerCallback(this)
 
     private fun loadData(): MutableList<ArtistData> =
         // TODO: retrieves all artists with existing favourite songs within users database
