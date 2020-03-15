@@ -1,15 +1,14 @@
 package com.alexluque.android.mymusicapp.mainactivity.model.network.services
 
 import MusicoveryGetByCountryResponse
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface MusicoveryArtistService {
 
     @GET("artist.php")
-    fun getArtistsByLocation(
+    suspend fun getArtistsByLocation(
         @Query("location") location: String,
         @Query("fct") getFromLocation: String = "getfromlocation"
-    ): Call<MusicoveryGetByCountryResponse>
+    ): MusicoveryGetByCountryResponse
 }

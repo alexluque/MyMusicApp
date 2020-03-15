@@ -3,8 +3,6 @@ package com.alexluque.android.mymusicapp.mainactivity
 import ArtistData
 import android.Manifest
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +20,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), MainActivityContract {
 
-    private val presenter: MainActivityPresenter by lazy { MainActivityPresenter(this) }
+    private val mainActivityView: View by lazy { findViewById<View>(android.R.id.content) }
+    private val presenter: MainActivityPresenter by lazy { MainActivityPresenter() }
     private val viewAdapter: RecyclerView.Adapter<*> by lazy { FavouriteArtistsAdapter(myDataSet) }
     private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
     private val myDataSet: MutableList<ArtistData> by lazy { loadData() }
@@ -36,41 +35,35 @@ class MainActivity : AppCompatActivity(), MainActivityContract {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        presenter.onCreate(this)
+
         recyclerView = artists_recycler_view.apply {
             layoutManager = viewManager
             adapter = viewAdapter
         }
 
         setOnClickListeners()
-        registerConnectivityControllerCallbacks()
+        registerConnectivityControllerCallback()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDestroy()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+    override fun showRecommendations(countryName: String) = presenter.onRecommendationsClicked(this, countryName)
 
-    override fun showRecommendations(countryName: String) = presenter.startRecommendationsActivity(this, countryName)
-
-    override fun showDefaultRecommendations(countryName: String) = presenter.startRecommendationsActivity(this, countryName)
+    override fun showDefaultRecommendations(countryName: String) = presenter.onRecommendationsClicked(this, countryName)
 
     private fun setOnClickListeners() {
-        val view = findViewById<View>(android.R.id.content)
         recommendationButton.setOnClickListener {
             Dexter.withActivity(this)
                 .withPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                .withListener(LocationRecommendationsListener(this, view, this, fusedClient)).check()
+                .withListener(LocationRecommendationsListener(this, mainActivityView, this, fusedClient)).check()
         }
     }
 
-    private fun registerConnectivityControllerCallbacks() = ConnectivityController.registerCallback(this)
+    private fun registerConnectivityControllerCallback() = ConnectivityController.registerCallback(this)
 
     private fun loadData(): MutableList<ArtistData> =
         // TODO: retrieves all artists with existing favourite songs within users database

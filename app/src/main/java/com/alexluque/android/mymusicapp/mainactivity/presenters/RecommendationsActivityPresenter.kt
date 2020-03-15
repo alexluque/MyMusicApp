@@ -1,35 +1,39 @@
 package com.alexluque.android.mymusicapp.mainactivity.presenters
 
 import MusicoveryArtist
-import MusicoveryGetByCountryResponse
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.model.network.builders.RetrofitBuilder
 import com.alexluque.android.mymusicapp.mainactivity.model.network.services.MusicoveryArtistService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.RecommendationsActivityContract
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class RecommendationsActivityPresenter {
+class RecommendationsActivityPresenter : MyCoroutineScope by MyCoroutineScope.Implementation() {
 
-    fun showRecommendations(viewAdapter: RecyclerView.Adapter<*>, myDataSet: MutableList<MusicoveryArtist>, country: String = DEFAULT_COUNTRY) {
-        val service = RetrofitBuilder.musicoveryInstance.create(MusicoveryArtistService::class.java)
-        service.getArtistsByLocation(country.toLowerCase().trim()).enqueue(object : Callback<MusicoveryGetByCountryResponse> {
+    private var contract: RecommendationsActivityContract? = null
 
-            override fun onFailure(call: Call<MusicoveryGetByCountryResponse>, t: Throwable) {
-                Log.e(this@RecommendationsActivityPresenter.javaClass.name, "Error while retrieving recommended artists from Musicovery's API...")
+    fun onCreate(contract: RecommendationsActivityContract) {
+        initScope()
+        this.contract = contract
+    }
+
+    fun onDestroy() {
+        cancelScope()
+        this.contract = null
+    }
+
+    fun showRecommendations(viewAdapter: RecyclerView.Adapter<*>, myDataSet: MutableList<MusicoveryArtist>, country: String) {
+        launch {
+            val artists = withContext(Dispatchers.IO) {
+                RetrofitBuilder.musicoveryInstance
+                    .create(MusicoveryArtistService::class.java)
+                    .getArtistsByLocation(country.toLowerCase().trim())
             }
-
-            override fun onResponse(call: Call<MusicoveryGetByCountryResponse>, response: Response<MusicoveryGetByCountryResponse>) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        myDataSet.clear()
-                        myDataSet.addAll(it.artists.artist)
-                        viewAdapter.notifyDataSetChanged()
-                    }
-                }
-            }
-        })
+            myDataSet.clear()
+            myDataSet.addAll(artists.artists.artist)
+            viewAdapter.notifyDataSetChanged()
+        }
     }
 
     companion object {
