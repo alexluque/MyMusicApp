@@ -4,6 +4,7 @@ import MusicoveryArtist
 import android.os.Bundle
 import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.view.View
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,7 @@ class RecommendationsActivity : AppCompatActivity(), RecommendationsActivityCont
     private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
     private val myDataSet: MutableList<MusicoveryArtist> by lazy { mutableListOf<MusicoveryArtist>() }
     private val countryName: String by lazy { intent.getStringExtra(EXTRA_MESSAGE) }
+    private val progressBar: ProgressBar by lazy { recommendations_progressBar }
 
     private lateinit var recyclerView: RecyclerView
 
@@ -28,7 +30,7 @@ class RecommendationsActivity : AppCompatActivity(), RecommendationsActivityCont
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recommendations)
 
-        presenter.onCreate(this)
+        presenter.onCreate(this, this)
 
         recyclerView = recommended_artists_recycler_view.apply {
             layoutManager = viewManager
@@ -43,9 +45,11 @@ class RecommendationsActivity : AppCompatActivity(), RecommendationsActivityCont
         presenter.onDestroy()
     }
 
-    override fun showRecommendations() {
-        presenter.showRecommendations(viewAdapter, myDataSet, countryName)
-        recommendationsView.makeLongSnackbar(getString(R.string.country_recommendations) + " ${countryName.toUpperCase()}")
+    override fun showRecommendations() = presenter.showRecommendations(viewAdapter, myDataSet, countryName)
+
+    override fun hideProgress() {
+        progressBar.visibility = View.GONE
     }
 
+    override fun makeSnackbar(msg: String) = recommendationsView.makeLongSnackbar(msg)
 }

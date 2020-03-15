@@ -1,7 +1,9 @@
 package com.alexluque.android.mymusicapp.mainactivity.presenters
 
 import MusicoveryArtist
+import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
+import com.alexluque.android.mymusicapp.mainactivity.R
 import com.alexluque.android.mymusicapp.mainactivity.model.network.builders.RetrofitBuilder
 import com.alexluque.android.mymusicapp.mainactivity.model.network.services.MusicoveryArtistService
 import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.RecommendationsActivityContract
@@ -12,10 +14,12 @@ import kotlinx.coroutines.withContext
 class RecommendationsActivityPresenter : MyCoroutineScope by MyCoroutineScope.Implementation() {
 
     private var contract: RecommendationsActivityContract? = null
+    private var context: Context? = null
 
-    fun onCreate(contract: RecommendationsActivityContract) {
+    fun onCreate(contract: RecommendationsActivityContract, context: Context) {
         initScope()
         this.contract = contract
+        this.context = context
     }
 
     fun onDestroy() {
@@ -33,6 +37,8 @@ class RecommendationsActivityPresenter : MyCoroutineScope by MyCoroutineScope.Im
             myDataSet.clear()
             myDataSet.addAll(artists.artists.artist)
             viewAdapter.notifyDataSetChanged()
+            contract?.hideProgress()
+            contract?.makeSnackbar(context?.getString(R.string.country_recommendations) + " ${country.toUpperCase()}")
         }
     }
 
