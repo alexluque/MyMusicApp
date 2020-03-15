@@ -9,4 +9,5 @@
     <string name="get_recommendations">Get Recommendations!</string>
     <string name="artist_genere">Artist\'s genere</string>
     <string name="no_internet">There is no Internet connection...</string>
+    <string name="country_recommendations">Showing recommendations for</string>
 </resources>

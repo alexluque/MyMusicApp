@@ -20,7 +20,7 @@ class RecommendationsActivityPresenter : MyCoroutineScope by MyCoroutineScope.Im
 
     fun onDestroy() {
         cancelScope()
-        this.contract = null
+        contract = null
     }
 
     fun showRecommendations(viewAdapter: RecyclerView.Adapter<*>, myDataSet: MutableList<MusicoveryArtist>, country: String) {

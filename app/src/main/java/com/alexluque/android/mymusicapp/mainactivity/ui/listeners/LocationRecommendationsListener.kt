@@ -5,7 +5,7 @@ import android.content.Context
 import android.location.Location
 import android.view.View
 import com.alexluque.android.mymusicapp.mainactivity.R
-import com.alexluque.android.mymusicapp.mainactivity.extensions.makeShortSnackbar
+import com.alexluque.android.mymusicapp.mainactivity.extensions.makeLongSnackbar
 import com.alexluque.android.mymusicapp.mainactivity.model.controllers.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.model.controllers.getCountry
 import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.MainActivityContract
@@ -44,7 +44,7 @@ class LocationRecommendationsListener(
                             }
                         }
                     }
-                    else -> view.makeShortSnackbar(context.getString(R.string.no_internet))
+                    else -> view.makeLongSnackbar(context.getString(R.string.no_internet))
                 }
             }
     }

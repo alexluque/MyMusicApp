@@ -3,9 +3,11 @@ package com.alexluque.android.mymusicapp.mainactivity
 import MusicoveryArtist
 import android.os.Bundle
 import android.provider.AlarmClock.EXTRA_MESSAGE
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alexluque.android.mymusicapp.mainactivity.extensions.makeLongSnackbar
 import com.alexluque.android.mymusicapp.mainactivity.presenters.RecommendationsActivityPresenter
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.RecommendedArtistsAdapter
 import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.RecommendationsActivityContract
@@ -13,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_recommendations.*
 
 class RecommendationsActivity : AppCompatActivity(), RecommendationsActivityContract {
 
+    private val recommendationsView: View by lazy { findViewById<View>(android.R.id.content) }
     private val presenter: RecommendationsActivityPresenter by lazy { RecommendationsActivityPresenter() }
     private val viewAdapter: RecyclerView.Adapter<*> by lazy { RecommendedArtistsAdapter(myDataSet) }
     private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
@@ -40,6 +43,9 @@ class RecommendationsActivity : AppCompatActivity(), RecommendationsActivityCont
         presenter.onDestroy()
     }
 
-    override fun showRecommendations() = presenter.showRecommendations(viewAdapter, myDataSet, countryName)
+    override fun showRecommendations() {
+        presenter.showRecommendations(viewAdapter, myDataSet, countryName)
+        recommendationsView.makeLongSnackbar(getString(R.string.country_recommendations) + " ${countryName.toUpperCase()}")
+    }
 
 }

@@ -19,4 +19,4 @@ fun ImageView.loadImage(url: String) {
     }
 }
 
-fun View.makeShortSnackbar(msg: String) = Snackbar.make(this, msg, Snackbar.LENGTH_SHORT).show()
+fun View.makeLongSnackbar(msg: String) = Snackbar.make(this, msg, Snackbar.LENGTH_LONG).show()

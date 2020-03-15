@@ -9,5 +9,6 @@
     <string name="get_recommendations">Recomiéndame Artistas!</string>
     <string name="artist_genere">Género musical</string>
     <string name="no_internet">No hay conexión a Internet...</string>
+    <string name="country_recommendations">Mostrando recomendaciones para</string>
 </resources>
 
