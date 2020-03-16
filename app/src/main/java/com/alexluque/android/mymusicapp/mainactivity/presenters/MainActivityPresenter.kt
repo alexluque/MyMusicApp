@@ -6,6 +6,7 @@ import android.provider.AlarmClock.EXTRA_MESSAGE
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.RecommendationsActivity
+import com.alexluque.android.mymusicapp.mainactivity.model.controllers.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.model.network.builders.RetrofitBuilder
 import com.alexluque.android.mymusicapp.mainactivity.model.network.services.DeezerArtistService
 import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.MainActivityContract
@@ -28,15 +29,17 @@ class MainActivityPresenter : MyCoroutineScope by MyCoroutineScope.Implementatio
     }
 
     fun getSongs(artist: String, viewAdapter: RecyclerView.Adapter<*>, myDataSet: MutableList<Any>) {
-        launch {
-            val songs = withContext(Dispatchers.IO) {
-                RetrofitBuilder.deezerInstance
-                    .create(DeezerArtistService::class.java)
-                    .getSongs(artist)
+        ConnectivityController.runIfConnected {
+            launch {
+                val songs = withContext(Dispatchers.IO) {
+                    RetrofitBuilder.deezerInstance
+                        .create(DeezerArtistService::class.java)
+                        .getSongs(artist)
+                }
+                myDataSet.clear()
+                myDataSet.addAll(songs.data)
+                viewAdapter.notifyDataSetChanged()
             }
-            myDataSet.clear()
-            myDataSet.addAll(songs.data)
-            viewAdapter.notifyDataSetChanged()
         }
     }
 

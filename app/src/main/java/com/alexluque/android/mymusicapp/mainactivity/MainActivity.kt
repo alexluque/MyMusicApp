@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract {
 
     private val mainActivityView: View by lazy { findViewById<View>(android.R.id.content) }
     private val presenter: MainActivityPresenter by lazy { MainActivityPresenter() }
-    private val viewAdapter: RecyclerView.Adapter<*> by lazy { FavouriteArtistsAdapter(myDataSet) }
+    private val viewAdapter: RecyclerView.Adapter<*> by lazy { FavouriteArtistsAdapter(myDataSet, this) }
     private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
     private val myDataSet: MutableList<ArtistData> by lazy { loadData() }
     private val recommendationButton: Button by lazy { recommend_button }
@@ -59,11 +59,11 @@ class MainActivity : AppCompatActivity(), MainActivityContract {
         recommendationButton.setOnClickListener {
             Dexter.withActivity(this)
                 .withPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                .withListener(LocationRecommendationsListener(this, mainActivityView, this, fusedClient)).check()
+                .withListener(LocationRecommendationsListener(this, this, fusedClient)).check()
         }
     }
 
-    private fun registerConnectivityControllerCallback() = ConnectivityController.registerCallback(this)
+    private fun registerConnectivityControllerCallback() = ConnectivityController.registerCallback(this, mainActivityView)
 
     private fun loadData(): MutableList<ArtistData> =
         // TODO: retrieves all artists with existing favourite songs within users database
