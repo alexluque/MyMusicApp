@@ -4,10 +4,12 @@
     <string name="action_settings">Settings</string>
     <string name="artists_avatar">Artist\'s avatar</string>
     <string name="artists_name">Artist\'s name</string>
-    <string name="artists_fav_num">Favourites:</string>
+    <string name="artists_fav_num">favourite songs</string>
     <string name="artist_fav_num">0</string>
     <string name="get_recommendations">Get Recommendations!</string>
     <string name="artist_genere">Artist\'s genere</string>
     <string name="no_internet">There is no Internet connection...</string>
     <string name="country_recommendations">Showing recommendations for</string>
+    <string name="song_name">Song\'s Name</string>
+    <string name="song_album">Song\'s Album</string>
 </resources>

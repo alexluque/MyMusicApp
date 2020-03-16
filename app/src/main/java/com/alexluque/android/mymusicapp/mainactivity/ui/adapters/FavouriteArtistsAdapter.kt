@@ -1,15 +1,21 @@
 package com.alexluque.android.mymusicapp.mainactivity.ui.adapters
 
 import ArtistData
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.alexluque.android.mymusicapp.mainactivity.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.R
 import com.alexluque.android.mymusicapp.mainactivity.extensions.loadImage
+import com.alexluque.android.mymusicapp.mainactivity.presenters.ArtistDetailActivityPresenter.Companion.ARTIST_NAME
+import com.alexluque.android.mymusicapp.mainactivity.presenters.ArtistDetailActivityPresenter.Companion.IMAGE_URL
 import kotlinx.android.synthetic.main.favourite_artist.view.*
 
-class FavouriteArtistsAdapter(private val myDataSet: MutableList<ArtistData>) :
+class FavouriteArtistsAdapter(private val myDataSet: MutableList<ArtistData>, private val context: Context) :
     RecyclerView.Adapter<FavouriteArtistsAdapter.MyViewHolder>() {
 
     class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view)
@@ -25,8 +31,16 @@ class FavouriteArtistsAdapter(private val myDataSet: MutableList<ArtistData>) :
         val view = holder.view
         val data = myDataSet[position]
         view.artist_avatar.loadImage(data.picture_medium)
-        view.artist_name.text = data.name
+        val artistName = data.name
+        view.artist_name.text = artistName
 //        view.artist_fav_num.text = TODO: grab amount of existing favourite songs from this artist
+        view.setOnClickListener {
+            val intent = Intent(context, ArtistDetailActivity::class.java).apply {
+                putExtra(ARTIST_NAME, artistName)
+                putExtra(IMAGE_URL, data.picture_big)
+            }
+            startActivity(context, intent, null)
+        }
     }
 
     override fun getItemCount() = myDataSet.size
