@@ -5,13 +5,15 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
-import kotlin.properties.Delegates
+import android.view.View
+import com.alexluque.android.mymusicapp.mainactivity.R
+import com.alexluque.android.mymusicapp.mainactivity.extensions.makeLongSnackbar
 
 object ConnectivityController {
 
-    var hasInternet: Boolean by Delegates.observable(true) { _, _, _ ->
-        networkCallback
-    }
+    private var view: View? = null
+    private var context: Context? = null
+    private var hasInternet: Boolean = true
 
     private val networkRequest = NetworkRequest.Builder()
         .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
@@ -28,8 +30,19 @@ object ConnectivityController {
         }
     }
 
-    fun registerCallback(context: Context) {
+    fun registerCallback(context: Context, view: View) {
+        this.context = context
+        this.view = view
         val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         manager.registerNetworkCallback(networkRequest, networkCallback)
+    }
+
+    fun runIfConnected(f: () -> Unit) {
+        when (hasInternet) {
+            true -> f()
+            else -> context?.let {
+                view?.makeLongSnackbar(context!!.getString(R.string.no_internet))
+            }
+        }
     }
 }
