@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.extensions.makeLongSnackbar
 import com.alexluque.android.mymusicapp.mainactivity.presenters.RecommendationsActivityPresenter
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.RecommendedArtistsAdapter
-import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.RecommendationsActivityContract
+import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.RecommendationsActivityContract
 import kotlinx.android.synthetic.main.activity_recommendations.*
 
 class RecommendationsActivity : AppCompatActivity(), RecommendationsActivityContract {

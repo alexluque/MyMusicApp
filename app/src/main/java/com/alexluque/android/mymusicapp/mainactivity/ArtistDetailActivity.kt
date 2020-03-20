@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.presenters.ArtistDetailActivityPresenter
+import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.ArtistDetailActivityContract
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.ArtistDetailAdapter
-import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.ArtistDetailActivityContract
 import kotlinx.android.synthetic.main.activity_artist_detail.*
 
 class ArtistDetailActivity : AppCompatActivity(), ArtistDetailActivityContract {
@@ -50,4 +50,5 @@ class ArtistDetailActivity : AppCompatActivity(), ArtistDetailActivityContract {
     }
 
     override fun onStartActivityReceived() = presenter.onStartActivityReceived(intent, artistName, artistImage, myDataSet, viewAdapter)
+
 }

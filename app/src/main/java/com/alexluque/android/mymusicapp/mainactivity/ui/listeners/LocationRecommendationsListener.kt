@@ -5,7 +5,7 @@ import android.content.Context
 import android.location.Location
 import com.alexluque.android.mymusicapp.mainactivity.model.controllers.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.model.controllers.getCountry
-import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.MainActivityContract
+import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.MainActivityContract
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse

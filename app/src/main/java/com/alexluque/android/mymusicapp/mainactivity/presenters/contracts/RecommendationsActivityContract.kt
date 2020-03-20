@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity.ui.contracts
+package com.alexluque.android.mymusicapp.mainactivity.presenters.contracts
 
 interface RecommendationsActivityContract {
 
