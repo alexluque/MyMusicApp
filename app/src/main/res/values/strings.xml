@@ -12,4 +12,9 @@
     <string name="country_recommendations">Showing recommendations for</string>
     <string name="song_name">Song\'s Name</string>
     <string name="song_album">Song\'s Album</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="search_button">Search</string>
+    <string name="artist_dialog_content">Write artist name</string>
+    <string name="artist_dialog_title">Artist</string>
+    <string name="artist_not_found">Artist not found...</string>
 </resources>

@@ -10,11 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.model.controllers.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.presenters.MainActivityPresenter
+import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.MainActivityContract
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.FavouriteArtistsAdapter
-import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.MainActivityContract
 import com.alexluque.android.mymusicapp.mainactivity.ui.listeners.LocationRecommendationsListener
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.karumi.dexter.Dexter
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity(), MainActivityContract {
     private val myDataSet: MutableList<ArtistData> by lazy { loadData() }
     private val recommendationButton: Button by lazy { recommend_button }
     private val fusedClient: FusedLocationProviderClient by lazy { LocationServices.getFusedLocationProviderClient(this) }
+    private val addButton: FloatingActionButton by lazy { add_button }
+    private val searchArtistFragment: SearchArtistFragment by lazy { SearchArtistFragment() }
 
     private lateinit var recyclerView: RecyclerView
 
@@ -35,7 +38,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        presenter.onCreate(this)
+        presenter.onCreate(this, searchArtistFragment)
 
         recyclerView = artists_recycler_view.apply {
             layoutManager = viewManager
@@ -60,6 +63,9 @@ class MainActivity : AppCompatActivity(), MainActivityContract {
             Dexter.withActivity(this)
                 .withPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
                 .withListener(LocationRecommendationsListener(this, this, fusedClient)).check()
+        }
+        addButton.setOnClickListener {
+            presenter.onClickAddButton(supportFragmentManager)
         }
     }
 

@@ -12,7 +12,6 @@ import com.alexluque.android.mymusicapp.mainactivity.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.R
 import com.alexluque.android.mymusicapp.mainactivity.extensions.loadImage
 import com.alexluque.android.mymusicapp.mainactivity.presenters.ArtistDetailActivityPresenter.Companion.ARTIST_NAME
-import com.alexluque.android.mymusicapp.mainactivity.presenters.ArtistDetailActivityPresenter.Companion.IMAGE_URL
 import kotlinx.android.synthetic.main.favourite_artist.view.*
 
 class FavouriteArtistsAdapter(private val myDataSet: MutableList<ArtistData>, private val context: Context) :
@@ -33,11 +32,10 @@ class FavouriteArtistsAdapter(private val myDataSet: MutableList<ArtistData>, pr
         view.artist_avatar.loadImage(data.picture_medium)
         val artistName = data.name
         view.artist_name.text = artistName
-//        view.artist_fav_num.text = TODO: grab amount of existing favourite songs from this artist
+//        view.artist_fav_num.text = TODO: number of fav songs in DB from this artist
         view.setOnClickListener {
             val intent = Intent(context, ArtistDetailActivity::class.java).apply {
                 putExtra(ARTIST_NAME, artistName)
-                putExtra(IMAGE_URL, data.picture_big)
             }
             startActivity(context, intent, null)
         }
