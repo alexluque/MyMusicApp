@@ -2,6 +2,7 @@ package com.alexluque.android.mymusicapp.mainactivity.extensions
 
 import android.view.View
 import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
@@ -20,3 +21,9 @@ fun ImageView.loadImage(url: String) {
 }
 
 fun View.makeLongSnackbar(msg: String) = Snackbar.make(this, msg, Snackbar.LENGTH_LONG).show()
+
+fun <T : Any> RecyclerView.Adapter<*>.updateData(dataSet: MutableList<Any>, data: List<T>) {
+    dataSet.clear()
+    dataSet.addAll(data)
+    this.notifyDataSetChanged()
+}

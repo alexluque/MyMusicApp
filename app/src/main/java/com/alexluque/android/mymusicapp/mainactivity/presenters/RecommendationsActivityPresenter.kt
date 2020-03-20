@@ -4,10 +4,11 @@ import MusicoveryArtist
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
+import com.alexluque.android.mymusicapp.mainactivity.extensions.updateData
 import com.alexluque.android.mymusicapp.mainactivity.model.controllers.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.model.network.builders.RetrofitBuilder
 import com.alexluque.android.mymusicapp.mainactivity.model.network.services.MusicoveryArtistService
-import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.RecommendationsActivityContract
+import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.RecommendationsActivityContract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -36,9 +37,7 @@ class RecommendationsActivityPresenter : MyCoroutineScope by MyCoroutineScope.Im
                         .create(MusicoveryArtistService::class.java)
                         .getArtistsByLocation(country.toLowerCase().trim())
                 }
-                myDataSet.clear()
-                myDataSet.addAll(artists.artists.artist)
-                viewAdapter.notifyDataSetChanged()
+                viewAdapter.updateData(myDataSet as MutableList<Any>, artists.artists.artist)
                 contract?.hideProgress()
                 contract?.makeSnackbar(context?.getString(R.string.country_recommendations) + " ${country.toUpperCase()}")
             }
