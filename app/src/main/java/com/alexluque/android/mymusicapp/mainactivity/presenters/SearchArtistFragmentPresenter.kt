@@ -1,9 +1,6 @@
 package com.alexluque.android.mymusicapp.mainactivity.presenters
 
-import ArtistData
-import android.content.Intent
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -11,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.R
 import com.alexluque.android.mymusicapp.mainactivity.SearchArtistFragment
+import com.alexluque.android.mymusicapp.mainactivity.extensions.myStartActivity
 import com.alexluque.android.mymusicapp.mainactivity.extensions.updateData
 import com.alexluque.android.mymusicapp.mainactivity.model.controllers.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.model.network.builders.RetrofitBuilder
@@ -50,10 +48,7 @@ class SearchArtistFragmentPresenter : MyCoroutineScope by MyCoroutineScope.Imple
                     .inflate(R.layout.fragment_search_artist, null))
                 .setPositiveButton(activity.getString(R.string.search_button)) { _, _ ->
                     val artistName = contract.retrieveEntry()
-                    val intent = Intent(activity, ArtistDetailActivity::class.java).apply {
-                        putExtra(ARTIST_NAME, artistName)
-                    }
-                    startActivity(activity, intent, null)
+                    activity.myStartActivity(ArtistDetailActivity::class.java, listOf(ARTIST_NAME to artistName))
                 }
                 .setNegativeButton(activity.getString(R.string.cancel_button)) { dialog, _ ->
                     dialog.cancel()
