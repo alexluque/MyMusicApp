@@ -18,7 +18,7 @@ class RecommendationsActivity : AppCompatActivity(), RecommendationsActivityCont
 
     private val recommendationsView: View by lazy { findViewById<View>(android.R.id.content) }
     private val presenter: RecommendationsActivityPresenter by lazy { RecommendationsActivityPresenter() }
-    private val viewAdapter: RecyclerView.Adapter<*> by lazy { RecommendedArtistsAdapter(myDataSet) }
+    private val viewAdapter: RecyclerView.Adapter<*> by lazy { RecommendedArtistsAdapter(myDataSet, this) }
     private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
     private val myDataSet: MutableList<MusicoveryArtist> by lazy { mutableListOf<MusicoveryArtist>() }
     private val countryName: String by lazy { intent.getStringExtra(EXTRA_MESSAGE) }
