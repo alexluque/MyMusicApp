@@ -1,5 +1,7 @@
 package com.alexluque.android.mymusicapp.mainactivity.presenters
 
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -7,10 +9,13 @@ import androidx.fragment.app.FragmentManager
 import com.alexluque.android.mymusicapp.mainactivity.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.R
 import com.alexluque.android.mymusicapp.mainactivity.SearchArtistFragment
+import com.alexluque.android.mymusicapp.mainactivity.extensions.hideKeyboard
 import com.alexluque.android.mymusicapp.mainactivity.extensions.myStartActivity
+import com.alexluque.android.mymusicapp.mainactivity.extensions.showKeyboard
 import com.alexluque.android.mymusicapp.mainactivity.presenters.ArtistDetailActivityPresenter.Companion.ARTIST_NAME
 import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.SearchArtistFragmentContract
 import com.alexluque.android.mymusicapp.mainactivity.presenters.objects.ArtistContainer
+import kotlinx.android.synthetic.main.fragment_search_artist.view.*
 
 class SearchArtistFragmentPresenter : MyCoroutineScope by MyCoroutineScope.Implementation() {
 
@@ -32,11 +37,16 @@ class SearchArtistFragmentPresenter : MyCoroutineScope by MyCoroutineScope.Imple
         this.contract = contract
 
         return activity?.let {
+            val view = fragment.requireActivity()
+                .layoutInflater
+                .inflate(R.layout.fragment_search_artist, null)
+            view.artistName_editText.showKeyboard(activity)
+
             AlertDialog.Builder(it)
                 .setTitle(activity.getString(R.string.artist_dialog_title))
-                .setView(fragment.requireActivity().layoutInflater
-                    .inflate(R.layout.fragment_search_artist, null))
+                .setView(view)
                 .setPositiveButton(activity.getString(R.string.search_button)) { _, _ ->
+                    view.artistName_editText.hideKeyboard(activity)
                     val artistName = contract.retrieveEntry()
 
                     when (artistContainer != null && detailPresenter != null) {
@@ -45,6 +55,7 @@ class SearchArtistFragmentPresenter : MyCoroutineScope by MyCoroutineScope.Imple
                     }
                 }
                 .setNegativeButton(activity.getString(R.string.cancel_button)) { dialog, _ ->
+                    view.artistName_editText.hideKeyboard(activity)
                     dialog.cancel()
                 }
                 .create()

@@ -13,6 +13,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:hint="@string/artist_dialog_content"
         android:inputType="textPersonName"
         android:selectAllOnFocus="false"
