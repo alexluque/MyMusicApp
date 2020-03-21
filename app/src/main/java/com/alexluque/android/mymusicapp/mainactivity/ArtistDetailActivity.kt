@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.presenters.ArtistDetailActivityPresenter
 import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.ArtistDetailActivityContract
+import com.alexluque.android.mymusicapp.mainactivity.presenters.objects.ArtistContainer
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.ArtistDetailAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_artist_detail.*
 
 class ArtistDetailActivity : AppCompatActivity(), ArtistDetailActivityContract {
@@ -23,6 +25,8 @@ class ArtistDetailActivity : AppCompatActivity(), ArtistDetailActivityContract {
     private val viewAdapter: RecyclerView.Adapter<*> by lazy { ArtistDetailAdapter(myDataSet) }
     private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
     private val myDataSet: SongsData by lazy { SongsData() }
+    private val searchButton: FloatingActionButton by lazy { search_button }
+    private val searchArtistFragment: SearchArtistFragment by lazy { SearchArtistFragment() }
 
     private lateinit var recyclerView: RecyclerView
 
@@ -30,7 +34,7 @@ class ArtistDetailActivity : AppCompatActivity(), ArtistDetailActivityContract {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_artist_detail)
 
-        presenter.onCreate(this, this)
+        presenter.onCreate(this, this, searchArtistFragment)
 
         recyclerView = artist_detail_recyclerView.apply {
             layoutManager = viewManager
@@ -38,6 +42,7 @@ class ArtistDetailActivity : AppCompatActivity(), ArtistDetailActivityContract {
         }
 
         onStartActivityReceived()
+        setOnClickListeners()
     }
 
     override fun onDestroy() {
@@ -49,6 +54,12 @@ class ArtistDetailActivity : AppCompatActivity(), ArtistDetailActivityContract {
         progressBar.visibility = View.GONE
     }
 
-    override fun onStartActivityReceived() = presenter.onStartActivityReceived(intent, artistName, artistImage, myDataSet, viewAdapter)
+    override fun onStartActivityReceived() = presenter.onStartActivityReceived(intent, container = ArtistContainer(artistName, artistImage, myDataSet, viewAdapter))
+
+    private fun setOnClickListeners() {
+        searchButton.setOnClickListener {
+            presenter.onClickSearchButton(supportFragmentManager, ArtistContainer(artistName, artistImage, myDataSet, viewAdapter))
+        }
+    }
 
 }

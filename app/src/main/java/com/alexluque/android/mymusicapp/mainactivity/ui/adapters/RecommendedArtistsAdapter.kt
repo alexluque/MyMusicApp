@@ -54,7 +54,7 @@ class RecommendedArtistsAdapter(private val myDataSet: MutableList<MusicoveryArt
                 val artist = withContext(Dispatchers.IO) {
                     RetrofitBuilder.deezerInstance
                         .create(DeezerArtistService::class.java)
-                        .getArtist(artistName!!)
+                        .getArtist(artistName)
                         .data
                         .firstOrNull()
                 }

@@ -12,7 +12,7 @@
     <string name="country_recommendations">Mostrant recomanacions per</string>
     <string name="song_name">Cançó</string>
     <string name="song_album">Album</string>
-    <string name="cancel_button">Cancel·la</string>
+    <string name="cancel_button">Cancel·lar</string>
     <string name="search_button">Cercar</string>
     <string name="artist_dialog_content">Escriu el nom de l\'artista</string>
     <string name="artist_dialog_title">Artista</string>

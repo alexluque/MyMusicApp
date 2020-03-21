@@ -17,7 +17,6 @@ class MainActivityPresenter : MyCoroutineScope by MyCoroutineScope.Implementatio
         initScope()
         this.contract = contract
         this.searchArtistContract = searchArtistContract
-
     }
 
     fun onDestroy() {
@@ -29,7 +28,5 @@ class MainActivityPresenter : MyCoroutineScope by MyCoroutineScope.Implementatio
         context.myStartActivity(RecommendationsActivity::class.java, listOf(EXTRA_MESSAGE to countryName))
 
 
-    fun onClickAddButton(supportFragmentManager: FragmentManager) {
-        searchArtistContract?.onSearchArtistButtonClick(supportFragmentManager)
-    }
+    fun onClickAddButton(supportFragmentManager: FragmentManager) = searchArtistContract?.onSearchArtistButtonClick(supportFragmentManager)
 }
