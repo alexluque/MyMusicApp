@@ -60,9 +60,7 @@ import kotlinx.coroutines.withContext
                         container.viewAdapter.updateData(container.dataSet.data as MutableList<Any>, songs.data)
                     }
                     else -> context?.let {
-                        val notFoundMsg = context!!.getString(R.string.artist_not_found)
-                        container.textView.text = notFoundMsg
-                        container.imageView.makeLongSnackbar(notFoundMsg)
+                        container.imageView.makeLongSnackbar(context!!.getString(R.string.artist_not_found))
                     }
                 }
             }
