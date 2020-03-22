@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_recommendations.*
 
 class RecommendationsActivity : AppCompatActivity(), RecommendationsActivityContract {
 
-    private val recommendationsView: View by lazy { findViewById<View>(android.R.id.content) }
+    private val activityView: View by lazy { findViewById<View>(android.R.id.content) }
     private val presenter: RecommendationsActivityPresenter by lazy { RecommendationsActivityPresenter() }
     private val viewAdapter: RecyclerView.Adapter<*> by lazy { RecommendedArtistsAdapter(myDataSet, this) }
     private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
@@ -51,5 +51,5 @@ class RecommendationsActivity : AppCompatActivity(), RecommendationsActivityCont
         progressBar.visibility = View.GONE
     }
 
-    override fun makeSnackbar(msg: String) = recommendationsView.makeLongSnackbar(msg)
+    override fun makeSnackbar(msg: String) = activityView.makeLongSnackbar(msg)
 }
