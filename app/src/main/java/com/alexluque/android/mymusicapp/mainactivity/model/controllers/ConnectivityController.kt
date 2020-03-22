@@ -9,9 +9,16 @@ import android.view.View
 import com.alexluque.android.mymusicapp.mainactivity.R
 import com.alexluque.android.mymusicapp.mainactivity.extensions.makeLongSnackbar
 
+/**
+ * Class to controll current Internet connectivity status.
+ * Every activity should instantiate this [view]'s property with a valid view object in order to show the [Snackbar]
+ * that would be shown to inform the user that no Internet connectivity is active.
+ * [view] instantiation should be made within [onCreate] methods and also within [onResume] when the activity could be ever resumed.
+ */
 object ConnectivityController {
 
-    private var view: View? = null
+    var view: View? = null
+
     private var context: Context? = null
     private var hasInternet: Boolean = false
 

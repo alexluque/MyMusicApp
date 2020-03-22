@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), MainActivityContract {
 
-    private val mainActivityView: View by lazy { findViewById<View>(android.R.id.content) }
+    private val activityView: View by lazy { findViewById<View>(android.R.id.content) }
     private val presenter: MainActivityPresenter by lazy { MainActivityPresenter() }
     private val viewAdapter: RecyclerView.Adapter<*> by lazy { FavouriteArtistsAdapter(myDataSet, this) }
     private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
@@ -49,6 +49,11 @@ class MainActivity : AppCompatActivity(), MainActivityContract {
         registerConnectivityControllerCallback()
     }
 
+    override fun onResume() {
+        super.onResume()
+        ConnectivityController.view = activityView
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         presenter.onDestroy()
@@ -69,10 +74,10 @@ class MainActivity : AppCompatActivity(), MainActivityContract {
         }
     }
 
-    private fun registerConnectivityControllerCallback() = ConnectivityController.registerCallback(this, mainActivityView)
+    private fun registerConnectivityControllerCallback() = ConnectivityController.registerCallback(this, activityView)
 
     private fun loadData(): MutableList<ArtistData> =
-        // TODO: retrieves all artists with existing favourite songs within users database
+        // TODO: retrieves all artists with existing favourite songs in the DB
         mutableListOf(
             ArtistData(
                 119,

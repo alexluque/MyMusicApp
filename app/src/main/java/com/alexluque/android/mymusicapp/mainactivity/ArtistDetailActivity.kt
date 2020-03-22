@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alexluque.android.mymusicapp.mainactivity.model.controllers.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.presenters.ArtistDetailActivityPresenter
 import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.ArtistDetailActivityContract
 import com.alexluque.android.mymusicapp.mainactivity.presenters.objects.ArtistContainer
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_artist_detail.*
 
 class ArtistDetailActivity : AppCompatActivity(), ArtistDetailActivityContract {
 
+    private val activityView: View by lazy { findViewById<View>(android.R.id.content) }
     private val progressBar: ProgressBar by lazy { artist_progressBar }
     private val artistImage: ImageView by lazy { artist_image }
     private val artistName: TextView by lazy { artist_name }
@@ -40,6 +42,7 @@ class ArtistDetailActivity : AppCompatActivity(), ArtistDetailActivityContract {
             layoutManager = viewManager
             adapter = viewAdapter
         }
+        ConnectivityController.view = activityView
 
         onStartActivityReceived()
         setOnClickListeners()
