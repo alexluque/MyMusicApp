@@ -13,6 +13,6 @@ data class SongData(
     val explicit_content_cover: Int = 0,
     val preview: String = String(),
     val artistSongData: ArtistSongData? = null,
-    val albumData: AlbumData? = null,
+    val album: AlbumData? = null,
     val type: String = String()
 )

@@ -24,7 +24,7 @@ class ArtistDetailAdapter(private val myDataSet: SongsData) :
         val view = holder.view
         val data = myDataSet.data[position]
         view.song_name.text = data.title
-        view.song_album.text = data.albumData?.title
+        view.song_album.text = data.album?.title
     }
 
     override fun getItemCount() = myDataSet.data.size
