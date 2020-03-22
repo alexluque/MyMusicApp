@@ -65,10 +65,9 @@ import kotlinx.coroutines.withContext
                         container.imageView.makeLongSnackbar(notFoundMsg)
                     }
                 }
-
-                contract?.hideProgress()
             }
         }
+        contract?.hideProgress()
     }
 
     fun onClickSearchButton(manager: FragmentManager, container: ArtistContainer) =
