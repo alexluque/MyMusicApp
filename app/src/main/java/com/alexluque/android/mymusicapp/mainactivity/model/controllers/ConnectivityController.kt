@@ -13,7 +13,7 @@ object ConnectivityController {
 
     private var view: View? = null
     private var context: Context? = null
-    private var hasInternet: Boolean = true
+    private var hasInternet: Boolean = false
 
     private val networkRequest = NetworkRequest.Builder()
         .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
@@ -37,9 +37,9 @@ object ConnectivityController {
         manager.registerNetworkCallback(networkRequest, networkCallback)
     }
 
-    fun runIfConnected(f: () -> Unit) {
+    fun runIfConnected(block: () -> Unit) {
         when (hasInternet) {
-            true -> f()
+            true -> block()
             else -> context?.let {
                 view?.makeLongSnackbar(context!!.getString(R.string.no_internet))
             }
