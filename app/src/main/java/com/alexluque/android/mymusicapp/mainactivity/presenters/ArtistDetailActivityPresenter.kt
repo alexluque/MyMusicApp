@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ArtistDetailActivityPresenter : MyCoroutineScope by MyCoroutineScope.Implementation() {
+@Suppress("UNCHECKED_CAST") class ArtistDetailActivityPresenter : MyCoroutineScope by MyCoroutineScope.Implementation() {
 
     private var contract: ArtistDetailActivityContract? = null
     private var searchArtistContract: SearchArtistFragmentContract? = null
@@ -60,7 +60,9 @@ class ArtistDetailActivityPresenter : MyCoroutineScope by MyCoroutineScope.Imple
                         container.viewAdapter.updateData(container.dataSet.data as MutableList<Any>, songs.data)
                     }
                     else -> context?.let {
-                        container.imageView.makeLongSnackbar(context!!.getString(R.string.artist_not_found))
+                        val notFoundMsg = context!!.getString(R.string.artist_not_found)
+                        container.textView.text = notFoundMsg
+                        container.imageView.makeLongSnackbar(notFoundMsg)
                     }
                 }
 
