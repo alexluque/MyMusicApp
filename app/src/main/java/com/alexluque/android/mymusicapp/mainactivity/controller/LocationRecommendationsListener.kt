@@ -1,11 +1,9 @@
-package com.alexluque.android.mymusicapp.mainactivity.ui.listeners
+package com.alexluque.android.mymusicapp.mainactivity.controller
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.location.Location
-import com.alexluque.android.mymusicapp.mainactivity.model.controllers.ConnectivityController
-import com.alexluque.android.mymusicapp.mainactivity.model.controllers.getCountry
-import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.MainActivityContract
+import com.alexluque.android.mymusicapp.mainactivity.model.repositories.getCountry
+import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.MainActivityContract
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -17,7 +15,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class LocationRecommendationsListener(
-    private val context: Context,
+    private val mapsKey: String,
     private val contract: MainActivityContract,
     private val fusedClient: FusedLocationProviderClient) : PermissionListener {
 
@@ -37,11 +35,13 @@ class LocationRecommendationsListener(
         when (location) {
             null -> contract.showDefaultRecommendations()
             else -> {
-                GlobalScope.launch(Dispatchers.IO) {
-                    val country = getCountry("${location.latitude},${location.longitude}", context)
-                    when (country.isNullOrEmpty()) {
-                        true -> contract.showDefaultRecommendations()
-                        else -> contract.showRecommendations(country)
+                ConnectivityController.runIfConnected {
+                    GlobalScope.launch(Dispatchers.IO) {
+                        val country = getCountry("${location.latitude},${location.longitude}", mapsKey)
+                        when (country.isNullOrEmpty()) {
+                            true -> contract.showDefaultRecommendations()
+                            else -> contract.showRecommendations(country)
+                        }
                     }
                 }
             }

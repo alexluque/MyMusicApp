@@ -1,23 +1,25 @@
-package com.alexluque.android.mymusicapp.mainactivity.presenters
+package com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels
 
 import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.FragmentManager
 import com.alexluque.android.mymusicapp.mainactivity.R
-import com.alexluque.android.mymusicapp.mainactivity.extensions.loadImage
-import com.alexluque.android.mymusicapp.mainactivity.extensions.makeLongSnackbar
-import com.alexluque.android.mymusicapp.mainactivity.extensions.updateData
-import com.alexluque.android.mymusicapp.mainactivity.model.controllers.ConnectivityController
-import com.alexluque.android.mymusicapp.mainactivity.model.network.builders.RetrofitBuilder
-import com.alexluque.android.mymusicapp.mainactivity.model.network.services.DeezerArtistService
-import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.ArtistDetailActivityContract
-import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.SearchArtistFragmentContract
-import com.alexluque.android.mymusicapp.mainactivity.presenters.objects.ArtistContainer
+import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
+import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.makeLongSnackbar
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.updateData
+import com.alexluque.android.mymusicapp.mainactivity.model.objects.ArtistContainer
+import com.alexluque.android.mymusicapp.mainactivity.model.repositories.getArtist
+import com.alexluque.android.mymusicapp.mainactivity.model.repositories.getSongs
+import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.ArtistDetailActivityContract
+import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.SearchArtistFragmentContract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@Suppress("UNCHECKED_CAST") class ArtistDetailActivityPresenter : MyCoroutineScope by MyCoroutineScope.Implementation() {
+@Suppress("UNCHECKED_CAST")
+class ArtistDetailActivityPresenter : MyCoroutineScope by MyCoroutineScope.Implementation() {
 
     private var contract: ArtistDetailActivityContract? = null
     private var searchArtistContract: SearchArtistFragmentContract? = null
@@ -41,19 +43,13 @@ import kotlinx.coroutines.withContext
 
             launch {
                 val artist = withContext(Dispatchers.IO) {
-                    RetrofitBuilder.deezerInstance
-                        .create(DeezerArtistService::class.java)
-                        .getArtist(name)
-                        .data
-                        .firstOrNull()
+                    getArtist(name)
                 }
 
                 when (artist != null) {
                     true -> {
                         val songs = withContext(Dispatchers.IO) {
-                            RetrofitBuilder.deezerInstance
-                                .create(DeezerArtistService::class.java)
-                                .getSongs(name)
+                            getSongs(name)
                         }
                         container.textView.text = artist.name
                         container.imageView.loadImage(artist.picture_big)

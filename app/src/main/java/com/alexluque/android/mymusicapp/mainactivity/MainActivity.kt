@@ -8,11 +8,11 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.alexluque.android.mymusicapp.mainactivity.model.controllers.ConnectivityController
-import com.alexluque.android.mymusicapp.mainactivity.presenters.MainActivityPresenter
-import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.MainActivityContract
+import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainActivityPresenter
+import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.MainActivityContract
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.FavouriteArtistsAdapter
-import com.alexluque.android.mymusicapp.mainactivity.ui.listeners.LocationRecommendationsListener
+import com.alexluque.android.mymusicapp.mainactivity.controller.LocationRecommendationsListener
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract {
         recommendationButton.setOnClickListener {
             Dexter.withActivity(this)
                 .withPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                .withListener(LocationRecommendationsListener(this, this, fusedClient)).check()
+                .withListener(LocationRecommendationsListener(getString(R.string.google_maps_key), this, fusedClient)).check()
         }
         addButton.setOnClickListener {
             presenter.onClickAddButton(supportFragmentManager)

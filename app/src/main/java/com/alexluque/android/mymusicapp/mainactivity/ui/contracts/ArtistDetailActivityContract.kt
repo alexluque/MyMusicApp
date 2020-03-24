@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity.presenters.contracts
+package com.alexluque.android.mymusicapp.mainactivity.ui.contracts
 
 interface ArtistDetailActivityContract {
 

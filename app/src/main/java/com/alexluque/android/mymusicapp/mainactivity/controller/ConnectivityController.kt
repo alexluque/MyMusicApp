@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity.model.controllers
+package com.alexluque.android.mymusicapp.mainactivity.controller
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -7,10 +7,10 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.view.View
 import com.alexluque.android.mymusicapp.mainactivity.R
-import com.alexluque.android.mymusicapp.mainactivity.extensions.makeLongSnackbar
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.makeLongSnackbar
 
 /**
- * Class to controll current Internet connectivity status.
+ * Class to control current Internet connectivity status.
  * Every activity should instantiate this [view]'s property with a valid view object in order to show the [Snackbar]
  * that would be shown to inform the user that no Internet connectivity is active.
  * [view] instantiation should be made within [onCreate] methods and also within [onResume] when the activity could be ever resumed.
@@ -38,8 +38,8 @@ object ConnectivityController {
     }
 
     fun registerCallback(context: Context, view: View) {
-        this.context = context
-        this.view = view
+        ConnectivityController.context = context
+        ConnectivityController.view = view
         val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         manager.registerNetworkCallback(networkRequest, networkCallback)
     }

@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity.presenters
+package com.alexluque.android.mymusicapp.mainactivity.controller
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

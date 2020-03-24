@@ -1,7 +1,7 @@
-package com.alexluque.android.mymusicapp.mainactivity.model.network.builders
+package com.alexluque.android.mymusicapp.mainactivity.model
 
 import com.alexluque.android.mymusicapp.mainactivity.BuildConfig
-import com.alexluque.android.mymusicapp.mainactivity.extensions.getInstance
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.getInstance
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

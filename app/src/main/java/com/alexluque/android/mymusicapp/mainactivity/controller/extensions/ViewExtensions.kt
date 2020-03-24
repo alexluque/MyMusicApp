@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity.extensions
+package com.alexluque.android.mymusicapp.mainactivity.controller.extensions
 
 import android.app.Activity
 import android.content.Context

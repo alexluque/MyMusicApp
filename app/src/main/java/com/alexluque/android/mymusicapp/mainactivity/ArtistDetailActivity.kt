@@ -9,10 +9,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.alexluque.android.mymusicapp.mainactivity.model.controllers.ConnectivityController
-import com.alexluque.android.mymusicapp.mainactivity.presenters.ArtistDetailActivityPresenter
-import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.ArtistDetailActivityContract
-import com.alexluque.android.mymusicapp.mainactivity.presenters.objects.ArtistContainer
+import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailActivityPresenter
+import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.ArtistDetailActivityContract
+import com.alexluque.android.mymusicapp.mainactivity.model.objects.ArtistContainer
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.ArtistDetailAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_artist_detail.*

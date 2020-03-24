@@ -5,10 +5,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import com.alexluque.android.mymusicapp.mainactivity.presenters.ArtistDetailActivityPresenter
-import com.alexluque.android.mymusicapp.mainactivity.presenters.SearchArtistFragmentPresenter
-import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.SearchArtistFragmentContract
-import com.alexluque.android.mymusicapp.mainactivity.presenters.objects.ArtistContainer
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailActivityPresenter
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.SearchArtistFragmentPresenter
+import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.SearchArtistFragmentContract
+import com.alexluque.android.mymusicapp.mainactivity.model.objects.ArtistContainer
 import kotlinx.android.synthetic.main.fragment_search_artist.*
 import java.util.*
 

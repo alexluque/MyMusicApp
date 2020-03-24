@@ -9,25 +9,22 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.R
-import com.alexluque.android.mymusicapp.mainactivity.extensions.loadImage
-import com.alexluque.android.mymusicapp.mainactivity.extensions.myStartActivity
-import com.alexluque.android.mymusicapp.mainactivity.model.controllers.ConnectivityController
-import com.alexluque.android.mymusicapp.mainactivity.model.network.builders.RetrofitBuilder
-import com.alexluque.android.mymusicapp.mainactivity.model.network.services.DeezerArtistService
-import com.alexluque.android.mymusicapp.mainactivity.presenters.ArtistDetailActivityPresenter
-import com.alexluque.android.mymusicapp.mainactivity.presenters.MyCoroutineScope
+import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailActivityPresenter
+import com.alexluque.android.mymusicapp.mainactivity.model.repositories.getArtist
 import kotlinx.android.synthetic.main.recommended_artist.view.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class RecommendedArtistsAdapter(private val myDataSet: MutableList<MusicoveryArtist>, private val context: Context) :
-    RecyclerView.Adapter<RecommendedArtistsAdapter.MyViewHolder>(), MyCoroutineScope by MyCoroutineScope.Implementation() {
+class RecommendedArtistsAdapter(var myDataSet: MutableList<MusicoveryArtist>, private val context: Context) :
+    RecyclerView.Adapter<RecommendedArtistsAdapter.MyViewHolder>() {
 
     class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        initScope()
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.recommended_artist, parent, false)
 
@@ -50,14 +47,8 @@ class RecommendedArtistsAdapter(private val myDataSet: MutableList<MusicoveryArt
 
     private fun loadImage(artistName: String, imageView: ImageView) {
         ConnectivityController.runIfConnected {
-            launch {
-                val artist = withContext(Dispatchers.IO) {
-                    RetrofitBuilder.deezerInstance
-                        .create(DeezerArtistService::class.java)
-                        .getArtist(artistName)
-                        .data
-                        .firstOrNull()
-                }
+            GlobalScope.launch(Dispatchers.IO) {
+                val artist = getArtist(artistName)
                 imageView.loadImage(artist?.picture_medium ?: RANDOM_IMAGE)
             }
         }

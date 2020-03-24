@@ -1,12 +1,13 @@
-package com.alexluque.android.mymusicapp.mainactivity.presenters
+package com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels
 
 import android.content.Context
 import android.provider.AlarmClock.EXTRA_MESSAGE
 import androidx.fragment.app.FragmentManager
 import com.alexluque.android.mymusicapp.mainactivity.RecommendationsActivity
-import com.alexluque.android.mymusicapp.mainactivity.extensions.myStartActivity
-import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.MainActivityContract
-import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.SearchArtistFragmentContract
+import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
+import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.MainActivityContract
+import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.SearchArtistFragmentContract
 
 class MainActivityPresenter : MyCoroutineScope by MyCoroutineScope.Implementation() {
 
@@ -26,7 +27,6 @@ class MainActivityPresenter : MyCoroutineScope by MyCoroutineScope.Implementatio
 
     fun onRecommendationsClicked(context: Context, countryName: String) =
         context.myStartActivity(RecommendationsActivity::class.java, listOf(EXTRA_MESSAGE to countryName))
-
 
     fun onClickAddButton(supportFragmentManager: FragmentManager) = searchArtistContract?.onSearchArtistButtonClick(supportFragmentManager)
 }

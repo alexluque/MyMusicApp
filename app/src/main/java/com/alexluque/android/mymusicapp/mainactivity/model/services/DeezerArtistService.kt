@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity.model.network.services
+package com.alexluque.android.mymusicapp.mainactivity.model.services
 
 import Artist
 import SongsData

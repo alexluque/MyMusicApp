@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity.presenters.objects
+package com.alexluque.android.mymusicapp.mainactivity.model.objects
 
 import SongsData
 import android.widget.ImageView

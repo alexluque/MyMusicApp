@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.R
-import com.alexluque.android.mymusicapp.mainactivity.extensions.loadImage
-import com.alexluque.android.mymusicapp.mainactivity.extensions.myStartActivity
-import com.alexluque.android.mymusicapp.mainactivity.presenters.ArtistDetailActivityPresenter.Companion.ARTIST_NAME
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailActivityPresenter.Companion.ARTIST_NAME
 import kotlinx.android.synthetic.main.favourite_artist.view.*
 
 class FavouriteArtistsAdapter(private val myDataSet: MutableList<ArtistData>, private val context: Context) :

@@ -1,8 +1,8 @@
-package com.alexluque.android.mymusicapp.mainactivity.presenters.contracts
+package com.alexluque.android.mymusicapp.mainactivity.ui.contracts
 
 import androidx.fragment.app.FragmentManager
-import com.alexluque.android.mymusicapp.mainactivity.presenters.ArtistDetailActivityPresenter
-import com.alexluque.android.mymusicapp.mainactivity.presenters.objects.ArtistContainer
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailActivityPresenter
+import com.alexluque.android.mymusicapp.mainactivity.model.objects.ArtistContainer
 
 interface SearchArtistFragmentContract {
 
