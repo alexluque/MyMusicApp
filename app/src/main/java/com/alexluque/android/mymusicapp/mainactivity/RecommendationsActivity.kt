@@ -10,17 +10,21 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.makeLongSnackbar
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailActivityPresenter
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.RecommendationsViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.RecommendationsViewModel.UiModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.RecommendationsViewModelFactory
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.RecommendedArtistsAdapter
 import kotlinx.android.synthetic.main.activity_recommendations.*
+import java.util.*
 
 class RecommendationsActivity : AppCompatActivity() {
 
-    private val activityView: View by lazy { findViewById<View>(android.R.id.content) }
+    private val mainView: View by lazy { findViewById<View>(android.R.id.content) }
     private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
-    private val myDataSet: MutableList<MusicoveryArtist> by lazy { mutableListOf<MusicoveryArtist>() }
+    private val artists: List<MusicoveryArtist> by lazy { mutableListOf<MusicoveryArtist>() }
     private val countryName: String by lazy { intent.getStringExtra(EXTRA_MESSAGE) }
     private val progress: ProgressBar by lazy { recommendations_progressBar }
 
@@ -32,9 +36,9 @@ class RecommendationsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recommendations)
 
-        recommendationsAdapter = RecommendedArtistsAdapter(myDataSet, this)
-        viewModel = ViewModelProvider(this, RecommendationsViewModelFactory(countryName, recommendationsAdapter, myDataSet))
+        viewModel = ViewModelProvider(this, RecommendationsViewModelFactory(countryName))
             .get(RecommendationsViewModel::class.java)
+        recommendationsAdapter = RecommendedArtistsAdapter(artists, viewModel::onArtistClicked, viewModel::loadImage)
         recyclerView = recommended_artists_recycler_view.apply {
             layoutManager = viewManager
             adapter = recommendationsAdapter
@@ -43,12 +47,18 @@ class RecommendationsActivity : AppCompatActivity() {
         viewModel.model.observe(this, Observer(::updateUi))
     }
 
-    fun updateUi(model: UiModel) {
+    private fun updateUi(model: UiModel) {
         progress.visibility = if (model == UiModel.Loading) View.VISIBLE else View.GONE
 
-//        when (model) {
-//            is UiModel.Content -> recommendationsAdapter.myDataSet = model.recommendations
-//            is UiModel.Navigation -> this.myStartActivity(RecommendationsActivity::class.java, listOf(EXTRA_MESSAGE to countryName))
-//        }
+        when (model) {
+            is UiModel.Content -> {
+                recommendationsAdapter.artists = model.artists
+                mainView.makeLongSnackbar(this.getString(R.string.country_recommendations) + " ${countryName.toUpperCase(Locale.ROOT)}")
+            }
+            is UiModel.Navigation -> this.myStartActivity(
+                ArtistDetailActivity::class.java,
+                listOf(ArtistDetailActivityPresenter.ARTIST_NAME to model.artistName)
+            )
+        }
     }
 }
