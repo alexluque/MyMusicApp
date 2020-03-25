@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.makeLongSnackbar
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailActivityPresenter
@@ -24,24 +25,27 @@ class RecommendationsActivity : AppCompatActivity() {
 
     private val mainView: View by lazy { findViewById<View>(android.R.id.content) }
     private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
-    private val artists: List<MusicoveryArtist> by lazy { mutableListOf<MusicoveryArtist>() }
     private val countryName: String by lazy { intent.getStringExtra(EXTRA_MESSAGE) }
     private val progress: ProgressBar by lazy { recommendations_progressBar }
 
     private lateinit var viewModel: RecommendationsViewModel
-    private lateinit var recommendationsAdapter: RecommendedArtistsAdapter
+    private lateinit var viewAdapter: RecommendedArtistsAdapter
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recommendations)
 
+        ConnectivityController.view = mainView
+
         viewModel = ViewModelProvider(this, RecommendationsViewModelFactory(countryName))
             .get(RecommendationsViewModel::class.java)
-        recommendationsAdapter = RecommendedArtistsAdapter(artists, viewModel::onArtistClicked, viewModel::loadImage)
+
+        viewAdapter = RecommendedArtistsAdapter(listOf<MusicoveryArtist>(), viewModel::onArtistClicked, viewModel::loadImage)
+
         recyclerView = recommended_artists_recycler_view.apply {
             layoutManager = viewManager
-            adapter = recommendationsAdapter
+            adapter = viewAdapter
         }
 
         viewModel.model.observe(this, Observer(::updateUi))
@@ -52,7 +56,7 @@ class RecommendationsActivity : AppCompatActivity() {
 
         when (model) {
             is UiModel.Content -> {
-                recommendationsAdapter.artists = model.artists
+                viewAdapter.artists = model.artists
                 mainView.makeLongSnackbar(this.getString(R.string.country_recommendations) + " ${countryName.toUpperCase(Locale.ROOT)}")
             }
             is UiModel.Navigation -> this.myStartActivity(

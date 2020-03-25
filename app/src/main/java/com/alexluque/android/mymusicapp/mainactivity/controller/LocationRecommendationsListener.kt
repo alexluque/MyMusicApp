@@ -3,7 +3,6 @@ package com.alexluque.android.mymusicapp.mainactivity.controller
 import android.annotation.SuppressLint
 import android.location.Location
 import com.alexluque.android.mymusicapp.mainactivity.model.repositories.getCountry
-import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.MainActivityContract
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -16,36 +15,43 @@ import kotlinx.coroutines.launch
 
 class LocationRecommendationsListener(
     private val mapsKey: String,
-    private val contract: MainActivityContract,
+    private val onRecommendClicked: (country: String) -> Unit,
     private val fusedClient: FusedLocationProviderClient) : PermissionListener {
 
     @SuppressLint("MissingPermission")
     override fun onPermissionGranted(response: PermissionGrantedResponse) {
         fusedClient.lastLocation
             .addOnSuccessListener { location: Location? ->
-                ConnectivityController.runIfConnected { showRecommendations(location) }
+                ConnectivityController.runIfConnected {
+                    showRecommendations(location)
+                }
             }
     }
 
-    override fun onPermissionDenied(response: PermissionDeniedResponse) = contract.showDefaultRecommendations()
+    override fun onPermissionDenied(response: PermissionDeniedResponse) = onRecommendClicked(DEFAULT_COUNTRY)
 
     override fun onPermissionRationaleShouldBeShown(permission: PermissionRequest, token: PermissionToken) = token.continuePermissionRequest()
 
     private fun showRecommendations(location: Location?) {
         when (location) {
-            null -> contract.showDefaultRecommendations()
+            null -> onRecommendClicked(DEFAULT_COUNTRY)
             else -> {
                 ConnectivityController.runIfConnected {
                     GlobalScope.launch(Dispatchers.IO) {
                         val country = getCountry("${location.latitude},${location.longitude}", mapsKey)
+
                         when (country.isNullOrEmpty()) {
-                            true -> contract.showDefaultRecommendations()
-                            else -> contract.showRecommendations(country)
+                            true -> onRecommendClicked(DEFAULT_COUNTRY)
+                            else -> onRecommendClicked(country)
                         }
                     }
                 }
             }
         }
+    }
+
+    private companion object {
+        private const val DEFAULT_COUNTRY = "usa"
     }
 
 }

@@ -43,7 +43,7 @@ class RecommendationsViewModel(private val country: String) :
 
     private fun refresh() {
         innerModel.value = UiModel.Loading
-        showRecommendations(country)
+        loadRecommendations(country)
     }
 
     fun onArtistClicked(artistName: String) {
@@ -61,7 +61,7 @@ class RecommendationsViewModel(private val country: String) :
         }
     }
 
-    private fun showRecommendations(country: String = DEFAULT_COUNTRY) {
+    private fun loadRecommendations(country: String) {
         ConnectivityController.runIfConnected {
             launch {
                 val artists = withContext(Dispatchers.IO) {
@@ -73,7 +73,6 @@ class RecommendationsViewModel(private val country: String) :
     }
 
     companion object {
-        const val DEFAULT_COUNTRY = "usa"
         private const val RANDOM_IMAGE = "https://picsum.photos/200/300"
     }
 }
