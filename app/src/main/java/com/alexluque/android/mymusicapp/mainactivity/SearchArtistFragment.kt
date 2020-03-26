@@ -51,7 +51,7 @@ class SearchArtistFragment(
         when (model) {
             is UiModel.Create -> dialog
             is UiModel.Search -> {
-                activity?.let { nameEditText.hideKeyboard(activity!!) }
+                activity?.let { nameEditText.hideKeyboard(it) }
                 if (loadArtistDetail != null)
                     loadArtistDetail.invoke(retrieveEntry())
                 else
