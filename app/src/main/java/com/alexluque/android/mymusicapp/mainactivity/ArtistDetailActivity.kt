@@ -1,68 +1,78 @@
 package com.alexluque.android.mymusicapp.mainactivity
 
-import SongsData
+import SongData
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alexluque.android.mymusicapp.mainactivity.SearchArtistFragment.Companion.FRAGMENT_NAME
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailActivityPresenter
-import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.ArtistDetailActivityContract
-import com.alexluque.android.mymusicapp.mainactivity.model.objects.ArtistContainer
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.makeLongSnackbar
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel.Companion.ARTIST_NAME
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel.UiModel
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModelFactory
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.ArtistDetailAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_artist_detail.*
 
-class ArtistDetailActivity : AppCompatActivity(), ArtistDetailActivityContract {
+class ArtistDetailActivity : AppCompatActivity() {
 
-    private val activityView: View by lazy { findViewById<View>(android.R.id.content) }
-    private val progressBar: ProgressBar by lazy { artist_progressBar }
+    private val mainView: View by lazy { findViewById<View>(android.R.id.content) }
+    private val progress: ProgressBar by lazy { artist_progressBar }
     private val artistImage: ImageView by lazy { artist_image }
-    private val artistName: TextView by lazy { artist_name }
-    private val presenter: ArtistDetailActivityPresenter by lazy { ArtistDetailActivityPresenter() }
-    private val viewAdapter: RecyclerView.Adapter<*> by lazy { ArtistDetailAdapter(myDataSet) }
+    private val artistNameView: TextView by lazy { artist_name }
     private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
-    private val myDataSet: SongsData by lazy { SongsData() }
     private val searchButton: FloatingActionButton by lazy { search_button }
-    private val searchArtistFragment: SearchArtistFragment by lazy { SearchArtistFragment() }
 
+    private lateinit var viewModel: ArtistDetailViewModel
     private lateinit var recyclerView: RecyclerView
+    private lateinit var viewAdapter: ArtistDetailAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_artist_detail)
 
-        presenter.onCreate(this, this, searchArtistFragment)
+        val artistName = intent.getStringExtra(ARTIST_NAME)
+        viewModel = ViewModelProvider(this, ArtistDetailViewModelFactory(artistName))
+            .get(ArtistDetailViewModel::class.java)
+
+        viewAdapter = ArtistDetailAdapter(listOf<SongData>())
 
         recyclerView = artist_detail_recyclerView.apply {
             layoutManager = viewManager
             adapter = viewAdapter
         }
-        ConnectivityController.view = activityView
 
-        onStartActivityReceived()
-        setOnClickListeners()
+        ConnectivityController.view = mainView
+
+        viewModel.model.observe(this, Observer(::updateUi))
+
+        searchButton.setOnClickListener { viewModel.onSearchClicked() }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.onDestroy()
-    }
+    private fun updateUi(model: UiModel) {
+        progress.visibility = if (model is UiModel.Loading) View.VISIBLE else View.GONE
 
-    override fun hideProgress() {
-        progressBar.visibility = View.GONE
-    }
+        when (model) {
+            is UiModel.Search -> SearchArtistFragment(viewModel::loadData).show(supportFragmentManager, FRAGMENT_NAME)
+            is UiModel.Content -> {
+                if (model.artist != null) {
+                    artistNameView.text = model.artist.name
+                    artistImage.loadImage(model.artist.picture_big)
+                } else {
+                    mainView.makeLongSnackbar(this.getString(R.string.artist_not_found))
+                }
 
-    override fun onStartActivityReceived() = presenter.onStartActivityReceived(intent, container = ArtistContainer(artistName, artistImage, myDataSet, viewAdapter))
-
-    private fun setOnClickListeners() {
-        searchButton.setOnClickListener {
-            presenter.onClickSearchButton(supportFragmentManager, ArtistContainer(artistName, artistImage, myDataSet, viewAdapter))
+                viewAdapter.songs = model.songs
+            }
         }
     }
-
 }

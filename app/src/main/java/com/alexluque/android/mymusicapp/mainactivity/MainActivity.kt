@@ -12,10 +12,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alexluque.android.mymusicapp.mainactivity.SearchArtistFragment.Companion.FRAGMENT_NAME
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.LocationRecommendationsListener
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailActivityPresenter
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainActivityViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainActivityViewModel.UiModel
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.FavouriteArtistsAdapter
@@ -52,10 +53,11 @@ class MainActivity : AppCompatActivity() {
             adapter = viewAdapter
         }
 
-        setOnClickListeners()
-        registerConnectivityControllerCallback()
+        ConnectivityController.registerCallback(this, mainView)
 
         viewModel.model.observe(this, Observer(::updateUi))
+
+        setOnClickListeners()
     }
 
     private fun updateUi(model: UiModel) {
@@ -63,10 +65,10 @@ class MainActivity : AppCompatActivity() {
 
         when (model) {
             is UiModel.Content -> viewAdapter.artists = model.artists
-            is UiModel.Search -> SearchArtistFragment().onSearchArtistButtonClick(supportFragmentManager)
+            is UiModel.Search -> SearchArtistFragment().show(supportFragmentManager, FRAGMENT_NAME)
             is UiModel.Navigation -> this.myStartActivity(
                 ArtistDetailActivity::class.java,
-                listOf(ArtistDetailActivityPresenter.ARTIST_NAME to model.artistName)
+                listOf(ArtistDetailViewModel.ARTIST_NAME to model.artistName)
             )
             is UiModel.Recommendations -> this.myStartActivity(
                 RecommendationsActivity::class.java,
@@ -95,7 +97,5 @@ class MainActivity : AppCompatActivity() {
             viewModel.onSearchClicked()
         }
     }
-
-    private fun registerConnectivityControllerCallback() = ConnectivityController.registerCallback(this, mainView)
 
 }

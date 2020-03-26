@@ -1,6 +1,6 @@
 package com.alexluque.android.mymusicapp.mainactivity.ui.adapters
 
-import SongsData
+import SongData
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
 import kotlinx.android.synthetic.main.artist_detail.view.*
 
-class ArtistDetailAdapter(private val myDataSet: SongsData) :
+class ArtistDetailAdapter(var songs: List<SongData>) :
     RecyclerView.Adapter<ArtistDetailAdapter.MyViewHolder>() {
 
     class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view)
@@ -22,10 +22,10 @@ class ArtistDetailAdapter(private val myDataSet: SongsData) :
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val view = holder.view
-        val data = myDataSet.data[position]
+        val data = songs[position]
         view.song_name.text = data.title
         view.song_album.text = data.album?.title
     }
 
-    override fun getItemCount() = myDataSet.data.size
+    override fun getItemCount() = songs.size
 }

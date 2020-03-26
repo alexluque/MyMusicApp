@@ -29,7 +29,6 @@ class MainActivityViewModel : ViewModel(), MyCoroutineScope by MyCoroutineScope.
 
     override fun onCleared() {
         cancelScope()
-        super.onCleared()
     }
 
     private fun refresh() {

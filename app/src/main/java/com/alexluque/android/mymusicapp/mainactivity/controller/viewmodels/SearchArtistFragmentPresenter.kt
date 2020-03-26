@@ -3,35 +3,25 @@ package com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import com.alexluque.android.mymusicapp.mainactivity.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.R
-import com.alexluque.android.mymusicapp.mainactivity.SearchArtistFragment
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.hideKeyboard
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.showKeyboard
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailActivityPresenter.Companion.ARTIST_NAME
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel.Companion.ARTIST_NAME
 import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.SearchArtistFragmentContract
-import com.alexluque.android.mymusicapp.mainactivity.model.objects.ArtistContainer
 import kotlinx.android.synthetic.main.fragment_search_artist.view.*
 
 class SearchArtistFragmentPresenter : MyCoroutineScope by MyCoroutineScope.Implementation() {
 
     private var contract: SearchArtistFragmentContract? = null
 
-    fun onSearchArtistButtonClick(
-        supportFragmentManager: FragmentManager,
-        artistContainer: ArtistContainer? = null,
-        detailPresenter: ArtistDetailActivityPresenter? = null
-    ) = SearchArtistFragment(artistContainer, detailPresenter).show(supportFragmentManager, FRAGMENT_NAME)
-
     fun onCreateDialog(
         contract: SearchArtistFragmentContract,
         activity: FragmentActivity?,
         fragment: Fragment,
-        artistContainer: ArtistContainer? = null,
-        detailPresenter: ArtistDetailActivityPresenter? = null
+        loadArtistDetail: ((artistName: String) -> Unit)? = null
     ): AlertDialog {
         this.contract = contract
 
@@ -48,10 +38,10 @@ class SearchArtistFragmentPresenter : MyCoroutineScope by MyCoroutineScope.Imple
                     view.artistName_editText.hideKeyboard(activity)
                     val artistName = contract.retrieveEntry()
 
-                    when (artistContainer != null && detailPresenter != null) {
-                        true -> detailPresenter.updateData(artistContainer, artistName)
-                        else -> activity.myStartActivity(ArtistDetailActivity::class.java, listOf(ARTIST_NAME to artistName))
-                    }
+                    if (loadArtistDetail != null)
+                        loadArtistDetail(artistName)
+                    else
+                        activity.myStartActivity(ArtistDetailActivity::class.java, listOf(ARTIST_NAME to artistName))
                 }
                 .setNegativeButton(activity.getString(R.string.cancel_button)) { dialog, _ ->
                     view.artistName_editText.hideKeyboard(activity)
@@ -59,9 +49,5 @@ class SearchArtistFragmentPresenter : MyCoroutineScope by MyCoroutineScope.Imple
                 }
                 .create()
         } ?: throw IllegalStateException("Activity cannot be null")
-    }
-
-    companion object {
-        const val FRAGMENT_NAME = "SearchArtistFragment"
     }
 }

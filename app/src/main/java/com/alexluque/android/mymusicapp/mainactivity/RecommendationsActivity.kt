@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.makeLongSnackbar
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailActivityPresenter
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.RecommendationsViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.RecommendationsViewModel.UiModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.RecommendationsViewModelFactory
@@ -61,7 +61,7 @@ class RecommendationsActivity : AppCompatActivity() {
             }
             is UiModel.Navigation -> this.myStartActivity(
                 ArtistDetailActivity::class.java,
-                listOf(ArtistDetailActivityPresenter.ARTIST_NAME to model.artistName)
+                listOf(ArtistDetailViewModel.ARTIST_NAME to model.artistName)
             )
         }
     }

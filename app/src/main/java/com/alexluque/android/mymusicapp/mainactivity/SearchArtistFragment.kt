@@ -4,17 +4,13 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailActivityPresenter
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.SearchArtistFragmentPresenter
 import com.alexluque.android.mymusicapp.mainactivity.ui.contracts.SearchArtistFragmentContract
-import com.alexluque.android.mymusicapp.mainactivity.model.objects.ArtistContainer
 import kotlinx.android.synthetic.main.fragment_search_artist.*
 import java.util.*
 
 class SearchArtistFragment(
-    private val artistContainer: ArtistContainer? = null,
-    private val detailPresenter: ArtistDetailActivityPresenter? = null
+    private val loadArtistDetail: ((artistName: String) -> Unit)? = null
 ) : DialogFragment(), SearchArtistFragmentContract {
 
     private val presenter: SearchArtistFragmentPresenter by lazy { SearchArtistFragmentPresenter() }
@@ -22,15 +18,9 @@ class SearchArtistFragment(
     private lateinit var dialog: AlertDialog
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        dialog = presenter.onCreateDialog(this, activity, this, artistContainer, detailPresenter)
+        dialog = presenter.onCreateDialog(this, activity, this, loadArtistDetail)
         return dialog
     }
-
-    override fun onSearchArtistButtonClick(
-        manager: FragmentManager,
-        container: ArtistContainer?,
-        detailPresenter: ArtistDetailActivityPresenter?
-    ) = presenter.onSearchArtistButtonClick(manager, container, detailPresenter)
 
     override fun retrieveEntry(): String =
         dialog.artistName_editText
@@ -38,4 +28,8 @@ class SearchArtistFragment(
             .toString()
             .toLowerCase(Locale.ROOT)
             .trim()
+
+    companion object {
+        const val FRAGMENT_NAME = "SearchArtistFragment"
+    }
 }
