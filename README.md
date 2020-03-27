@@ -1,2 +1,2 @@
 # MyMusicApp
-Music app to store favourite artists and their songs
+Music app to store your favourite artists and their songs
