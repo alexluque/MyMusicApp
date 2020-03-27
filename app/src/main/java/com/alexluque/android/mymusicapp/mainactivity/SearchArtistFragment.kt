@@ -1,5 +1,6 @@
 package com.alexluque.android.mymusicapp.mainactivity
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.view.View
@@ -18,6 +19,7 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.Searc
 import kotlinx.android.synthetic.main.fragment_search_artist.view.*
 import java.util.*
 
+@SuppressLint("InflateParams")
 class SearchArtistFragment(
     private val loadArtistDetail: ((artistName: String) -> Unit)? = null
 ) : DialogFragment() {
@@ -52,6 +54,7 @@ class SearchArtistFragment(
             is UiModel.Create -> dialog
             is UiModel.Search -> {
                 activity?.let { nameEditText.hideKeyboard(it) }
+
                 if (loadArtistDetail != null)
                     loadArtistDetail.invoke(retrieveEntry())
                 else

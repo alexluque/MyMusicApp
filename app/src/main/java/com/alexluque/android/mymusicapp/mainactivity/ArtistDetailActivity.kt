@@ -15,6 +15,7 @@ import com.alexluque.android.mymusicapp.mainactivity.SearchArtistFragment.Compan
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.makeLongSnackbar
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.runIfNotHandled
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel.Companion.ARTIST_NAME
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel.UiModel
@@ -52,17 +53,16 @@ class ArtistDetailActivity : AppCompatActivity() {
         }
 
         ConnectivityController.view = mainView
+        searchButton.setOnClickListener { viewModel.onSearchClicked() }
 
         viewModel.model.observe(this, Observer(::updateUi))
-
-        searchButton.setOnClickListener { viewModel.onSearchClicked() }
+        observeSearch()
     }
 
     private fun updateUi(model: UiModel) {
         progress.visibility = if (model is UiModel.Loading) View.VISIBLE else View.GONE
 
         when (model) {
-            is UiModel.Search -> SearchArtistFragment(viewModel::loadData).show(supportFragmentManager, FRAGMENT_NAME)
             is UiModel.Content -> {
                 if (model.artist != null) {
                     artistNameView.text = model.artist.name
@@ -75,4 +75,9 @@ class ArtistDetailActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun observeSearch() =
+        this.runIfNotHandled(viewModel.search) {
+            SearchArtistFragment(viewModel::loadData).show(supportFragmentManager, FRAGMENT_NAME)
+        }
 }

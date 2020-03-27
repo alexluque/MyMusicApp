@@ -16,6 +16,7 @@ import com.alexluque.android.mymusicapp.mainactivity.SearchArtistFragment.Compan
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.LocationRecommendationsListener
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.runIfNotHandled
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainActivityViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainActivityViewModel.UiModel
@@ -54,10 +55,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         ConnectivityController.registerCallback(this, mainView)
+        setOnClickListeners()
 
         viewModel.model.observe(this, Observer(::updateUi))
-
-        setOnClickListeners()
+        observeNavigation()
+        observeRecommendation()
+        observeSearch()
     }
 
     private fun updateUi(model: UiModel) {
@@ -65,17 +68,29 @@ class MainActivity : AppCompatActivity() {
 
         when (model) {
             is UiModel.Content -> viewAdapter.artists = model.artists
-            is UiModel.Search -> SearchArtistFragment().show(supportFragmentManager, FRAGMENT_NAME)
-            is UiModel.Navigation -> this.myStartActivity(
-                ArtistDetailActivity::class.java,
-                listOf(ArtistDetailViewModel.ARTIST_NAME to model.artistName)
-            )
-            is UiModel.Recommendations -> this.myStartActivity(
-                RecommendationsActivity::class.java,
-                listOf(AlarmClock.EXTRA_MESSAGE to model.country)
-            )
         }
     }
+
+    private fun observeSearch() =
+        this.runIfNotHandled(viewModel.search) {
+            SearchArtistFragment().show(supportFragmentManager, FRAGMENT_NAME)
+        }
+
+    private fun observeRecommendation() =
+        this.runIfNotHandled(viewModel.recommendation) {
+            this.myStartActivity(
+                RecommendationsActivity::class.java,
+                listOf(AlarmClock.EXTRA_MESSAGE to (it as UiModel.Recommendations).country)
+            )
+        }
+
+    private fun observeNavigation() =
+        this.runIfNotHandled(viewModel.navigation) {
+            this.myStartActivity(
+                ArtistDetailActivity::class.java,
+                listOf(ArtistDetailViewModel.ARTIST_NAME to (it as UiModel.Navigation).artistName)
+            )
+        }
 
     override fun onResume() {
         super.onResume()

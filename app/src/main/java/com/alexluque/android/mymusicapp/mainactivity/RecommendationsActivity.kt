@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.makeLongSnackbar
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.runIfNotHandled
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.RecommendationsViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.RecommendationsViewModel.UiModel
@@ -49,6 +50,7 @@ class RecommendationsActivity : AppCompatActivity() {
         }
 
         viewModel.model.observe(this, Observer(::updateUi))
+        observeNavigation()
     }
 
     private fun updateUi(model: UiModel) {
@@ -65,4 +67,12 @@ class RecommendationsActivity : AppCompatActivity() {
             )
         }
     }
+
+    private fun observeNavigation() =
+        this.runIfNotHandled(viewModel.navigation) {
+            this.myStartActivity(
+                ArtistDetailActivity::class.java,
+                listOf(ArtistDetailViewModel.ARTIST_NAME to (it as UiModel.Navigation).artistName)
+            )
+        }
 }

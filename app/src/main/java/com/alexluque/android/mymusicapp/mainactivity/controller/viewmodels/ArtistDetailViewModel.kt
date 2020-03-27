@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
+import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
 import com.alexluque.android.mymusicapp.mainactivity.model.repositories.getArtist
 import com.alexluque.android.mymusicapp.mainactivity.model.repositories.getSongs
@@ -30,6 +31,8 @@ class ArtistDetailViewModel(private val artistName: String?) :
             if (innerModel.value == null) refresh()
             return innerModel
         }
+    private val innerSearch = MutableLiveData<Event<UiModel>>()
+    val search: LiveData<Event<UiModel>> = innerSearch
 
     init {
         initScope()
@@ -63,7 +66,7 @@ class ArtistDetailViewModel(private val artistName: String?) :
     }
 
     fun onSearchClicked() {
-        innerModel.value = UiModel.Search
+        innerSearch.value = Event(UiModel.Search)
     }
 
     companion object {

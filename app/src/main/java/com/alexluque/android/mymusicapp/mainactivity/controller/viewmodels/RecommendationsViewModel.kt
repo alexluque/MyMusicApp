@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
+import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
 import com.alexluque.android.mymusicapp.mainactivity.model.repositories.getArtist
@@ -31,6 +32,8 @@ class RecommendationsViewModel(private val country: String) :
             if (innerModel.value == null) refresh()
             return innerModel
         }
+    private val innerNavigation = MutableLiveData<Event<UiModel>>()
+    val navigation: LiveData<Event<UiModel>> = innerNavigation
 
     init {
         initScope()
@@ -47,7 +50,7 @@ class RecommendationsViewModel(private val country: String) :
     }
 
     fun onArtistClicked(artistName: String) {
-        innerModel.value = UiModel.Navigation(artistName)
+        innerNavigation.value = Event(UiModel.Navigation(artistName))
     }
 
     fun loadImage(artistName: String, imageView: ImageView) {

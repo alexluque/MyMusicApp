@@ -4,6 +4,7 @@ import ArtistData
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
 
 class MainActivityViewModel : ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
@@ -22,6 +23,12 @@ class MainActivityViewModel : ViewModel(), MyCoroutineScope by MyCoroutineScope.
             if (innerModel.value == null) refresh()
             return innerModel
         }
+    private val innerNavigation = MutableLiveData<Event<UiModel>>()
+    val navigation: LiveData<Event<UiModel>> = innerNavigation
+    private val innerRecommendation = MutableLiveData<Event<UiModel>>()
+    val recommendation: LiveData<Event<UiModel>> = innerRecommendation
+    private val innerSearch = MutableLiveData<Event<UiModel>>()
+    val search: LiveData<Event<UiModel>> = innerSearch
 
     init {
         initScope()
@@ -72,14 +79,14 @@ class MainActivityViewModel : ViewModel(), MyCoroutineScope by MyCoroutineScope.
         )
 
     fun onArtistClicked(artistName: String) {
-        innerModel.value = UiModel.Navigation(artistName)
+        innerNavigation.value = Event(UiModel.Navigation(artistName))
     }
 
     fun onRecommendClicked(country: String) {
-        innerModel.value = UiModel.Recommendations(country)
+        innerRecommendation.value = Event(UiModel.Recommendations(country))
     }
 
     fun onSearchClicked() {
-        innerModel.value = UiModel.Search
+        innerSearch.value = Event(UiModel.Search)
     }
 }
