@@ -10,8 +10,8 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityCont
 import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
-import com.alexluque.android.mymusicapp.mainactivity.model.repositories.getArtist
-import com.alexluque.android.mymusicapp.mainactivity.model.repositories.getArtistsByLocation
+import com.alexluque.android.mymusicapp.mainactivity.model.network.repositories.getArtist
+import com.alexluque.android.mymusicapp.mainactivity.model.network.repositories.getArtistsByLocation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

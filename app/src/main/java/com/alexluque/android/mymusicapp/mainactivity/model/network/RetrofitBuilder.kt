@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity.model
+package com.alexluque.android.mymusicapp.mainactivity.model.network
 
 import com.alexluque.android.mymusicapp.mainactivity.BuildConfig
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.getInstance

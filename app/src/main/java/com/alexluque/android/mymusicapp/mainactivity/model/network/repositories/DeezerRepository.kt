@@ -1,7 +1,7 @@
-package com.alexluque.android.mymusicapp.mainactivity.model.repositories
+package com.alexluque.android.mymusicapp.mainactivity.model.network.repositories
 
-import com.alexluque.android.mymusicapp.mainactivity.model.RetrofitBuilder
-import com.alexluque.android.mymusicapp.mainactivity.model.services.DeezerArtistService
+import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
+import com.alexluque.android.mymusicapp.mainactivity.model.network.services.DeezerArtistService
 
 suspend fun getArtist(artistName: String) =
     RetrofitBuilder.deezerInstance

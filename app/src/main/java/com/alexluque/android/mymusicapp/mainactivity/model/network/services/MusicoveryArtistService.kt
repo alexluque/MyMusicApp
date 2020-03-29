@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity.model.services
+package com.alexluque.android.mymusicapp.mainactivity.model.network.services
 
 import MusicoveryGetByCountryResponse
 import retrofit2.http.GET

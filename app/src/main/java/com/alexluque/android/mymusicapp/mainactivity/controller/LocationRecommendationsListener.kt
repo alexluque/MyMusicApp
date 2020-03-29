@@ -2,7 +2,7 @@ package com.alexluque.android.mymusicapp.mainactivity.controller
 
 import android.annotation.SuppressLint
 import android.location.Location
-import com.alexluque.android.mymusicapp.mainactivity.model.repositories.getCountry
+import com.alexluque.android.mymusicapp.mainactivity.model.network.repositories.getCountry
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse

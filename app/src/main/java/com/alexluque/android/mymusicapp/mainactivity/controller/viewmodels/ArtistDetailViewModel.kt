@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
-import com.alexluque.android.mymusicapp.mainactivity.model.repositories.getArtist
-import com.alexluque.android.mymusicapp.mainactivity.model.repositories.getSongs
+import com.alexluque.android.mymusicapp.mainactivity.model.network.repositories.getArtist
+import com.alexluque.android.mymusicapp.mainactivity.model.network.repositories.getSongs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
