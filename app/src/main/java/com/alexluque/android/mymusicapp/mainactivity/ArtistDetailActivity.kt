@@ -15,6 +15,7 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityCont
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.makeLongSnackbar
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.runIfNotHandled
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.updateData
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel.Companion.ARTIST_NAME
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel.UiModel
@@ -24,6 +25,7 @@ import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.ArtistDetailAda
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_artist_detail.*
 
+@Suppress("UNCHECKED_CAST")
 class ArtistDetailActivity : AppCompatActivity() {
 
     private val mainView: View by lazy { findViewById<View>(android.R.id.content) }
@@ -48,7 +50,7 @@ class ArtistDetailActivity : AppCompatActivity() {
             ArtistDetailViewModelFactory(artistName, application)
         ).get(ArtistDetailViewModel::class.java)
 
-        viewAdapter = ArtistDetailAdapter(listOf<SongData>(), viewModel::onFavouriteClicked, viewModel::isFavourite)
+        viewAdapter = ArtistDetailAdapter(mutableListOf<SongData>(), viewModel::onFavouriteClicked, viewModel::isFavourite)
 
         recyclerView = artist_detail_recyclerView.apply {
             layoutManager = viewManager
@@ -74,7 +76,7 @@ class ArtistDetailActivity : AppCompatActivity() {
                     mainView.makeLongSnackbar(this.getString(R.string.artist_not_found))
                 }
 
-                viewAdapter.songs = model.songs
+                viewAdapter.updateData(viewAdapter.songs as MutableList<Any>, model.songs)
             }
             is UiModel.Favourite -> {
                 val resource = if (model.newFavourite) android.R.drawable.btn_star_big_on else android.R.drawable.btn_star

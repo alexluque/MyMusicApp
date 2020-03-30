@@ -88,6 +88,8 @@ class ArtistDetailViewModel(
                 }
             }
         }
+
+        loadFavouriteSongs()
     }
 
     fun onSearchClicked() {
@@ -119,10 +121,10 @@ class ArtistDetailViewModel(
 
                     innerModel.value = UiModel.Favourite(star, title, false)
                 }
-
-                loadFavouriteSongs()
             }
         }
+
+        loadFavouriteSongs()
     }
 
     companion object {

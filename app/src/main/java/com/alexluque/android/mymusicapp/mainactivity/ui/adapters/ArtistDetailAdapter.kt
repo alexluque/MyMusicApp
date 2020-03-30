@@ -10,7 +10,7 @@ import com.alexluque.android.mymusicapp.mainactivity.R
 import kotlinx.android.synthetic.main.artist_detail.view.*
 
 class ArtistDetailAdapter(
-    var songs: List<SongData>,
+    val songs: MutableList<SongData>,
     private val onFavouriteClicked: (star: ImageView, songId: Long, title: String, album: String?) -> Unit,
     private val isFavourite: (songId: Long) -> Boolean
 ) : RecyclerView.Adapter<ArtistDetailAdapter.MyViewHolder>() {
