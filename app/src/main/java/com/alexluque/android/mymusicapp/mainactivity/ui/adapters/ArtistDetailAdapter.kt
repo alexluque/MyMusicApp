@@ -29,9 +29,8 @@ class ArtistDetailAdapter(
         val song = songs[position]
         view.song_name.text = song.title
         view.song_album.text = song.album?.title
-
-        if (isFavourite(song.id))
-            view.set_favourite.setImageResource(android.R.drawable.btn_star_big_on)
+        val resource = if (isFavourite(song.id)) android.R.drawable.btn_star_big_on else android.R.drawable.btn_star
+        view.set_favourite.setImageResource(resource)
 
         view.set_favourite.setOnClickListener {
             onFavouriteClicked(
