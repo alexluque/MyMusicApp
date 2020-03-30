@@ -2,21 +2,20 @@ package com.alexluque.android.mymusicapp.mainactivity.controller
 
 import android.annotation.SuppressLint
 import android.location.Location
-import com.alexluque.android.mymusicapp.mainactivity.model.network.repositories.getCountry
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class LocationRecommendationsListener(
     private val mapsKey: String,
-    private val onRecommendClicked: (country: String) -> Unit,
-    private val fusedClient: FusedLocationProviderClient) : PermissionListener {
+    private val onRecommendClicked: (mapsKey: String, latitude: Double, longitude: Double) -> Unit,
+    private val fusedClient: FusedLocationProviderClient
+) : PermissionListener {
+
+    private val emptyDouble = 0.0
 
     @SuppressLint("MissingPermission")
     override fun onPermissionGranted(response: PermissionGrantedResponse) {
@@ -28,30 +27,14 @@ class LocationRecommendationsListener(
             }
     }
 
-    override fun onPermissionDenied(response: PermissionDeniedResponse) = onRecommendClicked(DEFAULT_COUNTRY)
+    override fun onPermissionDenied(response: PermissionDeniedResponse) = onRecommendClicked(mapsKey, emptyDouble, emptyDouble)
 
     override fun onPermissionRationaleShouldBeShown(permission: PermissionRequest, token: PermissionToken) = token.continuePermissionRequest()
 
     private fun showRecommendations(location: Location?) {
         when (location) {
-            null -> onRecommendClicked(DEFAULT_COUNTRY)
-            else -> {
-                ConnectivityController.runIfConnected {
-                    GlobalScope.launch(Dispatchers.IO) {
-                        val country = getCountry("${location.latitude},${location.longitude}", mapsKey)
-
-                        when (country.isNullOrEmpty()) {
-                            true -> onRecommendClicked(DEFAULT_COUNTRY)
-                            else -> onRecommendClicked(country)
-                        }
-                    }
-                }
-            }
+            null -> onRecommendClicked(mapsKey, emptyDouble, emptyDouble)
+            else -> onRecommendClicked(mapsKey, location.latitude, location.longitude)
         }
     }
-
-    private companion object {
-        private const val DEFAULT_COUNTRY = "usa"
-    }
-
 }

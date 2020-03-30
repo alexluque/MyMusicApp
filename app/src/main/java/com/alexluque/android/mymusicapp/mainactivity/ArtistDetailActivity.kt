@@ -1,6 +1,5 @@
 package com.alexluque.android.mymusicapp.mainactivity
 
-import SongData
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -20,6 +19,7 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.Artis
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel.Companion.ARTIST_NAME
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel.UiModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModelFactory
+import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.deezer.SongData
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.ArtistDetailAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_artist_detail.*
@@ -42,10 +42,13 @@ class ArtistDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_artist_detail)
 
         val artistName = intent.getStringExtra(ARTIST_NAME)
-        viewModel = ViewModelProvider(this, ArtistDetailViewModelFactory(artistName))
-            .get(ArtistDetailViewModel::class.java)
 
-        viewAdapter = ArtistDetailAdapter(listOf<SongData>())
+        viewModel = ViewModelProvider(
+            this,
+            ArtistDetailViewModelFactory(artistName, application)
+        ).get(ArtistDetailViewModel::class.java)
+
+        viewAdapter = ArtistDetailAdapter(listOf<SongData>(), viewModel::onFavouriteClicked, viewModel::isFavourite)
 
         recyclerView = artist_detail_recyclerView.apply {
             layoutManager = viewManager
@@ -72,6 +75,13 @@ class ArtistDetailActivity : AppCompatActivity() {
                 }
 
                 viewAdapter.songs = model.songs
+            }
+            is UiModel.Favourite -> {
+                val resource = if (model.newFavourite) android.R.drawable.btn_star_big_on else android.R.drawable.btn_star
+                val msg = if (model.newFavourite) getString(R.string.fav_song_added) else getString(R.string.fav_song_removed)
+
+                model.star.setImageResource(resource)
+                model.star.makeLongSnackbar("${model.songName} $msg")
             }
         }
     }

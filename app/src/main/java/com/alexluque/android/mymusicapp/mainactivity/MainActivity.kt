@@ -1,6 +1,5 @@
 package com.alexluque.android.mymusicapp.mainactivity
 
-import ArtistData
 import android.Manifest
 import android.os.Bundle
 import android.provider.AlarmClock
@@ -20,6 +19,8 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.runIf
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainActivityViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainActivityViewModel.UiModel
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainActivityViewModelFactory
+import com.alexluque.android.mymusicapp.mainactivity.model.database.entities.Artist
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.FavouriteArtistsAdapter
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -45,9 +46,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this,
+            MainActivityViewModelFactory(application)
+        ).get(MainActivityViewModel::class.java)
 
-        viewAdapter = FavouriteArtistsAdapter(listOf<ArtistData>(), viewModel::onArtistClicked)
+        viewAdapter = FavouriteArtistsAdapter(listOf<Artist>(), viewModel::onArtistClicked)
 
         recyclerView = artists_recycler_view.apply {
             layoutManager = viewManager

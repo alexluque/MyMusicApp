@@ -1,6 +1,6 @@
 package com.alexluque.android.mymusicapp.mainactivity.model.network.services
 
-import GeocodingResponse
+import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.geocoding.GeocodingResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

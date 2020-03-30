@@ -1,6 +1,6 @@
 package com.alexluque.android.mymusicapp.mainactivity.ui.adapters
 
-import MusicoveryArtist
+import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.MusicoveryArtist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

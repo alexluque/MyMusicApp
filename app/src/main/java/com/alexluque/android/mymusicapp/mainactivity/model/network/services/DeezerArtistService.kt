@@ -1,7 +1,7 @@
 package com.alexluque.android.mymusicapp.mainactivity.model.network.services
 
-import Artist
-import SongsData
+import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.deezer.Artist
+import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.deezer.SongsData
 import retrofit2.http.GET
 import retrofit2.http.Query
 

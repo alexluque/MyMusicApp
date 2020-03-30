@@ -1,6 +1,6 @@
 package com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels
 
-import MusicoveryArtist
+import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.MusicoveryArtist
 import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

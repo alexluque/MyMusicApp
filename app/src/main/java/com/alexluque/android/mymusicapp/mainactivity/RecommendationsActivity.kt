@@ -1,6 +1,6 @@
 package com.alexluque.android.mymusicapp.mainactivity
 
-import MusicoveryArtist
+import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.MusicoveryArtist
 import android.os.Bundle
 import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.view.View

@@ -17,4 +17,6 @@
     <string name="artist_dialog_content">Write artist name</string>
     <string name="artist_dialog_title">Artist</string>
     <string name="artist_not_found">Artist not found...</string>
+    <string name="fav_song_added">added to favourite songs!</string>
+    <string name="fav_song_removed">removed from favourite songs</string>
 </resources>
