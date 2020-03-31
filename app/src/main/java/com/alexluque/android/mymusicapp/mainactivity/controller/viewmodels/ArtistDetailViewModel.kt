@@ -1,6 +1,7 @@
 package com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels
 
 import android.app.Application
+import android.database.sqlite.SQLiteConstraintException
 import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -110,7 +111,10 @@ class ArtistDetailViewModel(
                     if (artistExists.not())
                         dbRepository.insertArtist(artist)
 
-                    dbRepository.insertSong(song)
+                    try {
+                        dbRepository.insertSong(song)
+                    } catch (e: SQLiteConstraintException) {
+                    }
 
                     innerModel.value = UiModel.Favourite(star, title, true)
                 } else {
