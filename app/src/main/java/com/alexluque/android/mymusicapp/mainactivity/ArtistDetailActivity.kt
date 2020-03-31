@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -31,7 +30,6 @@ class ArtistDetailActivity : AppCompatActivity() {
     private val mainView: View by lazy { findViewById<View>(android.R.id.content) }
     private val progress: ProgressBar by lazy { artist_progressBar }
     private val artistImage: ImageView by lazy { artist_image }
-    private val artistNameView: TextView by lazy { artist_name }
     private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
     private val searchButton: FloatingActionButton by lazy { search_button }
 
@@ -42,6 +40,7 @@ class ArtistDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_artist_detail)
+        this.title = getString(R.string.artists_name)
 
         val artistName = intent.getStringExtra(ARTIST_NAME)
 
@@ -70,7 +69,7 @@ class ArtistDetailActivity : AppCompatActivity() {
         when (model) {
             is UiModel.Content -> {
                 if (model.artist != null) {
-                    artistNameView.text = model.artist.name
+                    this.title = model.artist.name
                     artistImage.loadImage(model.artist.picture_big)
                 } else {
                     mainView.makeLongSnackbar(this.getString(R.string.artist_not_found))
