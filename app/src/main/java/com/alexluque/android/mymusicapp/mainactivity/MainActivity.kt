@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        this.title = getString(R.string.main_activity_title)
 
         viewModel = ViewModelProvider(
             this,

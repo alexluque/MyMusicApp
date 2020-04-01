@@ -19,5 +19,7 @@
     <string name="artist_not_found">Artista no encontrado...</string>
     <string name="fav_song_added">añadida a favoritas!</string>
     <string name="fav_song_removed">eliminada de favoritas</string>
+    <string name="recommendations_activity_title">Recomendaciones</string>
+    <string name="main_activity_title">Artistas Preferidos</string>
 </resources>
 

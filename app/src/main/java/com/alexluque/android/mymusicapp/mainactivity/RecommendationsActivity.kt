@@ -36,6 +36,7 @@ class RecommendationsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recommendations)
+        this.title = getString(R.string.recommendations_activity_title)
 
         ConnectivityController.view = mainView
 

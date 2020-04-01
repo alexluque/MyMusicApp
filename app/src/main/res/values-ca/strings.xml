@@ -19,5 +19,7 @@
     <string name="artist_not_found">No s\'ha trobat l\'artista...</string>
     <string name="fav_song_added">afegida a preferides!</string>
     <string name="fav_song_removed">eliminada de preferides</string>
+    <string name="recommendations_activity_title">Recomanacions</string>
+    <string name="main_activity_title">Artistes Preferits</string>
 </resources>
 
