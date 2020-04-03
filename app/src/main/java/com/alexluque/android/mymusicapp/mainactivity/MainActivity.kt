@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private val mainView: View by lazy { findViewById<View>(android.R.id.content) }
     private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
     private val recommendButton: Button by lazy { recommend_button }
+    private val recommendFloatingBtn: FloatingActionButton by lazy { recommend_floating_btn }
     private val fusedClient: FusedLocationProviderClient by lazy { LocationServices.getFusedLocationProviderClient(this) }
     private val searchButton: FloatingActionButton by lazy { search_button }
     private val progress: ProgressBar by lazy { progressBar }
@@ -103,19 +104,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setOnClickListeners() {
-        recommendButton.setOnClickListener {
-            Dexter.withActivity(this)
-                .withPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                .withListener(
-                    LocationRecommendationsListener(
-                        getString(R.string.google_maps_key),
-                        viewModel::onRecommendClicked,
-                        fusedClient)
-                ).check()
-        }
+        recommendButton.setOnClickListener { addLocationPermission() }
+        recommendFloatingBtn.setOnClickListener { addLocationPermission() }
         searchButton.setOnClickListener {
             viewModel.onSearchClicked()
         }
     }
+
+    private fun addLocationPermission() =
+        Dexter.withActivity(this)
+            .withPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+            .withListener(
+                LocationRecommendationsListener(
+                    getString(R.string.google_maps_key),
+                    viewModel::onRecommendClicked,
+                    fusedClient)
+            ).check()
 
 }
