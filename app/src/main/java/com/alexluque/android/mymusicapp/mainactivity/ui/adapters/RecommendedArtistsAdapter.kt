@@ -1,16 +1,16 @@
 package com.alexluque.android.mymusicapp.mainactivity.ui.adapters
 
-import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.MusicoveryArtist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
+import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.MusicoveryArtist
 import kotlinx.android.synthetic.main.recommended_artist.view.*
 
 class RecommendedArtistsAdapter(
-    var artists: List<MusicoveryArtist>,
+    var artists: MutableList<MusicoveryArtist>,
     private val onArtistClicked: (artistName: String) -> Unit,
     private val loadImage: (artistName: String, imageView: ImageView) -> Unit
 ) : RecyclerView.Adapter<RecommendedArtistsAdapter.MyViewHolder>() {

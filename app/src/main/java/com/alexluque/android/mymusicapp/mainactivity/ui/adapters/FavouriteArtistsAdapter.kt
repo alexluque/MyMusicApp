@@ -10,7 +10,7 @@ import com.alexluque.android.mymusicapp.mainactivity.model.database.entities.Art
 import kotlinx.android.synthetic.main.favourite_artist.view.*
 
 class FavouriteArtistsAdapter(
-    var artists: List<Artist>,
+    var artists: MutableList<Artist>,
     private val onArtistClicked: (artistName: String) -> Unit
 ) : RecyclerView.Adapter<FavouriteArtistsAdapter.MyViewHolder>() {
 

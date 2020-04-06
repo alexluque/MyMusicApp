@@ -24,44 +24,54 @@ import kotlinx.coroutines.withContext
 
 @Suppress("UNCHECKED_CAST")
 class ArtistDetailViewModel(
-    private val artistName: String?,
+    artistName: String?,
     application: Application
 ) : ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
 
-    sealed class UiModel {
-        object Loading : UiModel()
-        object Search : UiModel()
-        class Content(val artist: ArtistData?, val songs: List<SongData>) : UiModel()
-        class Favourite(val star: ImageView, val songName: String, val newFavourite: Boolean) : UiModel()
-    }
+    class Favourite(val star: ImageView, val songName: String, val newFavourite: Boolean)
 
-    private val innerModel = MutableLiveData<UiModel>()
-    val model: LiveData<UiModel>
-        get() {
-            if (innerModel.value == null) refresh()
-            return innerModel
-        }
-    private val innerSearch = MutableLiveData<Event<UiModel>>()
-    val search: LiveData<Event<UiModel>> = innerSearch
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> = _loading
+
+    private val _imageUrl = MutableLiveData<String>()
+    val imageUrl: LiveData<String> = _imageUrl
+
+    private val _songs = MutableLiveData<List<SongData>>()
+    val songs: LiveData<List<SongData>> = _songs
+
+    private val _favourite = MutableLiveData<Event<Favourite>>()
+    val favourite: LiveData<Event<Favourite>> = _favourite
 
     private val dbRepository: DatabaseRepository
-    private var currentArtist: ArtistData? = null
     private val favouriteSongs = mutableListOf<Song>()
+
+    private val _currentArtist = MutableLiveData<ArtistData?>()
+    val currentArtist: LiveData<ArtistData?> = _currentArtist
 
     init {
         initScope()
         val db = FavouritesRoomDatabase.getDatabase(application)
         dbRepository = DatabaseRepository(db.artistDao(), db.songDao())
-        loadFavouriteSongs()
-    }
-
-    override fun onCleared() {
-        cancelScope()
-    }
-
-    private fun refresh() {
-        innerModel.value = UiModel.Loading
         loadData(artistName)
+    }
+
+    override fun onCleared() = cancelScope()
+
+    fun loadData(artistName: String?) {
+        ConnectivityController.runIfConnected {
+            val name = artistName ?: String()
+
+            launch {
+                _loading.value = true
+                val artist = withContext(Dispatchers.IO) { getArtist(name) }
+                _currentArtist.value = artist
+                _imageUrl.value = artist?.picture_big
+                _songs.value = artist?.let { withContext(Dispatchers.IO) { getSongs(name).data } }
+                _loading.value = false
+            }
+        }
+
+        loadFavouriteSongs()
     }
 
     private fun loadFavouriteSongs() = launch {
@@ -69,38 +79,8 @@ class ArtistDetailViewModel(
         favouriteSongs.addAll(withContext(Dispatchers.IO) { dbRepository.getSongs() })
     }
 
-    fun loadData(artistName: String?) {
-        ConnectivityController.runIfConnected {
-            val name = artistName ?: String()
-
-            launch {
-                val artist = withContext(Dispatchers.IO) { getArtist(name) }
-
-                when (artist == null) {
-                    true -> {
-                        currentArtist = null
-                        innerModel.value = UiModel.Content(artist, listOf<SongData>())
-                    }
-                    else -> {
-                        currentArtist = artist
-                        val songs = withContext(Dispatchers.IO) { getSongs(name) }
-                        innerModel.value = UiModel.Content(artist, songs.data)
-                    }
-                }
-            }
-        }
-
-        loadFavouriteSongs()
-    }
-
-    fun onSearchClicked() {
-        innerSearch.value = Event(UiModel.Search)
-    }
-
-    fun isFavourite(songId: Long): Boolean = favouriteSongs.any { it.id == songId }
-
     fun onFavouriteClicked(star: ImageView, songId: Long, title: String, album: String?) {
-        currentArtist?.let {
+        _currentArtist.value?.let {
             launch {
                 val song = Song(songId, title, album, it.id)
                 val artist = Artist(it.id, it.name, it.picture_medium)
@@ -116,20 +96,22 @@ class ArtistDetailViewModel(
                     } catch (e: SQLiteConstraintException) {
                     }
 
-                    innerModel.value = UiModel.Favourite(star, title, true)
+                    _favourite.value = Event(Favourite(star, title, true))
+                    loadFavouriteSongs()
                 } else {
                     dbRepository.deleteSong(song)
 
                     if (dbRepository.artistHasSongs(it.id).not())
                         dbRepository.deleteArtist(artist)
 
-                    innerModel.value = UiModel.Favourite(star, title, false)
+                    _favourite.value = Event(Favourite(star, title, false))
+                    loadFavouriteSongs()
                 }
             }
         }
-
-        loadFavouriteSongs()
     }
+
+    fun isFavourite(songId: Long): Boolean = favouriteSongs.any { it.id == songId }
 
     companion object {
         const val ARTIST_NAME = "artist name"
@@ -141,5 +123,6 @@ class ArtistDetailViewModelFactory(
     private val artistName: String?,
     private val application: Application
 ) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T = ArtistDetailViewModel(artistName, application) as T
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+        ArtistDetailViewModel(artistName, application) as T
 }

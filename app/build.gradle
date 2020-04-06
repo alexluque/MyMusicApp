@@ -6,7 +6,8 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
-    viewBinding.enabled = true
+    dataBinding.enabled = true
+
     defaultConfig {
         applicationId "com.example.android.mymusicapp.mainactivity"
         minSdkVersion 24
@@ -15,16 +16,19 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     packagingOptions {
         exclude 'META-INF/atomicfu.kotlin_module'
     }

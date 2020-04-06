@@ -1,6 +1,5 @@
 package com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels
 
-import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.MusicoveryArtist
 import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +9,7 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityCont
 import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
+import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.MusicoveryArtist
 import com.alexluque.android.mymusicapp.mainactivity.model.network.repositories.getArtist
 import com.alexluque.android.mymusicapp.mainactivity.model.network.repositories.getArtistsByLocation
 import kotlinx.coroutines.Dispatchers
@@ -17,26 +17,21 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Suppress("UNCHECKED_CAST")
-class RecommendationsViewModel(private val country: String) :
+class RecommendationsViewModel(country: String) :
     ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
 
-    sealed class UiModel {
-        object Loading : UiModel()
-        class Content(val artists: List<MusicoveryArtist>) : UiModel()
-        class Navigation(val artistName: String) : UiModel()
-    }
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> = _loading
 
-    private val innerModel = MutableLiveData<UiModel>()
-    val model: LiveData<UiModel>
-        get() {
-            if (innerModel.value == null) refresh()
-            return innerModel
-        }
-    private val innerNavigation = MutableLiveData<Event<UiModel>>()
-    val navigation: LiveData<Event<UiModel>> = innerNavigation
+    private val _artists = MutableLiveData<List<MusicoveryArtist>>()
+    val artists: LiveData<List<MusicoveryArtist>> = _artists
+
+    private val _detail = MutableLiveData<Event<String>>()
+    val detail: LiveData<Event<String>> = _detail
 
     init {
         initScope()
+        loadRecommendations(country)
     }
 
     override fun onCleared() {
@@ -44,33 +39,26 @@ class RecommendationsViewModel(private val country: String) :
         super.onCleared()
     }
 
-    private fun refresh() {
-        innerModel.value = UiModel.Loading
-        loadRecommendations(country)
-    }
-
-    fun onArtistClicked(artistName: String) {
-        innerNavigation.value = Event(UiModel.Navigation(artistName))
-    }
-
     fun loadImage(artistName: String, imageView: ImageView) {
         ConnectivityController.runIfConnected {
             launch {
-                val artist = withContext(Dispatchers.IO) {
-                    getArtist(artistName)
-                }
+                val artist = withContext(Dispatchers.IO) { getArtist(artistName) }
                 imageView.loadImage(artist?.picture_medium ?: RANDOM_IMAGE)
             }
         }
     }
 
+    fun onArtistClicked(artistName: String) {
+        _detail.value = Event(artistName)
+    }
+
     private fun loadRecommendations(country: String) {
         ConnectivityController.runIfConnected {
             launch {
-                val artists = withContext(Dispatchers.IO) {
-                    getArtistsByLocation(country)
-                }
-                innerModel.value = UiModel.Content(artists.artists.artist)
+                _loading.value = true
+                val artists = withContext(Dispatchers.IO) { getArtistsByLocation(country) }
+                _artists.value = artists.artists.artist
+                _loading.value = false
             }
         }
     }
@@ -81,7 +69,7 @@ class RecommendationsViewModel(private val country: String) :
 }
 
 @Suppress("UNCHECKED_CAST")
-class RecommendationsViewModelFactory(val country: String) :
+class RecommendationsViewModelFactory(private val country: String) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
         RecommendationsViewModel(country) as T

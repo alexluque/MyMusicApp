@@ -25,9 +25,9 @@ fun ImageView.loadImage(url: String) {
 
 fun View.makeLongSnackbar(msg: String) = Snackbar.make(this, msg, Snackbar.LENGTH_LONG).show()
 
-fun <T : Any> RecyclerView.Adapter<*>.updateData(dataSet: MutableList<Any>, data: List<T>) {
+fun <T : Any> RecyclerView.Adapter<*>.updateData(dataSet: MutableList<Any>, newData: List<T>) {
     dataSet.clear()
-    dataSet.addAll(data)
+    dataSet.addAll(newData)
     this.notifyDataSetChanged()
 }
 

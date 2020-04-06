@@ -12,23 +12,23 @@ class SearchArtistViewModel : ViewModel() {
         object Cancel : UiModel()
     }
 
-    private val innerModel = MutableLiveData<UiModel>()
+    private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
         get() {
-            if (innerModel.value == null) refresh()
-            return innerModel
+            if (_model.value == null) refresh()
+            return _model
         }
 
     private fun refresh() {
-        innerModel.value = UiModel.Create
+        _model.value = UiModel.Create
     }
 
     fun onSearchClicked() {
-        innerModel.value = UiModel.Search
+        _model.value = UiModel.Search
     }
 
     fun onCancelClicked() {
-        innerModel.value = UiModel.Cancel
+        _model.value = UiModel.Cancel
     }
 }
 

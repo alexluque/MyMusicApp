@@ -20,26 +20,17 @@ class MainActivityViewModel(
     application: Application
 ) : ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
 
-    sealed class UiModel {
-        object Loading : UiModel()
-        object Search : UiModel()
-        class Content(val artists: List<Artist>) : UiModel()
-        class Navigation(val artistName: String) : UiModel()
-        class Recommendations(val country: String) : UiModel()
-    }
+    private val _artists = MutableLiveData<List<Artist>>()
+    val artists: LiveData<List<Artist>> = _artists
 
-    private val innerModel = MutableLiveData<UiModel>()
-    val model: LiveData<UiModel>
-        get() {
-            if (innerModel.value == null) refresh()
-            return innerModel
-        }
-    private val innerNavigation = MutableLiveData<Event<UiModel>>()
-    val navigation: LiveData<Event<UiModel>> = innerNavigation
-    private val innerRecommendation = MutableLiveData<Event<UiModel>>()
-    val recommendation: LiveData<Event<UiModel>> = innerRecommendation
-    private val innerSearch = MutableLiveData<Event<UiModel>>()
-    val search: LiveData<Event<UiModel>> = innerSearch
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> = _loading
+
+    private val _artistName = MutableLiveData<Event<String>>()
+    val artistName: LiveData<Event<String>> = _artistName
+
+    private val _country = MutableLiveData<Event<String>>()
+    val country: LiveData<Event<String>> = _country
 
     private val dbRepository: DatabaseRepository
 
@@ -47,25 +38,21 @@ class MainActivityViewModel(
         initScope()
         val db = FavouritesRoomDatabase.getDatabase(application)
         dbRepository = DatabaseRepository(db.artistDao(), db.songDao())
-    }
-
-    override fun onCleared() {
-        cancelScope()
-    }
-
-    private fun refresh() {
-        innerModel.value = UiModel.Loading
         loadArtists()
     }
 
-    private fun loadArtists() = launch {
+    override fun onCleared() = cancelScope()
+
+    fun loadArtists() = launch {
+        _loading.value = true
         val artists = withContext(Dispatchers.IO) { dbRepository.getFavouriteArtists() }
         artists.forEach { it.favouriteSongs = dbRepository.getArtistSongs(it.id) }
-        innerModel.value = UiModel.Content(artists)
+        _artists.value = artists
+        _loading.value = false
     }
 
     fun onArtistClicked(artistName: String) {
-        innerNavigation.value = Event(UiModel.Navigation(artistName))
+        _artistName.value = Event(artistName)
     }
 
     fun onRecommendClicked(mapsKey: String, latitude: Double, longitude: Double) =
@@ -76,13 +63,9 @@ class MainActivityViewModel(
                     true -> DEFAULT_COUNTRY
                     else -> userCountry
                 }
-                innerRecommendation.value = Event(UiModel.Recommendations(country))
+                _country.value = Event(country)
             }
         }
-
-    fun onSearchClicked() {
-        innerSearch.value = Event(UiModel.Search)
-    }
 
     private companion object {
         private const val DEFAULT_COUNTRY = "usa"
