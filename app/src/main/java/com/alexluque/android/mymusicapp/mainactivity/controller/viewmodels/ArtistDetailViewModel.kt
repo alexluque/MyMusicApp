@@ -31,22 +31,22 @@ class ArtistDetailViewModel(
     class Favourite(val star: ImageView, val songName: String, val newFavourite: Boolean)
 
     private val _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean> = _loading
+    val loading: LiveData<Boolean> get() = _loading
 
     private val _imageUrl = MutableLiveData<String>()
-    val imageUrl: LiveData<String> = _imageUrl
+    val imageUrl: LiveData<String> get() = _imageUrl
 
     private val _songs = MutableLiveData<List<SongData>>()
-    val songs: LiveData<List<SongData>> = _songs
+    val songs: LiveData<List<SongData>> get() = _songs
 
     private val _favourite = MutableLiveData<Event<Favourite>>()
-    val favourite: LiveData<Event<Favourite>> = _favourite
+    val favourite: LiveData<Event<Favourite>> get() = _favourite
 
     private val dbRepository: DatabaseRepository
     private val favouriteSongs = mutableListOf<Song>()
 
     private val _currentArtist = MutableLiveData<ArtistData?>()
-    val currentArtist: LiveData<ArtistData?> = _currentArtist
+    val currentArtist: LiveData<ArtistData?> get() = _currentArtist
 
     init {
         initScope()

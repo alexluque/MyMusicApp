@@ -21,16 +21,16 @@ class MainActivityViewModel(
 ) : ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
 
     private val _artists = MutableLiveData<List<Artist>>()
-    val artists: LiveData<List<Artist>> = _artists
+    val artists: LiveData<List<Artist>> get() = _artists
 
     private val _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean> = _loading
+    val loading: LiveData<Boolean> get() = _loading
 
     private val _artistName = MutableLiveData<Event<String>>()
-    val artistName: LiveData<Event<String>> = _artistName
+    val artistName: LiveData<Event<String>> get() = _artistName
 
     private val _country = MutableLiveData<Event<String>>()
-    val country: LiveData<Event<String>> = _country
+    val country: LiveData<Event<String>> get() = _country
 
     private val dbRepository: DatabaseRepository
 

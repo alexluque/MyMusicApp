@@ -21,13 +21,13 @@ class RecommendationsViewModel(country: String) :
     ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
 
     private val _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean> = _loading
+    val loading: LiveData<Boolean> get() = _loading
 
     private val _artists = MutableLiveData<List<MusicoveryArtist>>()
-    val artists: LiveData<List<MusicoveryArtist>> = _artists
+    val artists: LiveData<List<MusicoveryArtist>> get() = _artists
 
     private val _detail = MutableLiveData<Event<String>>()
-    val detail: LiveData<Event<String>> = _detail
+    val detail: LiveData<Event<String>> get() = _detail
 
     init {
         initScope()
