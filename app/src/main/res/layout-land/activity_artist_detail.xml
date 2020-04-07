@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewmodel"
             type="com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel" />
@@ -18,7 +19,7 @@
             android:id="@+id/artist_detail_recyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/artist_image"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,29 +31,25 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:visible="@{viewmodel.loading}"
             app:layout_constraintBottom_toBottomOf="@+id/artist_detail_recyclerView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:visible="@{viewmodel.loading}" />
 
         <ImageView
             android:id="@+id/artist_image"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            android:gravity="center"
-            android:scaleType="fitXY"
+            android:fitsSystemWindows="true"
+            android:scaleType="centerCrop"
+            app:image="@{viewmodel.imageUrl}"
+            app:layout_collapseMode="parallax"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.50"
             app:srcCompat="@drawable/ic_launcher_foreground"
-            app:image="@{viewmodel.imageUrl}"
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
