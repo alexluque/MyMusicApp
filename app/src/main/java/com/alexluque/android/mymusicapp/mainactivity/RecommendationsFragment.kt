@@ -1,43 +1,51 @@
 package com.alexluque.android.mymusicapp.mainactivity
 
 import android.os.Bundle
-import android.provider.AlarmClock.EXTRA_MESSAGE
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.EventObserver
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.makeLongSnackbar
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.updateData
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.RecommendationsViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.RecommendationsViewModelFactory
-import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityRecommendationsBinding
+import com.alexluque.android.mymusicapp.mainactivity.databinding.FragmentRecommendationsBinding
 import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.MusicoveryArtist
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.RecommendedArtistsAdapter
-import kotlinx.android.synthetic.main.activity_recommendations.*
+import kotlinx.android.synthetic.main.fragment_recommendations.*
 import java.util.*
 
 @Suppress("UNCHECKED_CAST")
-class RecommendationsActivity : AppCompatActivity() {
-
-    private val mainView: View by lazy { findViewById<View>(android.R.id.content) }
-    private val countryName: String by lazy { intent.getStringExtra(EXTRA_MESSAGE) }
+class RecommendationsFragment : Fragment() {
 
     private lateinit var viewModel: RecommendationsViewModel
     private lateinit var viewAdapter: RecommendedArtistsAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var navController: NavController
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_recommendations)
+    private var binding: FragmentRecommendationsBinding? = null
+    private val args: RecommendationsFragmentArgs by navArgs()
 
-        ConnectivityController.view = mainView
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.fragment_recommendations, container, false)
+        return binding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        navController = Navigation.findNavController(view)
 
         setViewModel()
         setAdapter()
@@ -48,13 +56,11 @@ class RecommendationsActivity : AppCompatActivity() {
     private fun setViewModel() {
         viewModel = ViewModelProvider(
             this,
-            RecommendationsViewModelFactory(countryName)
+            RecommendationsViewModelFactory(args.country)
         ).get(RecommendationsViewModel::class.java)
 
-        val binding: ActivityRecommendationsBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_recommendations)
-        binding.viewmodel = viewModel
-        binding.lifecycleOwner = this
+        binding?.viewmodel = viewModel
+        binding?.lifecycleOwner = this
     }
 
     private fun setAdapter() {
@@ -68,18 +74,16 @@ class RecommendationsActivity : AppCompatActivity() {
 
     private fun observeArtists() =
         viewModel.artists.observe(
-            this,
+            viewLifecycleOwner,
             Observer {
                 viewAdapter.updateData(viewAdapter.artists as MutableList<Any>, it)
-                mainView.makeLongSnackbar(this.getString(R.string.country_recommendations) + " ${countryName.toUpperCase(Locale.ROOT)}")
+                view?.makeLongSnackbar(this.getString(R.string.country_recommendations) + " ${args.country.toUpperCase(Locale.ROOT)}")
             }
         )
 
     private fun observeDetail() =
-        viewModel.detail.observe(this, EventObserver {
-            this.myStartActivity(
-                ArtistDetailActivity::class.java,
-                listOf(ArtistDetailViewModel.ARTIST_NAME to it)
-            )
+        viewModel.detail.observe(viewLifecycleOwner, EventObserver { artistName ->
+            val action = RecommendationsFragmentDirections.actionRecommendationsFragmentToArtistDetailFragment(artistName)
+            navController.navigate(action)
         })
 }

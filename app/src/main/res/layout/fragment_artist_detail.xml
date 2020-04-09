@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.alexluque.android.mymusicapp.mainactivity.ArtistDetailActivity">
+        tools:context="com.alexluque.android.mymusicapp.mainactivity.ArtistDetailFragment">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
@@ -26,6 +26,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <include layout="@layout/toolbar" />
 
             <ImageView
                 android:id="@+id/artist_image"

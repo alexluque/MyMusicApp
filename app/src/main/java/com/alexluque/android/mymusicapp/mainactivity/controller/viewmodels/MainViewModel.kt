@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainActivityViewModel(
+class MainViewModel(
     application: Application
 ) : ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
 
@@ -73,6 +73,6 @@ class MainActivityViewModel(
 }
 
 @Suppress("UNCHECKED_CAST")
-class MainActivityViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T = MainActivityViewModel(application) as T
+class MainViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T = MainViewModel(application) as T
 }

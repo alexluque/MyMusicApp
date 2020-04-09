@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.hideKeyboard
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.showKeyboard
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel.Companion.ARTIST_NAME
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.SearchArtistViewModel
@@ -55,10 +54,18 @@ class SearchArtistFragment(
             is UiModel.Search -> {
                 activity?.let { nameEditText.hideKeyboard(it) }
 
-                if (loadArtistDetail != null)
+                if (loadArtistDetail != null) {
                     loadArtistDetail.invoke(retrieveEntry())
-                else
-                    activity?.myStartActivity(ArtistDetailActivity::class.java, listOf(ARTIST_NAME to retrieveEntry()))
+                } else {
+                    val bundle = Bundle()
+                    bundle.putString(ARTIST_NAME, retrieveEntry())
+                    val fragment = ArtistDetailFragment()
+                    fragment.arguments = bundle
+                    val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+                    fragmentTransaction?.replace(R.id.nav_host_fragment, fragment)
+                    fragmentTransaction?.addToBackStack(null)
+                    fragmentTransaction?.commit()
+                }
             }
             is UiModel.Cancel -> {
                 activity?.let { nameEditText.hideKeyboard(it) }
