@@ -12,7 +12,7 @@ class DatabaseRepository(private val artistDao: ArtistDao, private val songDao: 
 
     suspend fun artistExists(artistId: Long): Boolean = artistDao.getArtistId(artistId).isNotEmpty()
 
-    suspend fun insertArtist(artist: Artist) = artistDao.insert(artist)
+    suspend fun insertArtist(artist: Artist): Long = artistDao.insert(artist)
 
     suspend fun deleteArtist(artist: Artist) = artistDao.delete(artist)
 
@@ -23,7 +23,7 @@ class DatabaseRepository(private val artistDao: ArtistDao, private val songDao: 
 
     suspend fun getSongs(): List<Song> = songDao.getSongs()
 
-    suspend fun insertSong(song: Song) = songDao.insert(song)
+    suspend fun insertSong(song: Song): Long = songDao.insert(song)
 
     suspend fun deleteSong(song: Song) = songDao.delete(song)
 }

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainActivityViewModel" />
+            type="com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

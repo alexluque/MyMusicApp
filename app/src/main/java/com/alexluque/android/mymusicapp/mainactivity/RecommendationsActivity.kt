@@ -18,8 +18,15 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.Artis
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.RecommendationsViewModel
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.RecommendationsViewModelFactory
 import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityRecommendationsBinding
-import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.MusicoveryArtist
+import com.alexluque.android.mymusicapp.mainactivity.model.database.FavouritesRoomDatabase
+import com.alexluque.android.mymusicapp.mainactivity.model.database.RoomDataSource
+import com.alexluque.android.mymusicapp.mainactivity.model.network.DeezerMusicoveryDataSource
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.RecommendedArtistsAdapter
+import com.example.android.data.repositories.ArtistDetailRepository
+import com.example.android.data.repositories.RecommendedArtistsRepository
+import com.example.android.domain.RecommendedArtist
+import com.example.android.usecases.GetArtist
+import com.example.android.usecases.GetRecommendedArtists
 import kotlinx.android.synthetic.main.activity_recommendations.*
 import java.util.*
 
@@ -46,9 +53,19 @@ class RecommendationsActivity : AppCompatActivity() {
     }
 
     private fun setViewModel() {
+        val remoteDS = DeezerMusicoveryDataSource()
+
         viewModel = ViewModelProvider(
             this,
-            RecommendationsViewModelFactory(countryName)
+            RecommendationsViewModelFactory(
+                GetArtist(
+                    ArtistDetailRepository(
+                        remoteDS,
+                        RoomDataSource(FavouritesRoomDatabase.getDatabase(applicationContext))
+                    )
+                ),
+                GetRecommendedArtists(RecommendedArtistsRepository(remoteDS))
+            )
         ).get(RecommendationsViewModel::class.java)
 
         val binding: ActivityRecommendationsBinding =
@@ -58,7 +75,7 @@ class RecommendationsActivity : AppCompatActivity() {
     }
 
     private fun setAdapter() {
-        viewAdapter = RecommendedArtistsAdapter(mutableListOf<MusicoveryArtist>(), viewModel::onArtistClicked, viewModel::loadImage)
+        viewAdapter = RecommendedArtistsAdapter(mutableListOf<RecommendedArtist>(), viewModel::onArtistClicked, viewModel::loadImage)
 
         recyclerView = recommended_artists_recycler_view.apply {
             layoutManager = LinearLayoutManager(context)

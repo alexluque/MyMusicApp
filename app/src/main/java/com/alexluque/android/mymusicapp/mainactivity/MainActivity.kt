@@ -17,11 +17,19 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.LocationRecommen
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.updateData
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainActivityViewModel
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainActivityViewModelFactory
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainViewModel
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainViewModelFactory
 import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityMainBinding
-import com.alexluque.android.mymusicapp.mainactivity.model.database.entities.Artist
+import com.alexluque.android.mymusicapp.mainactivity.model.database.FavouritesRoomDatabase
+import com.alexluque.android.mymusicapp.mainactivity.model.database.RoomDataSource
+import com.alexluque.android.mymusicapp.mainactivity.model.network.GoogleMapsDataSource
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.FavouriteArtistsAdapter
+import com.example.android.data.repositories.FavouriteArtistsRepository
+import com.example.android.data.repositories.GeolocationRepository
+import com.example.android.domain.FavouriteArtist
+import com.example.android.usecases.GetCountry
+import com.example.android.usecases.GetFavouriteArtistSongs
+import com.example.android.usecases.GetFavouriteArtists
 import com.google.android.gms.location.LocationServices
 import com.karumi.dexter.Dexter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
     private val mainView: View by lazy { findViewById<View>(android.R.id.content) }
 
-    private lateinit var viewModel: MainActivityViewModel
+    private lateinit var viewModel: MainViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: FavouriteArtistsAdapter
 
@@ -57,10 +65,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setViewModel() {
+        val repository = FavouriteArtistsRepository(RoomDataSource(FavouritesRoomDatabase.getDatabase(applicationContext)))
+
         viewModel = ViewModelProvider(
             this,
-            MainActivityViewModelFactory(application)
-        ).get(MainActivityViewModel::class.java)
+            MainViewModelFactory(
+                GetFavouriteArtists(repository),
+                GetFavouriteArtistSongs(repository),
+                GetCountry(GeolocationRepository(GoogleMapsDataSource()))
+            )
+        ).get(MainViewModel::class.java)
 
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewmodel = viewModel
@@ -68,7 +82,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setAdapter() {
-        viewAdapter = FavouriteArtistsAdapter(mutableListOf<Artist>(), viewModel::onArtistClicked)
+        viewAdapter = FavouriteArtistsAdapter(mutableListOf<FavouriteArtist>(), viewModel::onArtistClicked)
 
         recyclerView = artists_recycler_view.apply {
             layoutManager = LinearLayoutManager(context)
@@ -82,7 +96,7 @@ class MainActivity : AppCompatActivity() {
         search_button.setOnClickListener { SearchArtistFragment().show(supportFragmentManager, FRAGMENT_NAME) }
     }
 
-    private fun observeContent(artists: List<Artist>) =
+    private fun observeContent(artists: List<FavouriteArtist>) =
         viewAdapter.updateData(viewAdapter.artists as MutableList<Any>, artists)
 
     private fun addLocationPermission() =

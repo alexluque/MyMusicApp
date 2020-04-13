@@ -17,8 +17,13 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.Artis
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel.Companion.ARTIST_NAME
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModelFactory
 import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityArtistDetailBinding
-import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.deezer.SongData
+import com.alexluque.android.mymusicapp.mainactivity.model.database.FavouritesRoomDatabase
+import com.alexluque.android.mymusicapp.mainactivity.model.database.RoomDataSource
+import com.alexluque.android.mymusicapp.mainactivity.model.network.DeezerMusicoveryDataSource
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.ArtistDetailAdapter
+import com.example.android.data.repositories.ArtistDetailRepository
+import com.example.android.domain.Song
+import com.example.android.usecases.HandleFavourite
 import kotlinx.android.synthetic.main.activity_artist_detail.*
 
 @Suppress("UNCHECKED_CAST")
@@ -54,7 +59,15 @@ class ArtistDetailActivity : AppCompatActivity() {
     private fun setViewModel(artistName: String?) {
         viewModel = ViewModelProvider(
             this,
-            ArtistDetailViewModelFactory(artistName, application)
+            ArtistDetailViewModelFactory(
+                artistName,
+                HandleFavourite(
+                    ArtistDetailRepository(
+                        DeezerMusicoveryDataSource(),
+                        RoomDataSource(FavouritesRoomDatabase.getDatabase(applicationContext))
+                    )
+                )
+            )
         ).get(ArtistDetailViewModel::class.java)
 
         val binding: ActivityArtistDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_artist_detail)
@@ -63,7 +76,7 @@ class ArtistDetailActivity : AppCompatActivity() {
     }
 
     private fun setAdapter() {
-        viewAdapter = ArtistDetailAdapter(mutableListOf<SongData>(), viewModel::onFavouriteClicked, viewModel::isFavourite)
+        viewAdapter = ArtistDetailAdapter(mutableListOf<Song>(), viewModel::onFavouriteClicked, viewModel::isFavourite)
 
         recyclerView = artist_detail_recyclerView.apply {
             layoutManager = LinearLayoutManager(context)

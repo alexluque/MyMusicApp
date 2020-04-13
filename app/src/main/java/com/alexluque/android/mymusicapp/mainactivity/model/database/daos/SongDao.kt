@@ -19,7 +19,7 @@ interface SongDao {
     suspend fun getSongs(): List<Song>
 
     @Insert
-    suspend fun insert(song: Song)
+    suspend fun insert(song: Song): Long
 
     @Delete
     suspend fun delete(song: Song)

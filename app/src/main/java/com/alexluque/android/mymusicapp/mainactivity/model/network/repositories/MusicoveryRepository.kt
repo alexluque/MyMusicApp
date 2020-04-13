@@ -1,10 +1,11 @@
 package com.alexluque.android.mymusicapp.mainactivity.model.network.repositories
 
 import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
+import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.MusicoveryGetByCountryResponse
 import com.alexluque.android.mymusicapp.mainactivity.model.network.services.MusicoveryArtistService
 import java.util.*
 
-suspend fun getArtistsByLocation(country: String) =
+suspend fun getArtistsByLocation(country: String): MusicoveryGetByCountryResponse =
     RetrofitBuilder.musicoveryInstance
         .create(MusicoveryArtistService::class.java)
         .getArtistsByLocation(country.toLowerCase(Locale.ROOT).trim())

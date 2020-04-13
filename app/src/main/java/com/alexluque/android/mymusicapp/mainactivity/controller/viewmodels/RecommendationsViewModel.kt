@@ -9,29 +9,32 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityCont
 import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
-import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.MusicoveryArtist
-import com.alexluque.android.mymusicapp.mainactivity.model.network.repositories.getArtist
-import com.alexluque.android.mymusicapp.mainactivity.model.network.repositories.getArtistsByLocation
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainViewModel.Companion.DEFAULT_COUNTRY
+import com.example.android.domain.RecommendedArtist
+import com.example.android.usecases.GetArtist
+import com.example.android.usecases.GetRecommendedArtists
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Suppress("UNCHECKED_CAST")
-class RecommendationsViewModel(country: String) :
-    ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
+class RecommendationsViewModel(
+    private val getArtist: GetArtist,
+    private val getRecommendedArtists: GetRecommendedArtists
+) : ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
 
-    private val _artists = MutableLiveData<List<MusicoveryArtist>>()
-    val artists: LiveData<List<MusicoveryArtist>> get() = _artists
+    private val _artists = MutableLiveData<List<RecommendedArtist>>()
+    val artists: LiveData<List<RecommendedArtist>> get() = _artists
 
     private val _detail = MutableLiveData<Event<String>>()
     val detail: LiveData<Event<String>> get() = _detail
 
     init {
         initScope()
-        loadRecommendations(country)
+        loadRecommendations()
     }
 
     override fun onCleared() {
@@ -42,8 +45,8 @@ class RecommendationsViewModel(country: String) :
     fun loadImage(artistName: String, imageView: ImageView) {
         ConnectivityController.runIfConnected {
             launch {
-                val artist = withContext(Dispatchers.IO) { getArtist(artistName) }
-                imageView.loadImage(artist?.picture_medium ?: RANDOM_IMAGE)
+                val artist = withContext(Dispatchers.IO) { getArtist.invoke(artistName) }
+                imageView.loadImage(artist?.mediumImageUrl ?: RANDOM_IMAGE)
             }
         }
     }
@@ -52,25 +55,30 @@ class RecommendationsViewModel(country: String) :
         _detail.value = Event(artistName)
     }
 
-    private fun loadRecommendations(country: String) {
+    private fun loadRecommendations(country: String = DEFAULT_COUNTRY) {
         ConnectivityController.runIfConnected {
             launch {
                 _loading.value = true
-                val artists = withContext(Dispatchers.IO) { getArtistsByLocation(country) }
-                _artists.value = artists.artists.artist
+                val artists = withContext(Dispatchers.IO) { getRecommendedArtists.invoke(country) }
+                _artists.value = artists
                 _loading.value = false
             }
         }
     }
 
-    companion object {
+    private companion object {
         private const val RANDOM_IMAGE = "https://picsum.photos/200/300"
     }
 }
 
 @Suppress("UNCHECKED_CAST")
-class RecommendationsViewModelFactory(private val country: String) :
-    ViewModelProvider.Factory {
+class RecommendationsViewModelFactory(
+    private val getArtist: GetArtist,
+    private val getRecommendedArtists: GetRecommendedArtists
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        RecommendationsViewModel(country) as T
+        RecommendationsViewModel(
+            getArtist,
+            getRecommendedArtists
+        ) as T
 }

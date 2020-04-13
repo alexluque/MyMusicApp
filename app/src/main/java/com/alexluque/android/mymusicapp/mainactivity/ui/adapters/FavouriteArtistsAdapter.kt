@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
-import com.alexluque.android.mymusicapp.mainactivity.model.database.entities.Artist
+import com.example.android.domain.FavouriteArtist
 import kotlinx.android.synthetic.main.favourite_artist.view.*
 
 class FavouriteArtistsAdapter(
-    var artists: MutableList<Artist>,
+    var artists: MutableList<FavouriteArtist>,
     private val onArtistClicked: (artistName: String) -> Unit
 ) : RecyclerView.Adapter<FavouriteArtistsAdapter.MyViewHolder>() {
 

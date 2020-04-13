@@ -1,6 +1,5 @@
 package com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,20 +7,22 @@ import androidx.lifecycle.ViewModelProvider
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
-import com.alexluque.android.mymusicapp.mainactivity.model.database.FavouritesRoomDatabase
-import com.alexluque.android.mymusicapp.mainactivity.model.database.entities.Artist
-import com.alexluque.android.mymusicapp.mainactivity.model.database.repositories.DatabaseRepository
-import com.alexluque.android.mymusicapp.mainactivity.model.network.repositories.getCountry
+import com.example.android.domain.FavouriteArtist
+import com.example.android.usecases.GetCountry
+import com.example.android.usecases.GetFavouriteArtistSongs
+import com.example.android.usecases.GetFavouriteArtists
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainActivityViewModel(
-    application: Application
+class MainViewModel(
+    private val getFavouriteArtists: GetFavouriteArtists,
+    private val getFavouriteArtistSongs: GetFavouriteArtistSongs,
+    private val getCountry: GetCountry
 ) : ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
 
-    private val _artists = MutableLiveData<List<Artist>>()
-    val artists: LiveData<List<Artist>> get() = _artists
+    private val _artists = MutableLiveData<List<FavouriteArtist>>()
+    val artists: LiveData<List<FavouriteArtist>> get() = _artists
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
@@ -32,12 +33,8 @@ class MainActivityViewModel(
     private val _country = MutableLiveData<Event<String>>()
     val country: LiveData<Event<String>> get() = _country
 
-    private val dbRepository: DatabaseRepository
-
     init {
         initScope()
-        val db = FavouritesRoomDatabase.getDatabase(application)
-        dbRepository = DatabaseRepository(db.artistDao(), db.songDao())
         loadArtists()
     }
 
@@ -45,8 +42,8 @@ class MainActivityViewModel(
 
     fun loadArtists() = launch {
         _loading.value = true
-        val artists = withContext(Dispatchers.IO) { dbRepository.getFavouriteArtists() }
-        artists.forEach { it.favouriteSongs = dbRepository.getArtistSongs(it.id) }
+        val artists = withContext(Dispatchers.IO) { getFavouriteArtists.invoke() }
+        artists.forEach { it.favouriteSongs = getFavouriteArtistSongs.invoke(it.id) }
         _artists.value = artists
         _loading.value = false
     }
@@ -58,8 +55,8 @@ class MainActivityViewModel(
     fun onRecommendClicked(mapsKey: String, latitude: Double, longitude: Double) =
         ConnectivityController.runIfConnected {
             launch {
-                val userCountry = withContext(Dispatchers.IO) { getCountry("$latitude,$longitude", mapsKey) }
-                val country = when (userCountry.isNullOrEmpty()) {
+                val userCountry = withContext(Dispatchers.IO) { getCountry.invoke("$latitude,$longitude", mapsKey) }
+                val country = when (userCountry.isEmpty()) {
                     true -> DEFAULT_COUNTRY
                     else -> userCountry
                 }
@@ -67,12 +64,17 @@ class MainActivityViewModel(
             }
         }
 
-    private companion object {
-        private const val DEFAULT_COUNTRY = "usa"
+    companion object {
+        const val DEFAULT_COUNTRY = "usa"
     }
 }
 
 @Suppress("UNCHECKED_CAST")
-class MainActivityViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T = MainActivityViewModel(application) as T
+class MainViewModelFactory(
+    private val getFavouriteArtists: GetFavouriteArtists,
+    private val getFavouriteArtistSongs: GetFavouriteArtistSongs,
+    private val getCountry: GetCountry
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+        MainViewModel(getFavouriteArtists, getFavouriteArtistSongs, getCountry) as T
 }
