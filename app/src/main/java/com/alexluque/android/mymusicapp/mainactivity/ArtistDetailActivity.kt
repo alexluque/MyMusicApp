@@ -40,8 +40,6 @@ class ArtistDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_artist_detail)
 
-        this.title = artistName ?: getString(R.string.artists_name)
-
         setViewModel(artistName)
         setAdapter()
 
@@ -105,6 +103,13 @@ class ArtistDetailActivity : AppCompatActivity() {
     private fun observeCurrentArtist() =
         viewModel.currentArtist.observe(
             this,
-            Observer { if (it == null) mainView.makeLongSnackbar(getString(R.string.artist_not_found)) }
+            Observer {
+                if (it == null) {
+                    mainView.makeLongSnackbar(getString(R.string.artist_not_found))
+                    this.title = getString(R.string.artists_name)
+                } else {
+                    this.title = it.name
+                }
+            }
         )
 }

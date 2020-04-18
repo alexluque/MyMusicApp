@@ -1,5 +1,5 @@
 package com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery
 
-data class MusicoveryArtists (
-	val artist : List<MusicoveryArtist>
+data class ArtistsByNameResponse2(
+    val artist: Artist
 )

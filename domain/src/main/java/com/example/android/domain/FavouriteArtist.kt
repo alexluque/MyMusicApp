@@ -6,4 +6,6 @@ data class FavouriteArtist(
     val imageUrl: String
 ) {
     var favouriteSongs: Int = 0
+    var genre: String? = String()
+    var regionAndCountry: String = String()
 }

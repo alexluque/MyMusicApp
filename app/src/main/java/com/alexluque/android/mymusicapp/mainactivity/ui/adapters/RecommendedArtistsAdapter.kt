@@ -30,7 +30,7 @@ class RecommendedArtistsAdapter(
         val artistName = data.name
         loadImage(artistName, view.recommended_artist_image)
         view.recommended_artist_name.text = artistName
-        view.recommended_artist_genere.text = data.genre
+        view.recommended_artist_genere.text = data.genre?.toString()
         view.setOnClickListener {
             onArtistClicked(artistName)
         }

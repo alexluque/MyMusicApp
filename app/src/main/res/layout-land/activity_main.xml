@@ -75,7 +75,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-            tools:listitem="@layout/favourite_artist" />
+            tools:listitem="@layout/favourite_artist_card" />
 
         <Button
             android:id="@+id/recommend_button"

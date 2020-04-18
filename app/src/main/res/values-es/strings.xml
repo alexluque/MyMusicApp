@@ -8,18 +8,20 @@
     <string name="artist_fav_num">0</string>
     <string name="get_recommendations">Recomiéndame Artistas!</string>
     <string name="artist_genere">Género musical</string>
-    <string name="no_internet">No hay conexión a Internet...</string>
+    <string name="no_internet">No hay conexión a Internet…</string>
     <string name="country_recommendations">Mostrando recomendaciones para</string>
-    <string name="song_name">Cancion</string>
-    <string name="song_album">Album</string>
+    <string name="song_name">Canción</string>
+    <string name="song_album">Álbum</string>
     <string name="cancel_button">Cancelar</string>
     <string name="search_button">Buscar</string>
     <string name="artist_dialog_content">Escribe el nombre del artista</string>
     <string name="artist_dialog_title">Artista</string>
-    <string name="artist_not_found">Artista no encontrado...</string>
+    <string name="artist_not_found">Artista no encontrado…</string>
     <string name="fav_song_added">añadida a favoritas!</string>
     <string name="fav_song_removed">eliminada de favoritas</string>
     <string name="recommendations_activity_title">Recomendaciones</string>
     <string name="main_activity_title">Artistas Preferidos</string>
+    <string name="artist_s_genre">Estilo musical</string>
+    <string name="artist_s_region_country">Región y país del artista</string>
 </resources>
 

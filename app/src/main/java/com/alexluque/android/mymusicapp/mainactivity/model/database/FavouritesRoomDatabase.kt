@@ -11,7 +11,7 @@ import com.alexluque.android.mymusicapp.mainactivity.model.database.entities.Son
 
 @Database(
     entities = [Artist::class, Song::class],
-    version = 3,
+    version = 6,
     exportSchema = false
 )
 abstract class FavouritesRoomDatabase : RoomDatabase() {

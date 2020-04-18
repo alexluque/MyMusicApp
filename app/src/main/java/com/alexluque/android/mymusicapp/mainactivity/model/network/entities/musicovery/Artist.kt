@@ -1,8 +1,8 @@
 package com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery
 
-data class MusicoveryArtist (
+data class Artist (
 	val mbid : String,
 	val name : String,
-	val genre : String,
-	val country : String
+	val genre : Any?,
+	val country : Any?
 )

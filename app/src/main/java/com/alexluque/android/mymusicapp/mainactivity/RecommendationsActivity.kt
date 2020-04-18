@@ -25,7 +25,7 @@ import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.RecommendedArti
 import com.example.android.data.repositories.ArtistDetailRepository
 import com.example.android.data.repositories.RecommendedArtistsRepository
 import com.example.android.domain.RecommendedArtist
-import com.example.android.usecases.GetArtist
+import com.example.android.usecases.GetArtistDetail
 import com.example.android.usecases.GetRecommendedArtists
 import kotlinx.android.synthetic.main.activity_recommendations.*
 import java.util.*
@@ -58,7 +58,8 @@ class RecommendationsActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(
             this,
             RecommendationsViewModelFactory(
-                GetArtist(
+                countryName,
+                GetArtistDetail(
                     ArtistDetailRepository(
                         remoteDS,
                         RoomDataSource(FavouritesRoomDatabase.getDatabase(applicationContext))

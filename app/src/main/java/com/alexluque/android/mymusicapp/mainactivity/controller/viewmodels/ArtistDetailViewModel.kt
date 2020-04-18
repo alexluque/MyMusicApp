@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
+import com.example.android.domain.Artist
 import com.example.android.domain.ArtistDetail
 import com.example.android.domain.FavouriteArtist
 import com.example.android.domain.Song
@@ -42,6 +43,8 @@ class ArtistDetailViewModel(
 
     private val favouriteSongs = mutableListOf<Song>()
 
+    private lateinit var musicoveryArtist: Artist
+
     init {
         initScope()
         loadData(artistName)
@@ -55,8 +58,11 @@ class ArtistDetailViewModel(
 
             launch {
                 _loading.value = true
-                val artist = withContext(Dispatchers.IO) { handleFavourite.getArtist(name) }
+                val artist = withContext(Dispatchers.IO) { handleFavourite.getArtistDetail(name) }
                 _currentArtist.value = artist
+                artist?.let {
+                    musicoveryArtist = withContext(Dispatchers.IO) { handleFavourite.getArtist(it.name) }
+                }
                 _imageUrl.value = artist?.bigImageUrl
                 _songs.value = artist?.let { withContext(Dispatchers.IO) { handleFavourite.getArtistSongs(name) } }
                 _loading.value = false
@@ -75,13 +81,18 @@ class ArtistDetailViewModel(
         _currentArtist.value?.let {
             launch {
                 val song = Song(songId, title, album, it.id)
-                val artist = FavouriteArtist(it.id, it.name, it.mediumImageUrl)
+                val artistInfo = withContext(Dispatchers.IO) { handleFavourite.getArtistInfo(musicoveryArtist.mbid) }
+                val favouriteArtist = FavouriteArtist(it.id, it.name, it.bigImageUrl)
+                favouriteArtist.genre = artistInfo.genres.toString()
+                val region = artistInfo.region?.toString()?.replace(EMPTY_OBJECT, String())
+                val country = artistInfo.country?.toString()?.replace(EMPTY_OBJECT, String())
+                favouriteArtist.regionAndCountry = setRegionCountry(region, country)
 
                 if (isFavourite(songId).not()) {
                     val artistExists = withContext(Dispatchers.IO) { handleFavourite.isFavouriteArtist(it.id) }
 
                     if (artistExists.not())
-                        handleFavourite.insertArtist(artist)
+                        handleFavourite.insertArtist(favouriteArtist)
 
                     try {
                         handleFavourite.insertSong(song)
@@ -94,7 +105,7 @@ class ArtistDetailViewModel(
                     handleFavourite.deleteSong(song)
 
                     if (handleFavourite.artistHasSongs(it.id).not())
-                        handleFavourite.deleteArtist(artist)
+                        handleFavourite.deleteArtist(favouriteArtist)
 
                     _favourite.value = Event(Favourite(star, title, false))
                     loadFavouriteSongs()
@@ -103,10 +114,21 @@ class ArtistDetailViewModel(
         }
     }
 
+    private fun setRegionCountry(region: String?, country: String?): String =
+        if (region.isNullOrEmpty().not() && country.isNullOrEmpty().not())
+            "$region, $country"
+        else if (region.isNullOrEmpty() && country.isNullOrEmpty().not())
+            country!!
+        else if (region.isNullOrEmpty().not() && country.isNullOrEmpty())
+            region!!
+        else
+            String()
+
     fun isFavourite(songId: Long): Boolean = favouriteSongs.any { it.id == songId }
 
     companion object {
         const val ARTIST_NAME = "artist name"
+        private const val EMPTY_OBJECT = "{}"
     }
 }
 

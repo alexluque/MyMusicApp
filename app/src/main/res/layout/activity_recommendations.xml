@@ -21,7 +21,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/favourite_artist" />
+            tools:listitem="@layout/recommended_artist" />
 
         <ProgressBar
             android:id="@+id/recommendations_progressBar"

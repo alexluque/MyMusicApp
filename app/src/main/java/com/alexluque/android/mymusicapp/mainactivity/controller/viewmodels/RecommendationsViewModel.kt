@@ -11,7 +11,7 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
 import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainViewModel.Companion.DEFAULT_COUNTRY
 import com.example.android.domain.RecommendedArtist
-import com.example.android.usecases.GetArtist
+import com.example.android.usecases.GetArtistDetail
 import com.example.android.usecases.GetRecommendedArtists
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,7 +19,8 @@ import kotlinx.coroutines.withContext
 
 @Suppress("UNCHECKED_CAST")
 class RecommendationsViewModel(
-    private val getArtist: GetArtist,
+    country: String,
+    private val getArtistDetail: GetArtistDetail,
     private val getRecommendedArtists: GetRecommendedArtists
 ) : ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
 
@@ -34,7 +35,7 @@ class RecommendationsViewModel(
 
     init {
         initScope()
-        loadRecommendations()
+        loadRecommendations(country)
     }
 
     override fun onCleared() {
@@ -45,7 +46,7 @@ class RecommendationsViewModel(
     fun loadImage(artistName: String, imageView: ImageView) {
         ConnectivityController.runIfConnected {
             launch {
-                val artist = withContext(Dispatchers.IO) { getArtist.invoke(artistName) }
+                val artist = withContext(Dispatchers.IO) { getArtistDetail.invoke(artistName) }
                 imageView.loadImage(artist?.mediumImageUrl ?: RANDOM_IMAGE)
             }
         }
@@ -73,12 +74,14 @@ class RecommendationsViewModel(
 
 @Suppress("UNCHECKED_CAST")
 class RecommendationsViewModelFactory(
-    private val getArtist: GetArtist,
+    private val country: String,
+    private val getArtistDetail: GetArtistDetail,
     private val getRecommendedArtists: GetRecommendedArtists
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
         RecommendationsViewModel(
-            getArtist,
+            country,
+            getArtistDetail,
             getRecommendedArtists
         ) as T
 }

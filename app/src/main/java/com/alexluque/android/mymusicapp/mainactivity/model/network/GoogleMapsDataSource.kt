@@ -14,5 +14,6 @@ class GoogleMapsDataSource : GeolocationDataSource {
             ?.formatted_address
             ?.split(",")
             ?.lastOrNull()
+            ?.trim()
             .orEmpty()
 }

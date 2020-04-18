@@ -1,6 +1,6 @@
 package com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery
 
-data class MusicoveryResponse (
+data class Response (
 	val code : Int,
 	val anwser : String,
 	val time : Double,
