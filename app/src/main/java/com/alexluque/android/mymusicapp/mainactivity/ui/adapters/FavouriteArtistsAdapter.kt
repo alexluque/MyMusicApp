@@ -30,12 +30,13 @@ class FavouriteArtistsAdapter(
         view.artist_avatar.loadImage(artist.imageUrl)
         view.artist_name.text = artistName
         view.artist_fav_num.text = artist.favouriteSongs.toString()
+        view.artist_genre.text = artist.genre
+
         artist.genre?.let {
-            if (it.isNotEmpty()) {
-                view.artist_genre.text = it
+            if (it.isNotEmpty())
                 view.artist_genre.visibility = View.VISIBLE
-            }
         }
+
         view.artist_region_and_country.text = artist.regionAndCountry
         view.setOnClickListener { onArtistClicked(artistName) }
     }
