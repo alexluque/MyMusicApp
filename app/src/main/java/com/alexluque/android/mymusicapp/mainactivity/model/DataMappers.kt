@@ -51,8 +51,8 @@ fun ArtistInfo.toDomainArtistInfo(): DomainArtistInfo {
                     genres.entries
                         .map { it.value.toString().capitalize(Locale.ROOT) }[0]
                         .split(delimiters = *arrayOf(", "))
-                        .map { it.replace("[", "") }
-                        .map { it.replace("]", "") }
+                        .map { it.replace("[", String()) }
+                        .map { it.replace("]", String()) }
                         .take(2)
                         .joinToString { it.capitalize(Locale.ROOT) }
                 else
