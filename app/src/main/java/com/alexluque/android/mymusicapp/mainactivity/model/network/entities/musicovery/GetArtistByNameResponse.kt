@@ -2,5 +2,5 @@ package com.alexluque.android.mymusicapp.mainactivity.model.network.entities.mus
 
 data class GetArtistByNameResponse(
     val response: Response,
-    val artists: ArtistsByNameResponse
+    val artists: Any
 )

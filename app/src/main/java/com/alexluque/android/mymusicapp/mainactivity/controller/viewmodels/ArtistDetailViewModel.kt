@@ -17,6 +17,7 @@ import com.example.android.usecases.HandleFavourite
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 
 @Suppress("UNCHECKED_CAST")
 class ArtistDetailViewModel(
@@ -60,9 +61,7 @@ class ArtistDetailViewModel(
                 _loading.value = true
                 val artist = withContext(Dispatchers.IO) { handleFavourite.getArtistDetail(name) }
                 _currentArtist.value = artist
-                artist?.let {
-                    musicoveryArtist = withContext(Dispatchers.IO) { handleFavourite.getArtist(it.name) }
-                }
+                artist?.let { musicoveryArtist = withContext(Dispatchers.IO) { handleFavourite.getArtist(it.name) } }
                 _imageUrl.value = artist?.bigImageUrl
                 _songs.value = artist?.let { withContext(Dispatchers.IO) { handleFavourite.getArtistSongs(name) } }
                 _loading.value = false
@@ -77,16 +76,20 @@ class ArtistDetailViewModel(
         favouriteSongs.addAll(withContext(Dispatchers.IO) { handleFavourite.getFavouriteSongs() })
     }
 
+    @ExperimentalStdlibApi
     fun onFavouriteClicked(star: ImageView, songId: Long, title: String, album: String?) {
         _currentArtist.value?.let {
             launch {
                 val song = Song(songId, title, album, it.id)
-                val artistInfo = withContext(Dispatchers.IO) { handleFavourite.getArtistInfo(musicoveryArtist.mbid) }
                 val favouriteArtist = FavouriteArtist(it.id, it.name, it.bigImageUrl)
-                favouriteArtist.genre = artistInfo.genres.toString()
-                val region = artistInfo.region?.toString()?.replace(EMPTY_OBJECT, String())
-                val country = artistInfo.country?.toString()?.replace(EMPTY_OBJECT, String())
-                favouriteArtist.regionAndCountry = setRegionCountry(region, country)
+
+                if (musicoveryArtist.mbid.isNotEmpty()){
+                    val artistInfo = withContext(Dispatchers.IO) { handleFavourite.getArtistInfo(musicoveryArtist.mbid) }
+                    favouriteArtist.genre = artistInfo.genres.toString()
+                    val region = artistInfo.region?.toString()?.replace(EMPTY_OBJECT, String())?.capitalize(Locale.ROOT)
+                    val country = artistInfo.country?.toString()?.replace(EMPTY_OBJECT, String())
+                    favouriteArtist.regionAndCountry = setRegionCountry(region, country)
+                }
 
                 if (isFavourite(songId).not()) {
                     val artistExists = withContext(Dispatchers.IO) { handleFavourite.isFavouriteArtist(it.id) }

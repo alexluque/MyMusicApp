@@ -4,7 +4,10 @@ import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.deez
 import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.deezer.SongData
 import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.Artist
 import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.ArtistInfo
-import com.example.android.domain.*
+import com.example.android.domain.ArtistDetail
+import com.example.android.domain.FavouriteArtist
+import com.example.android.domain.Genre
+import com.example.android.domain.RecommendedArtist
 import com.google.gson.internal.LinkedTreeMap
 import java.util.*
 import com.alexluque.android.mymusicapp.mainactivity.model.database.entities.Artist as RoomArtist
@@ -34,6 +37,25 @@ fun RoomSong.toDomainSong(): DomainSong = DomainSong(id, title, album, artistId)
 fun DomainSong.toRoomSong(): RoomSong = RoomSong(id, title, album, artistId)
 
 fun Artist.toDomainArtist(): DomainArtist = DomainArtist(mbid, name, genre?.toString(), country)
+
+fun LinkedTreeMap<String, String>.toDomainArtist(): DomainArtist {
+    val values = this.values
+    val mbid = values.elementAt(0) ?: String()
+    val name = values.elementAt(1) ?: String()
+    val genre = try {
+        values.elementAt(2).toString()
+    } catch (ex: ClassCastException) {
+        String()
+    }
+    val country = try {
+        values.elementAt(3).toString()
+    } catch (ex: ClassCastException) {
+        String()
+    }
+    return DomainArtist(mbid, name, genre, country)
+}
+
+fun emptyDomainArtist(): DomainArtist = DomainArtist(String(), String(), String(), String())
 
 @ExperimentalStdlibApi
 fun ArtistInfo.toDomainArtistInfo(): DomainArtistInfo {
