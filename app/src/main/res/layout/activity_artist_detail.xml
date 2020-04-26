@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel" />
+            type="com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:isScrollContainer="false"
         android:nestedScrollingEnabled="false"
-        tools:context="com.alexluque.android.mymusicapp.mainactivity.ArtistDetailActivity">
+        tools:context="com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"

@@ -4,7 +4,7 @@
     android:id="@+id/search_artist_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.alexluque.android.mymusicapp.mainactivity.SearchArtistFragment">
+    tools:context="com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment">
 
     <EditText
         android:id="@+id/artistName_editText"

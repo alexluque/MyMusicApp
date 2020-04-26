@@ -7,13 +7,13 @@
 
         <variable
             name="viewmodel"
-            type="com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel" />
+            type="com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.alexluque.android.mymusicapp.mainactivity.ArtistDetailActivity">
+        tools:context="com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/artist_detail_recyclerView"

@@ -6,13 +6,13 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainViewModel" />
+            type="com.alexluque.android.mymusicapp.mainactivity.ui.main.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.alexluque.android.mymusicapp.mainactivity.MainActivity">
+        tools:context="com.alexluque.android.mymusicapp.mainactivity.ui.main.MainActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
