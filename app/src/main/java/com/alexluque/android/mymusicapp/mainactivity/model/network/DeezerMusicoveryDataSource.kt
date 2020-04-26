@@ -11,6 +11,7 @@ import com.example.android.domain.ArtistDetail
 import com.example.android.domain.RecommendedArtist
 import com.google.gson.internal.LinkedTreeMap
 import java.lang.ClassCastException
+import java.lang.NullPointerException
 import java.util.*
 import com.example.android.domain.Artist as DomainArtist
 import com.example.android.domain.ArtistInfo as DomainArtistInfo
@@ -33,13 +34,18 @@ class DeezerMusicoveryDataSource : RemoteDataSource {
             .data
             .map(SongData::toDomainSong)
 
-    override suspend fun getArtistsByLocation(country: String): List<RecommendedArtist> =
-        RetrofitBuilder.musicoveryInstance
-            .create(MusicoveryArtistService::class.java)
-            .getArtistsByLocation(country.toLowerCase(Locale.ROOT).trim())
-            .artists
-            .artist
-            .map(Artist::toRecommendedArtist)
+    override suspend fun getArtistsByLocation(country: String): List<RecommendedArtist> {
+        return try {
+            RetrofitBuilder.musicoveryInstance
+                .create(MusicoveryArtistService::class.java)
+                .getArtistsByLocation(country.toLowerCase(Locale.ROOT).trim())
+                .artists
+                .artist
+                .map(Artist::toRecommendedArtist)
+        } catch (ex: NullPointerException) {
+            emptyList<RecommendedArtist>()
+        }
+    }
 
     override suspend fun getArtist(artistName: String): DomainArtist {
         val artists = RetrofitBuilder.musicoveryInstance
@@ -47,7 +53,7 @@ class DeezerMusicoveryDataSource : RemoteDataSource {
             .getArtist(artistName)
             .artists
 
-        val result = when (artists) {
+        return when (artists) {
             is Map<*, *> -> {
                 if (artists.isNotEmpty())
                     try {
@@ -69,8 +75,6 @@ class DeezerMusicoveryDataSource : RemoteDataSource {
             is ArtistsByNameResponse -> artists.artist.artists.artist.toDomainArtist()
             else -> emptyDomainArtist()
         }
-
-        return result
     }
 
     @ExperimentalStdlibApi
