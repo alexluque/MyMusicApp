@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity
+package com.alexluque.android.mymusicapp.mainactivity.ui.recommendations
 
 import android.os.Bundle
 import android.provider.AlarmClock.EXTRA_MESSAGE
@@ -9,19 +9,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alexluque.android.mymusicapp.mainactivity.R
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.EventObserver
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.makeLongSnackbar
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.updateData
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.RecommendationsViewModel
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.RecommendationsViewModelFactory
+import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel
 import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityRecommendationsBinding
 import com.alexluque.android.mymusicapp.mainactivity.model.database.FavouritesRoomDatabase
 import com.alexluque.android.mymusicapp.mainactivity.model.database.RoomDataSource
 import com.alexluque.android.mymusicapp.mainactivity.model.network.DeezerMusicoveryDataSource
-import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.RecommendedArtistsAdapter
+import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity
 import com.example.android.data.repositories.ArtistDetailRepository
 import com.example.android.data.repositories.RecommendedArtistsRepository
 import com.example.android.domain.RecommendedArtist
@@ -88,8 +87,13 @@ class RecommendationsActivity : AppCompatActivity() {
         viewModel.artists.observe(
             this,
             Observer {
-                viewAdapter.updateData(viewAdapter.artists as MutableList<Any>, it)
-                mainView.makeLongSnackbar(this.getString(R.string.country_recommendations) + " ${countryName.toUpperCase(Locale.ROOT)}")
+                val artists = viewAdapter.artists as MutableList<Any>
+                viewAdapter.updateData(artists, it)
+                val msg = if (artists.isEmpty())
+                    getString(R.string.no_recommended_artists_found)
+                else
+                    this.getString(R.string.country_recommendations) + " ${countryName.toUpperCase(Locale.ROOT)}"
+                mainView.makeLongSnackbar(msg)
             }
         )
 

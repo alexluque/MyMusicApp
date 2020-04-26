@@ -20,14 +20,14 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".RecommendationsActivity"
+            android:name=".ui.recommendations.RecommendationsActivity"
             android:label="@string/recommendations_activity_title"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".ui.main.MainActivity" />
         <activity
-            android:name=".ArtistDetailActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".ui.detail.ArtistDetailActivity"
+            android:parentActivityName=".ui.main.MainActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

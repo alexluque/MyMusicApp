@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels
+package com.alexluque.android.mymusicapp.mainactivity.ui.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

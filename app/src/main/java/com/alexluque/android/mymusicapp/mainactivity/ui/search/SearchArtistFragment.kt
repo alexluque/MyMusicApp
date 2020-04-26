@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity
+package com.alexluque.android.mymusicapp.mainactivity.ui.search
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -10,12 +10,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.alexluque.android.mymusicapp.mainactivity.R
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.hideKeyboard
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.showKeyboard
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel.Companion.ARTIST_NAME
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.SearchArtistViewModel
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.SearchArtistViewModel.UiModel
+import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel.Companion.ARTIST_NAME
+import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistViewModel.UiModel
+import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity
 import kotlinx.android.synthetic.main.fragment_search_artist.view.*
 import java.util.*
 

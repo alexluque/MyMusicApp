@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity.ui.adapters
+package com.alexluque.android.mymusicapp.mainactivity.ui.detail
 
 import android.view.LayoutInflater
 import android.view.View

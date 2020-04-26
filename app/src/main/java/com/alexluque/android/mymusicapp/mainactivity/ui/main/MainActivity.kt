@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity
+package com.alexluque.android.mymusicapp.mainactivity.ui.main
 
 import android.Manifest
 import android.os.Bundle
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.alexluque.android.mymusicapp.mainactivity.SearchArtistFragment.Companion.FRAGMENT_NAME
+import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity
+import com.alexluque.android.mymusicapp.mainactivity.R
+import com.alexluque.android.mymusicapp.mainactivity.ui.recommendations.RecommendationsActivity
+import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment
+import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment.Companion.FRAGMENT_NAME
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.EventObserver
-import com.alexluque.android.mymusicapp.mainactivity.controller.LocationRecommendationsListener
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.updateData
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainViewModel
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainViewModelFactory
+import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel
 import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityMainBinding
 import com.alexluque.android.mymusicapp.mainactivity.model.database.FavouritesRoomDatabase
 import com.alexluque.android.mymusicapp.mainactivity.model.database.RoomDataSource
 import com.alexluque.android.mymusicapp.mainactivity.model.network.GoogleMapsDataSource
-import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.FavouriteArtistsAdapter
 import com.example.android.data.repositories.FavouriteArtistsRepository
 import com.example.android.data.repositories.GeolocationRepository
 import com.example.android.domain.FavouriteArtist

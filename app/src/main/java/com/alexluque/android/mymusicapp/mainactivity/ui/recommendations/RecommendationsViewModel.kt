@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels
+package com.alexluque.android.mymusicapp.mainactivity.ui.recommendations
 
 import android.widget.ImageView
 import androidx.lifecycle.LiveData
@@ -9,7 +9,7 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityCont
 import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
-import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.MainViewModel.Companion.DEFAULT_COUNTRY
+import com.alexluque.android.mymusicapp.mainactivity.ui.main.MainViewModel.Companion.DEFAULT_COUNTRY
 import com.example.android.domain.RecommendedArtist
 import com.example.android.usecases.GetArtistDetail
 import com.example.android.usecases.GetRecommendedArtists
