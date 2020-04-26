@@ -1,2 +1,5 @@
 include ':app'
 rootProject.name='MainActivity'
+include ':domain'
+include ':usecases'
+include ':data'

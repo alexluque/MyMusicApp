@@ -1,68 +1,117 @@
 package com.alexluque.android.mymusicapp.mainactivity
 
-import SongsData
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.alexluque.android.mymusicapp.mainactivity.model.controllers.ConnectivityController
-import com.alexluque.android.mymusicapp.mainactivity.presenters.ArtistDetailActivityPresenter
-import com.alexluque.android.mymusicapp.mainactivity.presenters.contracts.ArtistDetailActivityContract
-import com.alexluque.android.mymusicapp.mainactivity.presenters.objects.ArtistContainer
+import com.alexluque.android.mymusicapp.mainactivity.SearchArtistFragment.Companion.FRAGMENT_NAME
+import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
+import com.alexluque.android.mymusicapp.mainactivity.controller.EventObserver
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.makeLongSnackbar
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.updateData
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModel.Companion.ARTIST_NAME
+import com.alexluque.android.mymusicapp.mainactivity.controller.viewmodels.ArtistDetailViewModelFactory
+import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityArtistDetailBinding
+import com.alexluque.android.mymusicapp.mainactivity.model.database.FavouritesRoomDatabase
+import com.alexluque.android.mymusicapp.mainactivity.model.database.RoomDataSource
+import com.alexluque.android.mymusicapp.mainactivity.model.network.DeezerMusicoveryDataSource
 import com.alexluque.android.mymusicapp.mainactivity.ui.adapters.ArtistDetailAdapter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.android.data.repositories.ArtistDetailRepository
+import com.example.android.domain.Song
+import com.example.android.usecases.HandleFavourite
 import kotlinx.android.synthetic.main.activity_artist_detail.*
 
-class ArtistDetailActivity : AppCompatActivity(), ArtistDetailActivityContract {
+@Suppress("UNCHECKED_CAST")
+class ArtistDetailActivity : AppCompatActivity() {
 
-    private val activityView: View by lazy { findViewById<View>(android.R.id.content) }
-    private val progressBar: ProgressBar by lazy { artist_progressBar }
-    private val artistImage: ImageView by lazy { artist_image }
-    private val artistName: TextView by lazy { artist_name }
-    private val presenter: ArtistDetailActivityPresenter by lazy { ArtistDetailActivityPresenter() }
-    private val viewAdapter: RecyclerView.Adapter<*> by lazy { ArtistDetailAdapter(myDataSet) }
-    private val viewManager: RecyclerView.LayoutManager by lazy { LinearLayoutManager(this) }
-    private val myDataSet: SongsData by lazy { SongsData() }
-    private val searchButton: FloatingActionButton by lazy { search_button }
-    private val searchArtistFragment: SearchArtistFragment by lazy { SearchArtistFragment() }
+    private val mainView: View by lazy { findViewById<View>(android.R.id.content) }
+    private val artistName: String? by lazy { intent.getStringExtra(ARTIST_NAME) }
 
+    private lateinit var viewModel: ArtistDetailViewModel
     private lateinit var recyclerView: RecyclerView
+    private lateinit var viewAdapter: ArtistDetailAdapter
 
+    @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_artist_detail)
 
-        presenter.onCreate(this, this, searchArtistFragment)
+        setViewModel(artistName)
+        setAdapter()
+
+        ConnectivityController.view = mainView
+
+        search_button.setOnClickListener {
+            SearchArtistFragment(viewModel::loadData).show(supportFragmentManager, FRAGMENT_NAME)
+        }
+
+        observeSongs()
+        observeFavourite()
+        observeCurrentArtist()
+    }
+
+    private fun setViewModel(artistName: String?) {
+        viewModel = ViewModelProvider(
+            this,
+            ArtistDetailViewModelFactory(
+                artistName,
+                HandleFavourite(
+                    ArtistDetailRepository(
+                        DeezerMusicoveryDataSource(),
+                        RoomDataSource(FavouritesRoomDatabase.getDatabase(applicationContext))
+                    )
+                )
+            )
+        ).get(ArtistDetailViewModel::class.java)
+
+        val binding: ActivityArtistDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_artist_detail)
+        binding.viewmodel = viewModel
+        binding.lifecycleOwner = this
+    }
+
+    @ExperimentalStdlibApi
+    private fun setAdapter() {
+        viewAdapter = ArtistDetailAdapter(mutableListOf<Song>(), viewModel::onFavouriteClicked, viewModel::isFavourite)
 
         recyclerView = artist_detail_recyclerView.apply {
-            layoutManager = viewManager
+            layoutManager = LinearLayoutManager(context)
             adapter = viewAdapter
         }
-        ConnectivityController.view = activityView
-
-        onStartActivityReceived()
-        setOnClickListeners()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.onDestroy()
-    }
+    private fun observeSongs() =
+        viewModel.songs.observe(
+            this,
+            Observer { it?.let { viewAdapter.updateData(viewAdapter.songs as MutableList<Any>, it) } }
+        )
 
-    override fun hideProgress() {
-        progressBar.visibility = View.GONE
-    }
+    private fun observeFavourite() =
+        viewModel.favourite.observe(
+            this,
+            EventObserver {
+                val resource = if (it.newFavourite) android.R.drawable.btn_star_big_on else android.R.drawable.btn_star
+                val msg = if (it.newFavourite) getString(R.string.fav_song_added) else getString(R.string.fav_song_removed)
 
-    override fun onStartActivityReceived() = presenter.onStartActivityReceived(intent, container = ArtistContainer(artistName, artistImage, myDataSet, viewAdapter))
+                it.star.setImageResource(resource)
+                it.star.makeLongSnackbar("${it.songName} $msg")
+            }
+        )
 
-    private fun setOnClickListeners() {
-        searchButton.setOnClickListener {
-            presenter.onClickSearchButton(supportFragmentManager, ArtistContainer(artistName, artistImage, myDataSet, viewAdapter))
-        }
-    }
-
+    private fun observeCurrentArtist() =
+        viewModel.currentArtist.observe(
+            this,
+            Observer {
+                if (it == null) {
+                    mainView.makeLongSnackbar(getString(R.string.artist_not_found))
+                    this.title = getString(R.string.artists_name)
+                } else {
+                    this.title = it.name
+                }
+            }
+        )
 }

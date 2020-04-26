@@ -8,7 +8,7 @@
     <string name="artist_fav_num">0</string>
     <string name="get_recommendations">Recomana\'m Artistes!</string>
     <string name="artist_genere">Gènere musical</string>
-    <string name="no_internet">No hi ha connexió a Internet...</string>
+    <string name="no_internet">No hi ha connexió a Internet…</string>
     <string name="country_recommendations">Mostrant recomanacions per</string>
     <string name="song_name">Cançó</string>
     <string name="song_album">Album</string>
@@ -16,6 +16,12 @@
     <string name="search_button">Cercar</string>
     <string name="artist_dialog_content">Escriu el nom de l\'artista</string>
     <string name="artist_dialog_title">Artista</string>
-    <string name="artist_not_found">No s\'ha trobat l\'artista...</string>
+    <string name="artist_not_found">No s\'ha trobat l\'artista…</string>
+    <string name="fav_song_added">afegida a preferides!</string>
+    <string name="fav_song_removed">eliminada de preferides</string>
+    <string name="recommendations_activity_title">Recomanacions</string>
+    <string name="main_activity_title">Artistes Preferits</string>
+    <string name="artist_s_genre">Estil musical</string>
+    <string name="artist_s_region_country">Regió i país de l\'artista</string>
 </resources>
 

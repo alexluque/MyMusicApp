@@ -1,3 +1,5 @@
+package com.alexluque.android.mymusicapp.mainactivity.model.network.entities.deezer
+
 data class ArtistSongData(
     val id: Int,
     val name: String,

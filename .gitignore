@@ -21,3 +21,4 @@ build/
 /build/
 .idea/detekt.xml
 app/src/main/res/values/google_maps_api.xml
+*.iml

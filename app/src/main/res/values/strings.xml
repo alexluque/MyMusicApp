@@ -8,7 +8,7 @@
     <string name="artist_fav_num">0</string>
     <string name="get_recommendations">Get Recommendations!</string>
     <string name="artist_genere">Artist\'s genere</string>
-    <string name="no_internet">There is no Internet connection...</string>
+    <string name="no_internet">There is no Internet connection…</string>
     <string name="country_recommendations">Showing recommendations for</string>
     <string name="song_name">Song\'s Name</string>
     <string name="song_album">Song\'s Album</string>
@@ -16,5 +16,11 @@
     <string name="search_button">Search</string>
     <string name="artist_dialog_content">Write artist name</string>
     <string name="artist_dialog_title">Artist</string>
-    <string name="artist_not_found">Artist not found...</string>
+    <string name="artist_not_found">Artist not found…</string>
+    <string name="fav_song_added">added to favourite songs!</string>
+    <string name="fav_song_removed">removed from favourite songs</string>
+    <string name="recommendations_activity_title">Recommendations</string>
+    <string name="main_activity_title">Favourite Artists</string>
+    <string name="artist_s_genre">Artist\'s genre</string>
+    <string name="artist_s_region_country">Artist\'s region and country</string>
 </resources>

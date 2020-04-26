@@ -1,6 +1,7 @@
-data class SongData(
+package com.alexluque.android.mymusicapp.mainactivity.model.network.entities.deezer
 
-    val id: Int = 0,
+data class SongData(
+    val id: Long = 0,
     val readable: Boolean = true,
     val title: String = String(),
     val title_short: String = String(),
