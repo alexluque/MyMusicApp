@@ -87,3 +87,5 @@ fun ArtistInfo.toDomainArtistInfo(): DomainArtistInfo {
     }
     return DomainArtistInfo(name, mbid, domainGenres, country, region?.toString())
 }
+
+fun emptyDomainArtistInfo(): DomainArtistInfo = DomainArtistInfo(String(), String(), String(), String(), String())
