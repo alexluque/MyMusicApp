@@ -23,4 +23,5 @@
     <string name="main_activity_title">Favourite Artists</string>
     <string name="artist_s_genre">Artist\'s genre</string>
     <string name="artist_s_region_country">Artist\'s region and country</string>
+    <string name="no_recommended_artists_found">No artists found at this time. Try again later…</string>
 </resources>

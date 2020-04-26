@@ -23,5 +23,6 @@
     <string name="main_activity_title">Artistas Preferidos</string>
     <string name="artist_s_genre">Estilo musical</string>
     <string name="artist_s_region_country">Región y país del artista</string>
+    <string name="no_recommended_artists_found">No se han podido recuperar artistas en este momento. Por favor, inténtalo más tarde…</string>
 </resources>
 

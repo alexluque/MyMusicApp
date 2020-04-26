@@ -23,5 +23,6 @@
     <string name="main_activity_title">Artistes Preferits</string>
     <string name="artist_s_genre">Estil musical</string>
     <string name="artist_s_region_country">Regió i país de l\'artista</string>
+    <string name="no_recommended_artists_found">No s\'han pogut recuperar artistes en aquest moment. Si us plau, intenta-ho més tard…</string>
 </resources>
 
