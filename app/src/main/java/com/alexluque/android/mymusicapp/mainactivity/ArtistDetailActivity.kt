@@ -36,6 +36,7 @@ class ArtistDetailActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: ArtistDetailAdapter
 
+    @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_artist_detail)
@@ -73,6 +74,7 @@ class ArtistDetailActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
     }
 
+    @ExperimentalStdlibApi
     private fun setAdapter() {
         viewAdapter = ArtistDetailAdapter(mutableListOf<Song>(), viewModel::onFavouriteClicked, viewModel::isFavourite)
 
