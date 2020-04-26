@@ -11,7 +11,8 @@ interface MusicoveryArtistService {
     @GET("artist.php")
     suspend fun getArtistsByLocation(
         @Query("location") location: String,
-        @Query("fct") getFromLocation: String = "getfromlocation"
+        @Query("fct") getFromLocation: String = "getfromlocation",
+        @Query("resultsnumber") results: Int = 100
     ): GetArtistsByLocationResponse
 
     @GET("artist.php")
