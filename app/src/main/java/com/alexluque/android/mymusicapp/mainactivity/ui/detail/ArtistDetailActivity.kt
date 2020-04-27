@@ -39,6 +39,7 @@ class ArtistDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_artist_detail)
+        this.title = getString(R.string.artists_name)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_artist_detail)
 
@@ -53,7 +54,7 @@ class ArtistDetailActivity : AppCompatActivity() {
 
         observeSongs()
         observeFavourite()
-        observeCurrentArtist()
+        observeArtistName()
     }
 
     private fun setViewModel(artistName: String?) {
@@ -102,13 +103,12 @@ class ArtistDetailActivity : AppCompatActivity() {
             }
         )
 
-    private fun observeCurrentArtist() =
-        viewModel.currentArtist.observe(
+    private fun observeArtistName() =
+        viewModel.artistDetailName.observe(
             this,
             Observer {
                 if (it == null) {
                     mainView.makeLongSnackbar(getString(R.string.artist_not_found))
-                    this.title = getString(R.string.artists_name)
                 } else {
                     this.title = it.name
                 }

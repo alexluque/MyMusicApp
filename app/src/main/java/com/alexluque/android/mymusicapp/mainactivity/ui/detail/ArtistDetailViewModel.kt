@@ -25,6 +25,7 @@ class ArtistDetailViewModel(
 ) : ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
 
     class Favourite(val star: ImageView, val songName: String, val newFavourite: Boolean)
+    class ArtistDetailName(val name: String)
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
@@ -40,6 +41,9 @@ class ArtistDetailViewModel(
 
     private val _currentArtist = MutableLiveData<ArtistDetail?>()
     val currentArtist: LiveData<ArtistDetail?> get() = _currentArtist
+
+    private val _artistDetailName = MutableLiveData<ArtistDetailName?>()
+    val artistDetailName: LiveData<ArtistDetailName?> get() = _artistDetailName
 
     private val favouriteSongs = mutableListOf<Song>()
 
@@ -60,11 +64,18 @@ class ArtistDetailViewModel(
             launch {
                 _loading.value = true
                 val artist = withContext(Dispatchers.IO) { handleFavourite.getArtistDetail(name) }
-                _currentArtist.value = artist
-                artist?.let { musicoveryArtist = withContext(Dispatchers.IO) { handleFavourite.getArtist(it.name) } }
-                _imageUrl.value = artist?.bigImageUrl
-                _songs.value = artist?.let { withContext(Dispatchers.IO) { handleFavourite.getArtistSongs(name) } }
+                if (artist != null) {
+                    _currentArtist.value = artist
+                    musicoveryArtist = withContext(Dispatchers.IO) { handleFavourite.getArtist(artist.name) }
+                    _imageUrl.value = artist.bigImageUrl
+                    _songs.value = withContext(Dispatchers.IO) { handleFavourite.getArtistSongs(name) }
+                    _artistDetailName.value = ArtistDetailName(artist.name)
+                } else {
+                    _artistDetailName.value = null
+                }
 
+                // Ideally, this should be placed next to variable's assignment
+                // but Musicovery's API needs at least 1sec between calls
                 musicoveryArtist?.let {
                     if (artistInfo == null)
                         artistInfo = try {
