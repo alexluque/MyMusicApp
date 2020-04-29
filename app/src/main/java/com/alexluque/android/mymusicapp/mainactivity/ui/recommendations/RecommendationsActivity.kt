@@ -85,7 +85,6 @@ class RecommendationsActivity : AppCompatActivity() {
             this,
             RecommendationsViewModelFactory(
                 countryName,
-                getString(R.string.recommendations_activity_title),
                 GetArtistDetail(
                     ArtistDetailRepository(
                         remoteDS,

@@ -21,9 +21,11 @@
 
         <activity
             android:name=".ui.recommendations.RecommendationsActivity"
+            android:label="@string/recommendations_activity_title"
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
             android:name=".ui.detail.ArtistDetailActivity"
+            android:label="@string/artists_name"
             android:parentActivityName=".ui.main.MainActivity" />
         <activity
             android:name=".ui.main.MainActivity"

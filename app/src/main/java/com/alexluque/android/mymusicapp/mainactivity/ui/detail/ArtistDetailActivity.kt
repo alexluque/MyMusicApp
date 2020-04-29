@@ -51,7 +51,6 @@ class ArtistDetailActivity : AppCompatActivity() {
     @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.title = getString(R.string.artists_name)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_artist_detail)
         setSupportActionBar(binding.appBarLayoutToolbar.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
