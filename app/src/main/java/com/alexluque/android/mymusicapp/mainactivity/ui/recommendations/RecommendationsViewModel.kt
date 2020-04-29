@@ -20,6 +20,7 @@ import kotlinx.coroutines.withContext
 @Suppress("UNCHECKED_CAST")
 class RecommendationsViewModel(
     country: String,
+    activityTitle: String,
     private val getArtistDetail: GetArtistDetail,
     private val getRecommendedArtists: GetRecommendedArtists
 ) : ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
@@ -32,6 +33,8 @@ class RecommendationsViewModel(
 
     private val _detail = MutableLiveData<Event<String>>()
     val detail: LiveData<Event<String>> get() = _detail
+
+    val title = activityTitle
 
     init {
         initScope()
@@ -75,12 +78,14 @@ class RecommendationsViewModel(
 @Suppress("UNCHECKED_CAST")
 class RecommendationsViewModelFactory(
     private val country: String,
+    private val activityTitle: String,
     private val getArtistDetail: GetArtistDetail,
     private val getRecommendedArtists: GetRecommendedArtists
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
         RecommendationsViewModel(
             country,
+            activityTitle,
             getArtistDetail,
             getRecommendedArtists
         ) as T

@@ -2,6 +2,7 @@ package com.alexluque.android.mymusicapp.mainactivity.ui
 
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
 
@@ -14,3 +15,6 @@ fun View.setVisible(visible: Boolean?) {
 
 @BindingAdapter("image")
 fun ImageView.loadImage(url: String?) = url?.let { this.loadImage(url) }
+
+@BindingAdapter("toolbarTitle")
+fun Toolbar.setToolbarTitle(title: String?) = title?.let { this.title = title }
