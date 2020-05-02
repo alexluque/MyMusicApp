@@ -4,7 +4,6 @@ import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
@@ -70,18 +69,4 @@ class RecommendationsViewModel(
     private companion object {
         private const val RANDOM_IMAGE = "https://picsum.photos/200/300"
     }
-}
-
-@Suppress("UNCHECKED_CAST")
-class RecommendationsViewModelFactory(
-    private val country: String,
-    private val getArtistDetail: GetArtistDetail,
-    private val getRecommendedArtists: GetRecommendedArtists
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        RecommendationsViewModel(
-            country,
-            getArtistDetail,
-            getRecommendedArtists
-        ) as T
 }

@@ -5,7 +5,6 @@ import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
@@ -17,7 +16,6 @@ import com.example.android.usecases.HandleFavourite
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.IllegalArgumentException
 import java.util.*
 
 @Suppress("UNCHECKED_CAST")
@@ -43,7 +41,6 @@ class ArtistDetailViewModel(
     val favourite: LiveData<Event<Favourite>> get() = _favourite
 
     private val _currentArtist = MutableLiveData<ArtistDetail?>()
-    val currentArtist: LiveData<ArtistDetail?> get() = _currentArtist
 
     private val _artistDetailName = MutableLiveData<ArtistDetailName?>()
     val artistDetailName: LiveData<ArtistDetailName?> get() = _artistDetailName
@@ -173,14 +170,4 @@ class ArtistDetailViewModel(
         const val ARTIST_NAME = "artist name"
         private const val EMPTY_OBJECT = "{}"
     }
-}
-
-@Suppress("UNCHECKED_CAST")
-class ArtistDetailViewModelFactory(
-    private val artistName: String?,
-    private val handleFavourite: HandleFavourite,
-    private val getCountry: GetCountry
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        ArtistDetailViewModel(artistName, handleFavourite, getCountry) as T
 }

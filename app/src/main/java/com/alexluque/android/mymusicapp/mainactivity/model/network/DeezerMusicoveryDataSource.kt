@@ -17,6 +17,7 @@ import com.example.android.domain.Artist as DomainArtist
 import com.example.android.domain.ArtistInfo as DomainArtistInfo
 import com.example.android.domain.Song as DomainSong
 
+@Suppress("UNCHECKED_CAST")
 class DeezerMusicoveryDataSource : RemoteDataSource {
 
     override suspend fun getArtistDetail(artistName: String): ArtistDetail? =

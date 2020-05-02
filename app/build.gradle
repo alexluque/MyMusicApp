@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+ext.antlr4_version = '4.8-1'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -15,6 +17,14 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        "room.schemaLocation"  : "$projectDir/schemas".toString(),
+                        "room.incremental"     : "true",
+                        "room.expandProjection": "true"]
+            }
+        }
     }
 
     buildTypes {
@@ -29,8 +39,17 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
     packagingOptions {
         exclude 'META-INF/atomicfu.kotlin_module'
+    }
+
+    configurations.all() {
+        resolutionStrategy.force "org.antlr:antlr4-runtime:$antlr4_version"
+        resolutionStrategy.force "org.antlr:antlr4-tool:$antlr4_version"
     }
 }
 
@@ -62,6 +81,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
+    def dagger_version = '2.27'
+    implementation "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
     implementation 'com.squareup.retrofit2:retrofit:2.7.2'
     implementation "com.squareup.okhttp3:okhttp:4.4.0"
@@ -70,6 +92,7 @@ dependencies {
     implementation "com.squareup.picasso:picasso:2.71828"
 
     implementation 'com.karumi:dexter:6.0.2'
+    implementation "org.antlr:antlr4-runtime:$antlr4_version"
 
     testImplementation 'junit:junit:4.13'
 

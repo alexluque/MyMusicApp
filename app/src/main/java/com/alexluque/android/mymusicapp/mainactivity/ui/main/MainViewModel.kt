@@ -3,7 +3,6 @@ package com.alexluque.android.mymusicapp.mainactivity.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
@@ -67,14 +66,4 @@ class MainViewModel(
     companion object {
         const val DEFAULT_COUNTRY = "usa"
     }
-}
-
-@Suppress("UNCHECKED_CAST")
-class MainViewModelFactory(
-    private val getFavouriteArtists: GetFavouriteArtists,
-    private val getFavouriteArtistSongs: GetFavouriteArtistSongs,
-    private val getCountry: GetCountry
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        MainViewModel(getFavouriteArtists, getFavouriteArtistSongs, getCountry) as T
 }

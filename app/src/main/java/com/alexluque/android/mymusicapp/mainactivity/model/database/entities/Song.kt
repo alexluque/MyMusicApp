@@ -1,12 +1,10 @@
 package com.alexluque.android.mymusicapp.mainactivity.model.database.entities
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 
 @Entity(
     tableName = "songs",
+    indices = [Index(value = ["artist_id"])],
     foreignKeys = [
         ForeignKey(
             entity = Artist::class,

@@ -9,31 +9,19 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.EventObserver
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.addLocationPermission
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.makeLongSnackbar
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.updateData
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.*
 import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityArtistDetailBinding
-import com.alexluque.android.mymusicapp.mainactivity.model.database.FavouritesRoomDatabase
-import com.alexluque.android.mymusicapp.mainactivity.model.database.RoomDataSource
-import com.alexluque.android.mymusicapp.mainactivity.model.network.DeezerMusicoveryDataSource
-import com.alexluque.android.mymusicapp.mainactivity.model.network.GoogleMapsDataSource
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel.Companion.ARTIST_NAME
 import com.alexluque.android.mymusicapp.mainactivity.ui.main.LocationRecommendationsListener
 import com.alexluque.android.mymusicapp.mainactivity.ui.recommendations.RecommendationsActivity
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment.Companion.FRAGMENT_NAME
-import com.example.android.data.repositories.ArtistDetailRepository
-import com.example.android.data.repositories.GeolocationRepository
 import com.example.android.domain.Song
-import com.example.android.usecases.GetCountry
-import com.example.android.usecases.HandleFavourite
 import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.app_actionbar.view.*
 
@@ -42,11 +30,12 @@ class ArtistDetailActivity : AppCompatActivity() {
 
     private val mainView: View by lazy { findViewById<View>(android.R.id.content) }
     private val artistName: String? by lazy { intent.getStringExtra(ARTIST_NAME) }
+    private val viewModel: ArtistDetailViewModel by lazy { getViewModel { component.detailViewModel } }
 
     private lateinit var binding: ActivityArtistDetailBinding
-    private lateinit var viewModel: ArtistDetailViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: ArtistDetailAdapter
+    private lateinit var component: DetailActivityComponent
 
     @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +44,11 @@ class ArtistDetailActivity : AppCompatActivity() {
         setSupportActionBar(binding.appBarLayoutToolbar.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        setViewModel(artistName)
+        component = app.component.plus(DetailActivityModule(artistName))
+
+        binding.viewmodel = viewModel
+        binding.lifecycleOwner = this
+
         setAdapter()
 
         ConnectivityController.view = mainView
@@ -89,25 +82,6 @@ class ArtistDetailActivity : AppCompatActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
-    }
-
-    private fun setViewModel(artistName: String?) {
-        viewModel = ViewModelProvider(
-            this,
-            ArtistDetailViewModelFactory(
-                artistName,
-                HandleFavourite(
-                    ArtistDetailRepository(
-                        DeezerMusicoveryDataSource(),
-                        RoomDataSource(FavouritesRoomDatabase.getDatabase(applicationContext))
-                    )
-                ),
-                GetCountry(GeolocationRepository(GoogleMapsDataSource()))
-            )
-        ).get(ArtistDetailViewModel::class.java)
-
-        binding.viewmodel = viewModel
-        binding.lifecycleOwner = this
     }
 
     @ExperimentalStdlibApi
