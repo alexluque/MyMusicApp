@@ -2,6 +2,7 @@ package com.alexluque.android.mymusicapp.mainactivity.ui.search
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -14,9 +15,9 @@ import com.alexluque.android.mymusicapp.mainactivity.R
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.hideKeyboard
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.showKeyboard
+import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel.Companion.ARTIST_NAME
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistViewModel.UiModel
-import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity
 import kotlinx.android.synthetic.main.fragment_search_artist.view.*
 import java.util.*
 
@@ -50,21 +51,22 @@ class SearchArtistFragment(
         return dialog
     }
 
+    override fun onCancel(dialog: DialogInterface) {
+        activity?.let { nameEditText.hideKeyboard(it) }
+    }
+
     private fun updateUi(model: UiModel) {
         when (model) {
             is UiModel.Create -> dialog
             is UiModel.Search -> {
-                activity?.let { nameEditText.hideKeyboard(it) }
+                dialog?.cancel()
 
                 if (loadArtistDetail != null)
                     loadArtistDetail.invoke(retrieveEntry())
                 else
                     activity?.myStartActivity(ArtistDetailActivity::class.java, listOf(ARTIST_NAME to retrieveEntry()))
             }
-            is UiModel.Cancel -> {
-                activity?.let { nameEditText.hideKeyboard(it) }
-                dialog?.cancel()
-            }
+            is UiModel.Cancel -> dialog?.cancel()
         }
     }
 
