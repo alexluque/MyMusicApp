@@ -41,7 +41,7 @@ class ArtistDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_artist_detail)
-        setSupportActionBar(binding.appBarLayoutToolbar.toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         component = app.component.plus(DetailActivityModule(artistName))
