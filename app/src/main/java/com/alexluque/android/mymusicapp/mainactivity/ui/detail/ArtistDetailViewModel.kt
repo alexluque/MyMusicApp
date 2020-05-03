@@ -51,7 +51,7 @@ class ArtistDetailViewModel(
     private val favouriteSongs = mutableListOf<Song>()
 
     private var musicoveryArtist: Artist? = null
-    private var artistInfo: ArtistInfo? = null
+    private lateinit var artistInfo: ArtistInfo
 
     init {
         initScope()
@@ -80,12 +80,11 @@ class ArtistDetailViewModel(
                 // Ideally, this should be placed next to variable's assignment
                 // but Musicovery's API needs at least 1sec between calls
                 musicoveryArtist?.let {
-                    if (artistInfo == null)
-                        artistInfo = try {
-                            withContext(Dispatchers.IO) { handleFavourite.getArtistInfo(it.mbid) }
-                        } catch (ex: IllegalArgumentException) {
-                            emptyDomainArtistInfo()
-                        }
+                    artistInfo = try {
+                        withContext(Dispatchers.IO) { handleFavourite.getArtistInfo(it.mbid) }
+                    } catch (ex: IllegalArgumentException) {
+                        emptyDomainArtistInfo()
+                    }
                 }
 
                 _loading.value = false
@@ -108,10 +107,10 @@ class ArtistDetailViewModel(
                 val favouriteArtist = FavouriteArtist(it.id, it.name, it.bigImageUrl)
 
                 musicoveryArtist?.let {
-                    artistInfo?.let {
-                        favouriteArtist.genre = it.genres.toString()
-                        val region = it.region?.toString()?.replace(EMPTY_OBJECT, String())?.capitalize(Locale.ROOT)
-                        val country = it.country?.toString()?.replace(EMPTY_OBJECT, String())
+                    with(artistInfo) {
+                        favouriteArtist.genre = genres.toString()
+                        val region = region?.toString()?.replace(EMPTY_OBJECT, String())?.capitalize(Locale.ROOT)
+                        val country = country?.toString()?.replace(EMPTY_OBJECT, String())
                         favouriteArtist.regionAndCountry = setRegionCountry(region, country)
                     }
                 }
