@@ -25,7 +25,7 @@ class DeezerMusicoveryDataSource : RemoteDataSource {
             .create(DeezerArtistService::class.java)
             .getArtist(artistName)
             .data
-            .firstOrNull()
+            ?.firstOrNull()
             ?.toArtistDetail()
 
     override suspend fun getSongs(artistName: String): List<DomainSong> =
