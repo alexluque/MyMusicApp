@@ -8,9 +8,9 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityCont
 import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
-import com.alexluque.android.mymusicapp.mainactivity.ui.main.MainViewModel.Companion.DEFAULT_COUNTRY
 import com.example.android.domain.RecommendedArtist
 import com.example.android.usecases.GetArtistDetail
+import com.example.android.usecases.GetCountry
 import com.example.android.usecases.GetRecommendedArtists
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,9 +18,12 @@ import kotlinx.coroutines.withContext
 
 @Suppress("UNCHECKED_CAST")
 class RecommendationsViewModel(
-    country: String,
+    latitude: String,
+    longitude: String,
+    mapsKey: String,
     private val getArtistDetail: GetArtistDetail,
-    private val getRecommendedArtists: GetRecommendedArtists
+    private val getRecommendedArtists: GetRecommendedArtists,
+    private val getCountry: GetCountry
 ) : ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
 
     private val _loading = MutableLiveData<Boolean>()
@@ -32,9 +35,12 @@ class RecommendationsViewModel(
     private val _detail = MutableLiveData<Event<String>>()
     val detail: LiveData<Event<String>> get() = _detail
 
+    private val _country = MutableLiveData<Event<String>>()
+    val country: LiveData<Event<String>> get() = _country
+
     init {
         initScope()
-        loadRecommendations(country)
+        retrieveCountry(latitude, longitude, mapsKey)
     }
 
     override fun onCleared() {
@@ -55,10 +61,11 @@ class RecommendationsViewModel(
         _detail.value = Event(artistName)
     }
 
-    private fun loadRecommendations(country: String = DEFAULT_COUNTRY) {
+    fun loadRecommendations() {
         ConnectivityController.runIfConnected {
             launch {
                 _loading.value = true
+                val country = _country.value?.peekContent() ?: DEFAULT_COUNTRY
                 val artists = withContext(Dispatchers.IO) { getRecommendedArtists.invoke(country) }
                 _artists.value = artists
                 _loading.value = false
@@ -66,7 +73,21 @@ class RecommendationsViewModel(
         }
     }
 
+    private fun retrieveCountry(latitude: String, longitude: String, mapsKey: String) {
+        ConnectivityController.runIfConnected {
+            launch {
+                val userCountry = withContext(Dispatchers.IO) { getCountry.invoke("$latitude,$longitude", mapsKey) }
+                val retrievedCountry = when (userCountry.isEmpty()) {
+                    true -> DEFAULT_COUNTRY
+                    else -> userCountry
+                }
+                _country.value = Event(retrievedCountry)
+            }
+        }
+    }
+
     private companion object {
         private const val RANDOM_IMAGE = "https://picsum.photos/200/300"
+        private const val DEFAULT_COUNTRY = "usa"
     }
 }

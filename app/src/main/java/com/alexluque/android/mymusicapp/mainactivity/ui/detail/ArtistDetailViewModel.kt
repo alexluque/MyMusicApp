@@ -11,9 +11,7 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.updateData
 import com.alexluque.android.mymusicapp.mainactivity.model.emptyDomainArtistInfo
-import com.alexluque.android.mymusicapp.mainactivity.ui.main.MainViewModel
 import com.example.android.domain.*
-import com.example.android.usecases.GetCountry
 import com.example.android.usecases.HandleFavourite
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.Dispatchers
@@ -24,8 +22,7 @@ import java.util.*
 @Suppress("UNCHECKED_CAST")
 class ArtistDetailViewModel(
     artistName: String?,
-    private val handleFavourite: HandleFavourite,
-    private val getCountry: GetCountry
+    private val handleFavourite: HandleFavourite
 ) : ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
 
     class Favourite(val star: ImageView, val songName: String, val newFavourite: Boolean)
@@ -47,9 +44,6 @@ class ArtistDetailViewModel(
 
     private val _artistDetailName = MutableLiveData<ArtistDetailName?>()
     val artistDetailName: LiveData<ArtistDetailName?> get() = _artistDetailName
-
-    private val _country = MutableLiveData<Event<String>>()
-    val country: LiveData<Event<String>> get() = _country
 
     private val favouriteSongs = mutableListOf<Song>()
 
@@ -155,18 +149,6 @@ class ArtistDetailViewModel(
             String()
 
     fun isFavourite(songId: Long): Boolean = favouriteSongs.any { it.id == songId }
-
-    fun onRecommendClicked(mapsKey: String, latitude: Double, longitude: Double) =
-        ConnectivityController.runIfConnected {
-            launch {
-                val userCountry = withContext(Dispatchers.IO) { getCountry.invoke("$latitude,$longitude", mapsKey) }
-                val country = when (userCountry.isEmpty()) {
-                    true -> MainViewModel.DEFAULT_COUNTRY
-                    else -> userCountry
-                }
-                _country.value = Event(country)
-            }
-        }
 
     fun updateDetail(
         viewAdapter: ArtistDetailAdapter,

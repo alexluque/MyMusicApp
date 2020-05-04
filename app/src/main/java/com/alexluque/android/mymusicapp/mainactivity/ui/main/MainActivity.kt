@@ -1,7 +1,6 @@
 package com.alexluque.android.mymusicapp.mainactivity.ui.main
 
 import android.os.Bundle
-import android.provider.AlarmClock
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -16,9 +15,9 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityCont
 import com.alexluque.android.mymusicapp.mainactivity.controller.EventObserver
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.*
 import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityMainBinding
+import com.alexluque.android.mymusicapp.mainactivity.di.ListenersModule
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel
-import com.alexluque.android.mymusicapp.mainactivity.ui.recommendations.RecommendationsActivity
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment.Companion.FRAGMENT_NAME
 import com.example.android.domain.FavouriteArtist
@@ -41,7 +40,10 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setSupportActionBar(binding.appBarLayout.toolbar)
 
-        component = app.component.plus(MainActivityModule())
+        component = app.component.plus(
+            MainActivityModule(),
+            ListenersModule(this, LocationServices.getFusedLocationProviderClient(this))
+        )
 
         viewModel = getViewModel { component.mainViewModel }
         binding.viewmodel = viewModel
@@ -51,7 +53,6 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.artists.observe(this, Observer(::observeContent))
         observeSearch()
-        observeRecommendation()
 
         ConnectivityController.registerCallback(this, mainView)
     }
@@ -68,13 +69,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
         R.id.action_recommend -> {
-            addLocationPermission(
-                LocationRecommendationsListener(
-                    getString(R.string.google_maps_key),
-                    viewModel::onRecommendClicked,
-                    LocationServices.getFusedLocationProviderClient(this)
-                )
-            )
+            addLocationPermission(component.locationLister)
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -97,14 +92,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeContent(artists: List<FavouriteArtist>) =
         viewAdapter.updateData(viewAdapter.artists as MutableList<Any>, artists)
-
-    private fun observeRecommendation() =
-        viewModel.country.observe(this, EventObserver {
-            this.myStartActivity(
-                RecommendationsActivity::class.java,
-                listOf(AlarmClock.EXTRA_MESSAGE to it)
-            )
-        })
 
     private fun observeSearch() =
         viewModel.artistName.observe(this, EventObserver {

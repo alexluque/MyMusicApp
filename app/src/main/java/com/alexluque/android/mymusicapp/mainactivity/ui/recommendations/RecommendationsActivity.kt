@@ -1,7 +1,6 @@
 package com.alexluque.android.mymusicapp.mainactivity.ui.recommendations
 
 import android.os.Bundle
-import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -18,6 +17,8 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.*
 import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityRecommendationsBinding
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel
+import com.alexluque.android.mymusicapp.mainactivity.ui.main.LocationRecommendationsListener.Companion.LATITUDE
+import com.alexluque.android.mymusicapp.mainactivity.ui.main.LocationRecommendationsListener.Companion.LONGITUDE
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment
 import com.example.android.domain.RecommendedArtist
 import kotlinx.android.synthetic.main.activity_recommendations.*
@@ -28,7 +29,8 @@ import java.util.*
 class RecommendationsActivity : AppCompatActivity() {
 
     private val mainView: View by lazy { findViewById<View>(android.R.id.content) }
-    private val countryName: String by lazy { intent.getStringExtra(EXTRA_MESSAGE) }
+    private val latitude: String by lazy { intent.getStringExtra(LATITUDE) }
+    private val longitude: String by lazy { intent.getStringExtra(LONGITUDE) }
 
     private lateinit var viewModel: RecommendationsViewModel
     private lateinit var viewAdapter: RecommendedArtistsAdapter
@@ -43,7 +45,7 @@ class RecommendationsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         invalidateOptionsMenu() // Forces to redraw the layout. Needed when some change is made like hide an icon.
 
-        component = app.component.plus(RecommendationsActivityModule(countryName))
+        component = app.component.plus(RecommendationsActivityModule(latitude, longitude, getString(R.string.google_maps_key)))
 
         viewModel = getViewModel { component.recommendationsViewModel }
 
@@ -55,6 +57,7 @@ class RecommendationsActivity : AppCompatActivity() {
         setAdapter()
         observeArtists()
         observeDetail()
+        observeCountry()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -87,10 +90,13 @@ class RecommendationsActivity : AppCompatActivity() {
             Observer {
                 val artists = viewAdapter.artists as MutableList<Any>
                 viewAdapter.updateData(artists, it)
+
                 val msg = if (artists.isEmpty())
                     getString(R.string.no_recommended_artists_found)
                 else
-                    this.getString(R.string.country_recommendations) + " ${countryName.toUpperCase(Locale.ROOT)}"
+                    this.getString(R.string.country_recommendations) +
+                            " ${viewModel.country.value?.peekContent()?.toUpperCase(Locale.ROOT)}"
+
                 mainView.makeLongSnackbar(msg)
             }
         )
@@ -102,4 +108,7 @@ class RecommendationsActivity : AppCompatActivity() {
                 listOf(ArtistDetailViewModel.ARTIST_NAME to it)
             )
         })
+
+    private fun observeCountry() =
+        viewModel.country.observe(this, EventObserver{ viewModel.loadRecommendations() })
 }

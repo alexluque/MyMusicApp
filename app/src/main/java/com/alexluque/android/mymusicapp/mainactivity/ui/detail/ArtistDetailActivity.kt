@@ -1,7 +1,6 @@
 package com.alexluque.android.mymusicapp.mainactivity.ui.detail
 
 import android.os.Bundle
-import android.provider.AlarmClock
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -14,11 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.EventObserver
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.*
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.addLocationPermission
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.app
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.getViewModel
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.makeLongSnackbar
 import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityArtistDetailBinding
+import com.alexluque.android.mymusicapp.mainactivity.di.ListenersModule
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel.Companion.ARTIST_NAME
-import com.alexluque.android.mymusicapp.mainactivity.ui.main.LocationRecommendationsListener
-import com.alexluque.android.mymusicapp.mainactivity.ui.recommendations.RecommendationsActivity
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment.Companion.FRAGMENT_NAME
 import com.example.android.domain.Song
@@ -43,7 +44,10 @@ class ArtistDetailActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        component = app.component.plus(DetailActivityModule(artistName))
+        component = app.component.plus(
+            DetailActivityModule(artistName),
+            ListenersModule(this, LocationServices.getFusedLocationProviderClient(this))
+        )
 
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
@@ -55,7 +59,6 @@ class ArtistDetailActivity : AppCompatActivity() {
         observeSongs()
         observeFavourite()
         observeArtistName()
-        observeRecommendation()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -71,13 +74,7 @@ class ArtistDetailActivity : AppCompatActivity() {
             true
         }
         R.id.action_recommend -> {
-            addLocationPermission(
-                LocationRecommendationsListener(
-                    getString(R.string.google_maps_key),
-                    viewModel::onRecommendClicked,
-                    LocationServices.getFusedLocationProviderClient(this)
-                )
-            )
+            addLocationPermission(component.locationListener)
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -124,12 +121,4 @@ class ArtistDetailActivity : AppCompatActivity() {
                 }
             }
         )
-
-    private fun observeRecommendation() =
-        viewModel.country.observe(this, EventObserver {
-            this.myStartActivity(
-                RecommendationsActivity::class.java,
-                listOf(AlarmClock.EXTRA_MESSAGE to it)
-            )
-        })
 }

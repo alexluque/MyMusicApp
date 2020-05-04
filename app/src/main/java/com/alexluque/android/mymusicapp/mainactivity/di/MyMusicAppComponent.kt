@@ -15,8 +15,8 @@ import javax.inject.Singleton
 @Component(modules = [AppModule::class, DataModule::class])
 interface MyMusicAppComponent {
 
-    fun plus(mainModule: MainActivityModule): MainActivityComponent
-    fun plus(module: DetailActivityModule): DetailActivityComponent
+    fun plus(mainModule: MainActivityModule, listenersModule: ListenersModule): MainActivityComponent
+    fun plus(detailModule: DetailActivityModule, listenersModule: ListenersModule): DetailActivityComponent
     fun plus(module: RecommendationsActivityModule): RecommendationsActivityComponent
 
     @Component.Factory

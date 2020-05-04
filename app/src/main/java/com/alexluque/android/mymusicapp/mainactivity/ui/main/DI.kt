@@ -1,8 +1,7 @@
 package com.alexluque.android.mymusicapp.mainactivity.ui.main
 
+import com.alexluque.android.mymusicapp.mainactivity.di.ListenersModule
 import com.example.android.data.repositories.FavouriteArtistsRepository
-import com.example.android.data.repositories.GeolocationRepository
-import com.example.android.usecases.GetCountry
 import com.example.android.usecases.GetFavouriteArtistSongs
 import com.example.android.usecases.GetFavouriteArtists
 import dagger.Module
@@ -15,9 +14,8 @@ class MainActivityModule {
     @Provides
     fun mainViewModelProvider(
         getFavouriteArtists: GetFavouriteArtists,
-        getFavouriteArtistSongs: GetFavouriteArtistSongs,
-        getCountry: GetCountry
-    ) = MainViewModel(getFavouriteArtists, getFavouriteArtistSongs, getCountry)
+        getFavouriteArtistSongs: GetFavouriteArtistSongs
+    ) = MainViewModel(getFavouriteArtists, getFavouriteArtistSongs)
 
     @Provides
     fun getFavouriteArtistsProvider(
@@ -28,14 +26,10 @@ class MainActivityModule {
     fun getFavouriteArtistSongsProvider(
         favouriteArtistsRepository: FavouriteArtistsRepository
     ) = GetFavouriteArtistSongs(favouriteArtistsRepository)
-
-    @Provides
-    fun getCountryProvider(
-        geolocationRepository: GeolocationRepository
-    ) = GetCountry(geolocationRepository)
 }
 
-@Subcomponent(modules = [(MainActivityModule::class)])
+@Subcomponent(modules = [(MainActivityModule::class), (ListenersModule::class)])
 interface MainActivityComponent {
     val mainViewModel: MainViewModel
+    val locationLister: LocationRecommendationsListener
 }
