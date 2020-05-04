@@ -108,7 +108,7 @@ class ArtistDetailActivity : AppCompatActivity() {
                 val msg = if (it.newFavourite) getString(R.string.fav_song_added) else getString(R.string.fav_song_removed)
 
                 it.star.setImageResource(resource)
-                it.star.makeLongSnackbar("${it.songName} $msg")
+                mainView.makeLongSnackbar("${it.songName} $msg")
             }
         )
 
