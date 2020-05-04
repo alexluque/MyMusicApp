@@ -23,7 +23,6 @@ import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragm
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment.Companion.FRAGMENT_NAME
 import com.example.android.domain.Song
 import com.google.android.gms.location.LocationServices
-import kotlinx.android.synthetic.main.app_actionbar.view.*
 
 @Suppress("UNCHECKED_CAST")
 class ArtistDetailActivity : AppCompatActivity() {
@@ -97,7 +96,9 @@ class ArtistDetailActivity : AppCompatActivity() {
     private fun observeSongs() =
         viewModel.songs.observe(
             this,
-            Observer { it?.let { viewAdapter.updateData(viewAdapter.songs as MutableList<Any>, it) } }
+            Observer {
+                it?.let { viewModel.updateDetail(viewAdapter, it, binding.appBarLayoutImage, recyclerView) }
+            }
         )
 
     private fun observeFavourite() =

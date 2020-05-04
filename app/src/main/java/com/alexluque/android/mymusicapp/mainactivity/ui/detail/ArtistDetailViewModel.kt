@@ -5,14 +5,17 @@ import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
+import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.updateData
 import com.alexluque.android.mymusicapp.mainactivity.model.emptyDomainArtistInfo
 import com.alexluque.android.mymusicapp.mainactivity.ui.main.MainViewModel
 import com.example.android.domain.*
 import com.example.android.usecases.GetCountry
 import com.example.android.usecases.HandleFavourite
+import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -165,8 +168,20 @@ class ArtistDetailViewModel(
             }
         }
 
+    fun updateDetail(
+        viewAdapter: ArtistDetailAdapter,
+        songs: List<Song>,
+        appBarLayout: AppBarLayout?,
+        recyclerView: RecyclerView
+    ) {
+        viewAdapter.updateData(viewAdapter.songs as MutableList<Any>, songs)
+        appBarLayout?.setExpanded(true)
+        recyclerView.scrollToPosition(INITIAL_POSITION)
+    }
+
     companion object {
         const val ARTIST_NAME = "artist name"
         private const val EMPTY_OBJECT = "{}"
+        private const val INITIAL_POSITION = 0
     }
 }
