@@ -4,7 +4,8 @@ apply plugin: 'kotlin'
 dependencies {
     implementation project(":domain")
     implementation project(":data")
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation jetbrainsLibs.kotlinStdlib
 }
 
 sourceCompatibility = "8"
