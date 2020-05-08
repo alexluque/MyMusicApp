@@ -1,14 +1,14 @@
 package com.alexluque.android.mymusicapp.mainactivity.model.network
 
 import com.alexluque.android.mymusicapp.mainactivity.BuildConfig
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.getInstance
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitBuilder {
 
-    val client: OkHttpClient by lazy {
+    private val client: OkHttpClient by lazy {
         OkHttpClient().newBuilder()
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
@@ -26,4 +26,10 @@ object RetrofitBuilder {
     val geocodingInstance: Retrofit by lazy {
         Retrofit.Builder().getInstance("https://maps.googleapis.com/maps/api/geocode/")
     }
+
+    private fun Retrofit.Builder.getInstance(url: String): Retrofit =
+        this.baseUrl(url)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 }
