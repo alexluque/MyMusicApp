@@ -1,6 +1,8 @@
 package com.example.android.data.datasources
 
+import retrofit2.Retrofit
+
 interface GeolocationDataSource {
 
-    suspend fun getCountry(latlng: String, mapsKey: String): String
+    suspend fun getCountry(retrofit: Retrofit, latlng: String, mapsKey: String): String
 }

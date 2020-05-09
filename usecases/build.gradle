@@ -6,6 +6,7 @@ dependencies {
     implementation project(":data")
 
     implementation jetbrainsLibs.kotlinStdlib
+    implementation squareLibs.retrofit
 }
 
 sourceCompatibility = "8"

@@ -2,11 +2,12 @@ package com.alexluque.android.mymusicapp.mainactivity.model.network
 
 import com.alexluque.android.mymusicapp.mainactivity.model.network.services.MapsGeocodingService
 import com.example.android.data.datasources.GeolocationDataSource
+import retrofit2.Retrofit
 
 class GoogleMapsDataSource : GeolocationDataSource {
 
-    override suspend fun getCountry(latlng: String, mapsKey: String): String =
-        RetrofitBuilder.geocodingInstance
+    override suspend fun getCountry(retrofit: Retrofit, latlng: String, mapsKey: String): String =
+        retrofit
             .create(MapsGeocodingService::class.java)
             .getAddresses(latlng, mapsKey)
             .results

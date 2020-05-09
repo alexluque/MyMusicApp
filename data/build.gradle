@@ -5,6 +5,7 @@ dependencies {
     implementation project(":domain")
 
     implementation jetbrainsLibs.kotlinStdlib
+    implementation squareLibs.retrofit
 }
 
 sourceCompatibility = "8"

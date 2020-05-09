@@ -8,6 +8,7 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityCont
 import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
+import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.example.android.domain.RecommendedArtist
 import com.example.android.usecases.GetArtistDetail
 import com.example.android.usecases.GetCountry
@@ -15,6 +16,7 @@ import com.example.android.usecases.GetRecommendedArtists
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Retrofit
 
 @Suppress("UNCHECKED_CAST")
 class RecommendationsViewModel(
@@ -40,7 +42,7 @@ class RecommendationsViewModel(
 
     init {
         initScope()
-        retrieveCountry(latitude, longitude, mapsKey)
+        retrieveCountry(RetrofitBuilder.geocodingInstance, latitude, longitude, mapsKey)
     }
 
     override fun onCleared() {
@@ -73,10 +75,10 @@ class RecommendationsViewModel(
         }
     }
 
-    private fun retrieveCountry(latitude: String, longitude: String, mapsKey: String) {
+    private fun retrieveCountry(retrofit: Retrofit, latitude: String, longitude: String, mapsKey: String) {
         ConnectivityController.runIfConnected {
             launch {
-                val userCountry = withContext(Dispatchers.IO) { getCountry.invoke("$latitude,$longitude", mapsKey) }
+                val userCountry = withContext(Dispatchers.IO) { getCountry.invoke(retrofit, "$latitude,$longitude", mapsKey) }
                 val retrievedCountry = when (userCountry.isEmpty()) {
                     true -> DEFAULT_COUNTRY
                     else -> userCountry
