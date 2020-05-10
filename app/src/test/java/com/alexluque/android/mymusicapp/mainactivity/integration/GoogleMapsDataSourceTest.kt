@@ -25,17 +25,18 @@ class GoogleMapsDataSourceTest {
 
     private val latlng = "latlng"
     private val mapsKey = "key"
+
     private val serviceMock = Mockito.mock(MapsGeocodingService::class.java)
 
     @Spy
-    private lateinit var dataSourceStub: GoogleMapsDataSource
+    private lateinit var dataSourceMock: GoogleMapsDataSource
     @Spy
-    private val retrofitStub: Retrofit = RetrofitBuilder.geocodingInstance
+    private val retrofitMock: Retrofit = RetrofitBuilder.geocodingInstance
 
     @Mock
-    private lateinit var geocodingResponseMock: GeocodingResponse
+    private lateinit var geocodingResponseStub: GeocodingResponse
     @Mock
-    private lateinit var resultMock: Results
+    private lateinit var resultStub: Results
 
     @Before
     fun setUp() {
@@ -48,12 +49,12 @@ class GoogleMapsDataSourceTest {
             val fakeAddress = "calle bla 12, murcia, spain"
             val expected = "spain"
 
-            whenever(retrofitStub.create(MapsGeocodingService::class.java)).thenReturn(serviceMock)
-            whenever(serviceMock.getAddresses(latlng, mapsKey)).thenReturn(geocodingResponseMock)
-            whenever(geocodingResponseMock.results).thenReturn(listOf(resultMock))
-            whenever(resultMock.formatted_address).thenReturn(fakeAddress)
+            whenever(retrofitMock.create(MapsGeocodingService::class.java)).thenReturn(serviceMock)
+            whenever(serviceMock.getAddresses(latlng, mapsKey)).thenReturn(geocodingResponseStub)
+            whenever(geocodingResponseStub.results).thenReturn(listOf(resultStub))
+            whenever(resultStub.formatted_address).thenReturn(fakeAddress)
 
-            val result = dataSourceStub.getCountry(retrofitStub, latlng, mapsKey)
+            val result = dataSourceMock.getCountry(retrofitMock, latlng, mapsKey)
 
             Assert.assertEquals(expected, result)
         }
@@ -64,11 +65,11 @@ class GoogleMapsDataSourceTest {
         runBlockingTest {
             val expected = ""
 
-            whenever(retrofitStub.create(MapsGeocodingService::class.java)).thenReturn(serviceMock)
-            whenever(serviceMock.getAddresses(latlng, mapsKey)).thenReturn(geocodingResponseMock)
-            whenever(geocodingResponseMock.results).thenReturn(listOf())
+            whenever(retrofitMock.create(MapsGeocodingService::class.java)).thenReturn(serviceMock)
+            whenever(serviceMock.getAddresses(latlng, mapsKey)).thenReturn(geocodingResponseStub)
+            whenever(geocodingResponseStub.results).thenReturn(listOf())
 
-            val result = dataSourceStub.getCountry(retrofitStub, latlng, mapsKey)
+            val result = dataSourceMock.getCountry(retrofitMock, latlng, mapsKey)
 
             Assert.assertEquals(expected, result)
         }
