@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.loadImage
 
 @BindingAdapter("visible")
 fun View.setVisible(visible: Boolean?) {

@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity.controller
+package com.alexluque.android.mymusicapp.mainactivity.ui.common
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -7,7 +7,7 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.view.View
 import com.alexluque.android.mymusicapp.mainactivity.R
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.makeLongSnackbar
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.makeLongSnackbar
 
 /**
  * Class to control current Internet connectivity status.

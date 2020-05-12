@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.loadImage
 import com.example.android.domain.FavouriteArtist
 import kotlinx.android.synthetic.main.favourite_artist_card.view.*
 

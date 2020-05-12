@@ -12,9 +12,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.alexluque.android.mymusicapp.mainactivity.R
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.hideKeyboard
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.showKeyboard
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.hideKeyboard
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.myStartActivity
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.showKeyboard
 import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel.Companion.ARTIST_NAME

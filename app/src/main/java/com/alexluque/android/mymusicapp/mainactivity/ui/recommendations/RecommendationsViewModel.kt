@@ -4,10 +4,10 @@ import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
-import com.alexluque.android.mymusicapp.mainactivity.controller.Event
-import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.loadImage
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.Event
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.MyCoroutineScope
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.loadImage
 import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.example.android.domain.RecommendedArtist
 import com.example.android.usecases.GetArtistDetail

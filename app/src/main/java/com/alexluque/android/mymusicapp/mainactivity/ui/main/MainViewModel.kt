@@ -3,8 +3,8 @@ package com.alexluque.android.mymusicapp.mainactivity.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.alexluque.android.mymusicapp.mainactivity.controller.Event
-import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.Event
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.MyCoroutineScope
 import com.example.android.domain.FavouriteArtist
 import com.example.android.usecases.GetFavouriteArtistSongs
 import com.example.android.usecases.GetFavouriteArtists

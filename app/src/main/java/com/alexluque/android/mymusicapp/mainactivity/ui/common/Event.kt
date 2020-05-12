@@ -1,4 +1,4 @@
-package com.alexluque.android.mymusicapp.mainactivity.controller
+package com.alexluque.android.mymusicapp.mainactivity.ui.common
 
 import androidx.lifecycle.Observer
 

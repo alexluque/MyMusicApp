@@ -11,11 +11,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
-import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
-import com.alexluque.android.mymusicapp.mainactivity.controller.EventObserver
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.*
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.EventObserver
 import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityMainBinding
 import com.alexluque.android.mymusicapp.mainactivity.di.ListenersModule
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.*
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment

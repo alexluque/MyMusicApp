@@ -11,11 +11,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
-import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
-import com.alexluque.android.mymusicapp.mainactivity.controller.EventObserver
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.*
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.EventObserver
 import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityRecommendationsBinding
 import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.*
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel
 import com.alexluque.android.mymusicapp.mainactivity.ui.main.LocationRecommendationsListener.Companion.LATITUDE
@@ -111,5 +111,5 @@ class RecommendationsActivity : AppCompatActivity() {
         })
 
     private fun observeCountry() =
-        viewModel.country.observe(this, EventObserver{ viewModel.loadRecommendations(RetrofitBuilder.musicoveryInstance) })
+        viewModel.country.observe(this, EventObserver { viewModel.loadRecommendations(RetrofitBuilder.musicoveryInstance) })
 }

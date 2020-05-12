@@ -6,10 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
-import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityController
-import com.alexluque.android.mymusicapp.mainactivity.controller.Event
-import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
-import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.updateData
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.Event
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.MyCoroutineScope
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.updateData
 import com.alexluque.android.mymusicapp.mainactivity.model.emptyDomainArtistInfo
 import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.example.android.domain.*
@@ -18,7 +18,6 @@ import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
 import java.util.*
 
 @Suppress("UNCHECKED_CAST")
