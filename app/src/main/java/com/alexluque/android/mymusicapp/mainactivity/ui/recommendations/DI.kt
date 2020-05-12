@@ -9,6 +9,7 @@ import com.example.android.usecases.GetRecommendedArtists
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
+import kotlinx.coroutines.Dispatchers
 
 @Module
 class RecommendationsActivityModule(
@@ -28,7 +29,8 @@ class RecommendationsActivityModule(
         mapsKey,
         getArtistDetail,
         getRecommendedArtists,
-        getCountry
+        getCountry,
+        Dispatchers.Main
     )
 
     @Provides

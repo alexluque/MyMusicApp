@@ -3,16 +3,16 @@ package com.alexluque.android.mymusicapp.mainactivity.ui.recommendations
 import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.Event
-import com.alexluque.android.mymusicapp.mainactivity.ui.common.MyCoroutineScope
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.ScopedViewModel
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.loadImage
-import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.example.android.domain.RecommendedArtist
 import com.example.android.usecases.GetArtistDetail
 import com.example.android.usecases.GetCountry
 import com.example.android.usecases.GetRecommendedArtists
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,8 +25,9 @@ class RecommendationsViewModel(
     mapsKey: String,
     private val getArtistDetail: GetArtistDetail,
     private val getRecommendedArtists: GetRecommendedArtists,
-    private val getCountry: GetCountry
-) : ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
+    private val getCountry: GetCountry,
+    uiDispatcher: CoroutineDispatcher
+) : ScopedViewModel(uiDispatcher) {
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
@@ -46,7 +47,7 @@ class RecommendationsViewModel(
     }
 
     override fun onCleared() {
-        cancelScope()
+        destroyScope()
         super.onCleared()
     }
 

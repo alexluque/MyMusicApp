@@ -7,6 +7,7 @@ import com.example.android.usecases.GetFavouriteArtists
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
+import kotlinx.coroutines.Dispatchers
 
 @Module
 class MainActivityModule {
@@ -15,7 +16,7 @@ class MainActivityModule {
     fun mainViewModelProvider(
         getFavouriteArtists: GetFavouriteArtists,
         getFavouriteArtistSongs: GetFavouriteArtistSongs
-    ) = MainViewModel(getFavouriteArtists, getFavouriteArtistSongs)
+    ) = MainViewModel(getFavouriteArtists, getFavouriteArtistSongs, Dispatchers.Main)
 
     @Provides
     fun getFavouriteArtistsProvider(

@@ -7,6 +7,7 @@ import com.example.android.usecases.HandleFavourite
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
+import kotlinx.coroutines.Dispatchers
 
 @Module
 class DetailActivityModule(private val artistName: String?) {
@@ -14,7 +15,7 @@ class DetailActivityModule(private val artistName: String?) {
     @Provides
     fun detailViewModelProvider(
         handleFavourite: HandleFavourite
-    ) = ArtistDetailViewModel(artistName, handleFavourite)
+    ) = ArtistDetailViewModel(artistName, handleFavourite, Dispatchers.Main)
 
     @Provides
     fun handleFavouriteProvider(

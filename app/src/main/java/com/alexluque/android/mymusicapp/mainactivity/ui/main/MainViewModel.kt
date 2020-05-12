@@ -2,20 +2,21 @@ package com.alexluque.android.mymusicapp.mainactivity.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.Event
-import com.alexluque.android.mymusicapp.mainactivity.ui.common.MyCoroutineScope
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.ScopedViewModel
 import com.example.android.domain.FavouriteArtist
 import com.example.android.usecases.GetFavouriteArtistSongs
 import com.example.android.usecases.GetFavouriteArtists
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainViewModel(
     private val getFavouriteArtists: GetFavouriteArtists,
-    private val getFavouriteArtistSongs: GetFavouriteArtistSongs
-) : ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
+    private val getFavouriteArtistSongs: GetFavouriteArtistSongs,
+    uiDispatcher: CoroutineDispatcher
+) : ScopedViewModel(uiDispatcher) {
 
     private val _artists = MutableLiveData<List<FavouriteArtist>>()
     val artists: LiveData<List<FavouriteArtist>> get() = _artists
@@ -31,7 +32,10 @@ class MainViewModel(
         loadArtists()
     }
 
-    override fun onCleared() = cancelScope()
+    override fun onCleared() {
+        destroyScope()
+        super.onCleared()
+    }
 
     fun loadArtists() = launch {
         _loading.value = true

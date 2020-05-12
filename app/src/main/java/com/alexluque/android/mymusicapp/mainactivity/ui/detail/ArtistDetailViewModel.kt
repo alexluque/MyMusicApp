@@ -4,17 +4,17 @@ import android.database.sqlite.SQLiteConstraintException
 import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
-import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
-import com.alexluque.android.mymusicapp.mainactivity.ui.common.Event
-import com.alexluque.android.mymusicapp.mainactivity.ui.common.MyCoroutineScope
-import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.updateData
 import com.alexluque.android.mymusicapp.mainactivity.model.emptyDomainArtistInfo
 import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.Event
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.ScopedViewModel
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.updateData
 import com.example.android.domain.*
 import com.example.android.usecases.HandleFavourite
 import com.google.android.material.appbar.AppBarLayout
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,8 +23,9 @@ import java.util.*
 @Suppress("UNCHECKED_CAST")
 class ArtistDetailViewModel(
     artistName: String?,
-    private val handleFavourite: HandleFavourite
-) : ViewModel(), MyCoroutineScope by MyCoroutineScope.Implementation() {
+    private val handleFavourite: HandleFavourite,
+    uiDispatcher: CoroutineDispatcher
+) : ScopedViewModel(uiDispatcher) {
 
     class Favourite(val star: ImageView, val songName: String, val newFavourite: Boolean)
     class ArtistDetailName(val name: String)
@@ -56,7 +57,10 @@ class ArtistDetailViewModel(
         loadData(RetrofitBuilder, artistName)
     }
 
-    override fun onCleared() = cancelScope()
+    override fun onCleared() {
+        destroyScope()
+        super.onCleared()
+    }
 
     fun loadData(retrofit: RetrofitBuilder, artistName: String?) {
         ConnectivityController.runIfConnected {
