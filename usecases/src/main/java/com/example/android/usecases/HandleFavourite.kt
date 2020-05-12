@@ -2,18 +2,19 @@ package com.example.android.usecases
 
 import com.example.android.data.repositories.ArtistDetailRepository
 import com.example.android.domain.*
+import retrofit2.Retrofit
 
 class HandleFavourite(
     private val repository: ArtistDetailRepository
 ) {
 
-    suspend fun getArtistDetail(artistName: String): ArtistDetail? = GetArtistDetail(repository).invoke(artistName)
+    suspend fun getArtistDetail(retrofit: Retrofit, artistName: String): ArtistDetail? = GetArtistDetail(repository).invoke(retrofit, artistName)
 
-    suspend fun getArtistSongs(artistName: String): List<Song> = GetSongs(repository).invoke(artistName)
+    suspend fun getArtistSongs(retrofit: Retrofit, artistName: String): List<Song> = GetSongs(repository).invoke(retrofit, artistName)
 
-    suspend fun getArtist(artistName: String): Artist = GetArtist(repository).invoke(artistName)
+    suspend fun getArtist(retrofit: Retrofit, artistName: String): Artist = GetArtist(repository).invoke(retrofit, artistName)
 
-    suspend fun getArtistInfo(mbid: String): ArtistInfo = GetArtistInfo(repository).invoke(mbid)
+    suspend fun getArtistInfo(retrofit: Retrofit, mbid: String): ArtistInfo = GetArtistInfo(repository).invoke(retrofit, mbid)
 
     suspend fun getFavouriteSongs(): List<Song> = GetFavouriteSongs(repository).invoke()
 

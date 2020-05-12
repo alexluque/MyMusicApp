@@ -50,10 +50,10 @@ class RecommendationsViewModel(
         super.onCleared()
     }
 
-    fun loadImage(artistName: String, imageView: ImageView) {
+    fun loadImage(artistName: String, imageView: ImageView, retrofit: Retrofit) {
         ConnectivityController.runIfConnected {
             launch {
-                val artist = withContext(Dispatchers.IO) { getArtistDetail.invoke(artistName) }
+                val artist = withContext(Dispatchers.IO) { getArtistDetail.invoke(retrofit, artistName) }
                 imageView.loadImage(artist?.mediumImageUrl ?: RANDOM_IMAGE)
             }
         }
@@ -63,12 +63,12 @@ class RecommendationsViewModel(
         _detail.value = Event(artistName)
     }
 
-    fun loadRecommendations() {
+    fun loadRecommendations(retrofit: Retrofit) {
         ConnectivityController.runIfConnected {
             launch {
                 _loading.value = true
                 val country = _country.value?.peekContent() ?: DEFAULT_COUNTRY
-                val artists = withContext(Dispatchers.IO) { getRecommendedArtists.invoke(country) }
+                val artists = withContext(Dispatchers.IO) { getRecommendedArtists.invoke(retrofit, country) }
                 _artists.value = artists
                 _loading.value = false
             }

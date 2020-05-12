@@ -4,5 +4,5 @@ data class Song(
     val id: Long,
     val title: String,
     val album: String? = String(),
-    val artistId: Long = 0
+    val artistId: Long? = 0
 )

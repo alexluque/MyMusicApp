@@ -17,7 +17,6 @@ import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import org.mockito.Spy
 import org.mockito.junit.MockitoJUnitRunner
-import retrofit2.Retrofit
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -31,7 +30,7 @@ class GoogleMapsDataSourceTest {
     @Spy
     private lateinit var dataSourceMock: GoogleMapsDataSource
     @Spy
-    private val retrofitMock: Retrofit = RetrofitBuilder.geocodingInstance
+    private val retrofitMock = RetrofitBuilder.geocodingInstance
 
     @Mock
     private lateinit var geocodingResponseStub: GeocodingResponse

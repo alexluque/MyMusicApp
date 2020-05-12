@@ -6,13 +6,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
+import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.example.android.domain.RecommendedArtist
 import kotlinx.android.synthetic.main.recommended_artist.view.*
+import retrofit2.Retrofit
 
 class RecommendedArtistsAdapter(
     var artists: MutableList<RecommendedArtist>,
     private val onArtistClicked: (artistName: String) -> Unit,
-    private val loadImage: (artistName: String, imageView: ImageView) -> Unit
+    private val loadImage: (artistName: String, imageView: ImageView, retrofit: Retrofit) -> Unit
 ) : RecyclerView.Adapter<RecommendedArtistsAdapter.MyViewHolder>() {
 
     class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view)
@@ -28,7 +30,7 @@ class RecommendedArtistsAdapter(
         val view = holder.view
         val data = artists[position]
         val artistName = data.name
-        loadImage(artistName, view.recommended_artist_image)
+        loadImage(artistName, view.recommended_artist_image, RetrofitBuilder.deezerInstance)
         view.recommended_artist_name.text = artistName
         view.recommended_artist_genere.text = data.genre?.toString()
         view.setOnClickListener {

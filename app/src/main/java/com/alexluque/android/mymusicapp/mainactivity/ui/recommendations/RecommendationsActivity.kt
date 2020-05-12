@@ -15,6 +15,7 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.ConnectivityCont
 import com.alexluque.android.mymusicapp.mainactivity.controller.EventObserver
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.*
 import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityRecommendationsBinding
+import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel
 import com.alexluque.android.mymusicapp.mainactivity.ui.main.LocationRecommendationsListener.Companion.LATITUDE
@@ -110,5 +111,5 @@ class RecommendationsActivity : AppCompatActivity() {
         })
 
     private fun observeCountry() =
-        viewModel.country.observe(this, EventObserver{ viewModel.loadRecommendations() })
+        viewModel.country.observe(this, EventObserver{ viewModel.loadRecommendations(RetrofitBuilder.musicoveryInstance) })
 }

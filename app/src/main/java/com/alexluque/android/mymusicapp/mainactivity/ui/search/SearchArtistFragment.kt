@@ -15,6 +15,7 @@ import com.alexluque.android.mymusicapp.mainactivity.R
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.hideKeyboard
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.myStartActivity
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.showKeyboard
+import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel.Companion.ARTIST_NAME
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistViewModel.UiModel
@@ -23,7 +24,7 @@ import java.util.*
 
 @SuppressLint("InflateParams")
 class SearchArtistFragment(
-    private val loadArtistDetail: ((artistName: String) -> Unit)? = null
+    private val loadArtistDetail: ((retrofit: RetrofitBuilder, artistName: String) -> Unit)? = null
 ) : DialogFragment() {
 
     private val nameEditText: EditText by lazy { mainView.artistName_editText }
@@ -62,7 +63,7 @@ class SearchArtistFragment(
                 dialog?.cancel()
 
                 if (loadArtistDetail != null)
-                    loadArtistDetail.invoke(retrieveEntry())
+                    loadArtistDetail.invoke(RetrofitBuilder, retrieveEntry())
                 else
                     activity?.myStartActivity(ArtistDetailActivity::class.java, listOf(ARTIST_NAME to retrieveEntry()))
             }

@@ -11,12 +11,14 @@ import com.alexluque.android.mymusicapp.mainactivity.controller.Event
 import com.alexluque.android.mymusicapp.mainactivity.controller.MyCoroutineScope
 import com.alexluque.android.mymusicapp.mainactivity.controller.extensions.updateData
 import com.alexluque.android.mymusicapp.mainactivity.model.emptyDomainArtistInfo
+import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.example.android.domain.*
 import com.example.android.usecases.HandleFavourite
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Retrofit
 import java.util.*
 
 @Suppress("UNCHECKED_CAST")
@@ -52,23 +54,23 @@ class ArtistDetailViewModel(
 
     init {
         initScope()
-        loadData(artistName)
+        loadData(RetrofitBuilder, artistName)
     }
 
     override fun onCleared() = cancelScope()
 
-    fun loadData(artistName: String?) {
+    fun loadData(retrofit: RetrofitBuilder, artistName: String?) {
         ConnectivityController.runIfConnected {
             val name = artistName ?: String()
 
             launch {
                 _loading.value = true
-                val artist = withContext(Dispatchers.IO) { handleFavourite.getArtistDetail(name) }
+                val artist = withContext(Dispatchers.IO) { handleFavourite.getArtistDetail(retrofit.deezerInstance, name) }
                 if (artist != null) {
                     _currentArtist.value = artist
-                    musicoveryArtist = withContext(Dispatchers.IO) { handleFavourite.getArtist(artist.name) }
+                    musicoveryArtist = withContext(Dispatchers.IO) { handleFavourite.getArtist(retrofit.musicoveryInstance, artist.name) }
                     _imageUrl.value = artist.bigImageUrl
-                    _songs.value = withContext(Dispatchers.IO) { handleFavourite.getArtistSongs(name) }
+                    _songs.value = withContext(Dispatchers.IO) { handleFavourite.getArtistSongs(retrofit.deezerInstance, name) }
                     _artistDetailName.value = ArtistDetailName(artist.name)
                 } else {
                     _artistDetailName.value = null
@@ -78,7 +80,7 @@ class ArtistDetailViewModel(
                 // but Musicovery's API needs at least 1sec between calls
                 musicoveryArtist?.let {
                     artistInfo = try {
-                        withContext(Dispatchers.IO) { handleFavourite.getArtistInfo(it.mbid) }
+                        withContext(Dispatchers.IO) { handleFavourite.getArtistInfo(retrofit.musicoveryInstance, it.mbid) }
                     } catch (ex: IllegalArgumentException) {
                         emptyDomainArtistInfo()
                     }

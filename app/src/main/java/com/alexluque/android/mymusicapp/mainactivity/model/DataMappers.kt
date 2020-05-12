@@ -19,9 +19,9 @@ import com.example.android.domain.Song as DomainSong
 
 fun ArtistData.toArtistDetail(): ArtistDetail = ArtistDetail(id, name, picture_big, picture_medium)
 
-fun SongData.toDomainSong(): DomainSong = DomainSong(id, title, album?.title)
+fun SongData.toDomainSong(): DomainSong = DomainSong(id, title, album?.title, artistSongData?.id?.toLong())
 
-fun Artist.toRecommendedArtist(): RecommendedArtist = RecommendedArtist(name, genre?.toString())
+fun Artist.toRecommendedArtist(): RecommendedArtist = RecommendedArtist(name, genre?.toString(), country?.toString())
 
 fun RoomArtist.toDomainArtist(): FavouriteArtist {
     val artist = FavouriteArtist(id, name, imageUrl)
@@ -34,7 +34,7 @@ fun FavouriteArtist.toRoomArtist(): RoomArtist = RoomArtist(id, name, imageUrl, 
 
 fun RoomSong.toDomainSong(): DomainSong = DomainSong(id, title, album, artistId)
 
-fun DomainSong.toRoomSong(): RoomSong = RoomSong(id, title, album, artistId)
+fun DomainSong.toRoomSong(): RoomSong = RoomSong(id, title, album, artistId!!)
 
 fun Artist.toDomainArtist(): DomainArtist = DomainArtist(mbid, name, genre?.toString(), country)
 
