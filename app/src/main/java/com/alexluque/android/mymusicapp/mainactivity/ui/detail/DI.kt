@@ -1,6 +1,7 @@
 package com.alexluque.android.mymusicapp.mainactivity.ui.detail
 
 import com.alexluque.android.mymusicapp.mainactivity.di.ListenersModule
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.ui.main.LocationRecommendationsListener
 import com.example.android.data.repositories.ArtistDetailRepository
 import com.example.android.usecases.HandleFavourite
@@ -9,13 +10,14 @@ import dagger.Provides
 import dagger.Subcomponent
 import kotlinx.coroutines.Dispatchers
 
+@ExperimentalStdlibApi
 @Module
-class DetailActivityModule(private val artistName: String?) {
+class DetailActivityModule {
 
     @Provides
     fun detailViewModelProvider(
         handleFavourite: HandleFavourite
-    ) = ArtistDetailViewModel(artistName, handleFavourite, Dispatchers.Main)
+    ) = ArtistDetailViewModel(handleFavourite, Dispatchers.Main, ConnectivityController.getInstance())
 
     @Provides
     fun handleFavouriteProvider(
@@ -23,6 +25,7 @@ class DetailActivityModule(private val artistName: String?) {
     ) = HandleFavourite(artistDetailRepository)
 }
 
+@ExperimentalStdlibApi
 @Subcomponent(modules = [(DetailActivityModule::class), (ListenersModule::class)])
 interface DetailActivityComponent {
     val detailViewModel: ArtistDetailViewModel

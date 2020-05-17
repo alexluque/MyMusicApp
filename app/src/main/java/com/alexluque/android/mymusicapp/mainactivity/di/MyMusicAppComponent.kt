@@ -11,6 +11,7 @@ import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
+@ExperimentalStdlibApi
 @Singleton
 @Component(modules = [AppModule::class, DataModule::class])
 interface MyMusicAppComponent {

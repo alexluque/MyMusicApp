@@ -8,9 +8,7 @@ import com.example.android.domain.FavouriteArtist
 import com.example.android.usecases.GetFavouriteArtistSongs
 import com.example.android.usecases.GetFavouriteArtists
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainViewModel(
     private val getFavouriteArtists: GetFavouriteArtists,
@@ -39,9 +37,15 @@ class MainViewModel(
 
     fun loadArtists() = launch {
         _loading.value = true
-        val artists = withContext(Dispatchers.IO) { getFavouriteArtists.invoke() }
-        artists.forEach { it.favouriteSongs = getFavouriteArtistSongs.invoke(it.id) }
+
+        val artists: List<FavouriteArtist>? = getFavouriteArtists.invoke()
+        artists?.let {
+            it.forEach { artist ->
+                artist.favouriteSongs = getFavouriteArtistSongs.invoke(artist.id)
+            }
+        }
         _artists.value = artists
+
         _loading.value = false
     }
 

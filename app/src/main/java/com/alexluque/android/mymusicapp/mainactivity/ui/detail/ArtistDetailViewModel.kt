@@ -5,30 +5,30 @@ import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.alexluque.android.mymusicapp.mainactivity.model.emptyDomainArtistInfo
 import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.Event
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.ScopedViewModel
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.updateData
-import com.example.android.domain.*
+import com.example.android.domain.Artist
+import com.example.android.domain.ArtistDetail
+import com.example.android.domain.FavouriteArtist
+import com.example.android.domain.Song
 import com.example.android.usecases.HandleFavourite
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 
+@ExperimentalStdlibApi
 @Suppress("UNCHECKED_CAST")
 class ArtistDetailViewModel(
-    artistName: String?,
     private val handleFavourite: HandleFavourite,
-    uiDispatcher: CoroutineDispatcher
+    uiDispatcher: CoroutineDispatcher,
+    private val connectivity: ConnectivityController
 ) : ScopedViewModel(uiDispatcher) {
 
     class Favourite(val star: ImageView, val songName: String, val newFavourite: Boolean)
-    class ArtistDetailName(val name: String)
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
@@ -43,18 +43,17 @@ class ArtistDetailViewModel(
     val favourite: LiveData<Event<Favourite>> get() = _favourite
 
     private val _currentArtist = MutableLiveData<ArtistDetail?>()
+    val currentArtist: LiveData<ArtistDetail?> get() = _currentArtist
 
-    private val _artistDetailName = MutableLiveData<ArtistDetailName?>()
-    val artistDetailName: LiveData<ArtistDetailName?> get() = _artistDetailName
+    private val _artistDetailName = MutableLiveData<String?>()
+    val artistDetailName: LiveData<String?> get() = _artistDetailName
 
     private val favouriteSongs = mutableListOf<Song>()
 
     private var musicoveryArtist: Artist? = null
-    private lateinit var artistInfo: ArtistInfo
 
     init {
         initScope()
-        loadData(RetrofitBuilder, artistName)
     }
 
     override fun onCleared() {
@@ -62,83 +61,80 @@ class ArtistDetailViewModel(
         super.onCleared()
     }
 
-    fun loadData(retrofit: RetrofitBuilder, artistName: String?) {
-        ConnectivityController.runIfConnected {
-            val name = artistName ?: String()
-
+    fun loadData(retrofit: RetrofitBuilder, artistName: String? = String()) {
+        connectivity.runIfConnected {
             launch {
                 _loading.value = true
-                val artist = withContext(Dispatchers.IO) { handleFavourite.getArtistDetail(retrofit.deezerInstance, name) }
-                if (artist != null) {
-                    _currentArtist.value = artist
-                    musicoveryArtist = withContext(Dispatchers.IO) { handleFavourite.getArtist(retrofit.musicoveryInstance, artist.name) }
-                    _imageUrl.value = artist.bigImageUrl
-                    _songs.value = withContext(Dispatchers.IO) { handleFavourite.getArtistSongs(retrofit.deezerInstance, name) }
-                    _artistDetailName.value = ArtistDetailName(artist.name)
-                } else {
-                    _artistDetailName.value = null
-                }
+
+                val artist = handleFavourite.getArtistDetail(retrofit.deezerInstance, artistName!!)
+                artist?.let {
+                    _currentArtist.value = it
+                    musicoveryArtist = handleFavourite.getArtist(retrofit.musicoveryInstance, it.name)
+                    _imageUrl.value = it.bigImageUrl
+                    _songs.value = handleFavourite.getArtistSongs(retrofit.deezerInstance, artistName)
+                    _artistDetailName.value = it.name
+                } ?: run { _artistDetailName.value = null }
 
                 // Ideally, this should be placed next to variable's assignment
                 // but Musicovery's API needs at least 1sec between calls
-                musicoveryArtist?.let {
-                    artistInfo = try {
-                        withContext(Dispatchers.IO) { handleFavourite.getArtistInfo(retrofit.musicoveryInstance, it.mbid) }
-                    } catch (ex: IllegalArgumentException) {
-                        emptyDomainArtistInfo()
+                musicoveryArtist?.let { ma ->
+                    val info: Artist? = handleFavourite.getArtistInfo(retrofit.musicoveryInstance, ma.mbid)
+                    info.let {
+                        ma.genres = it?.genres.toString()
+                        ma.region = it?.region?.toString()?.replace(EMPTY_OBJECT, String())?.capitalize(Locale.ROOT)
+                        ma.country = it?.country?.toString()?.replace(EMPTY_OBJECT, String())
                     }
                 }
 
                 _loading.value = false
             }
         }
-
-        loadFavouriteSongs()
     }
 
-    private fun loadFavouriteSongs() = launch {
-        favouriteSongs.clear()
-        favouriteSongs.addAll(withContext(Dispatchers.IO) { handleFavourite.getFavouriteSongs() })
+    fun loadFavouriteSongs() {
+        launch {
+            favouriteSongs.clear()
+            favouriteSongs.addAll(handleFavourite.getFavouriteSongs())
+        }
     }
 
-    @ExperimentalStdlibApi
     fun onFavouriteClicked(star: ImageView, songId: Long, title: String, album: String?) {
         _currentArtist.value?.let {
             launch {
                 val song = Song(songId, title, album, it.id)
                 val favouriteArtist = FavouriteArtist(it.id, it.name, it.bigImageUrl)
+                favouriteArtist.genre = musicoveryArtist?.genres.toString()
+                favouriteArtist.regionAndCountry =
+                    setRegionCountry(musicoveryArtist?.region.toString(), musicoveryArtist?.country.toString())
 
-                musicoveryArtist?.let {
-                    with(artistInfo) {
-                        favouriteArtist.genre = genres.toString()
-                        val region = region?.toString()?.replace(EMPTY_OBJECT, String())?.capitalize(Locale.ROOT)
-                        val country = country?.toString()?.replace(EMPTY_OBJECT, String())
-                        favouriteArtist.regionAndCountry = setRegionCountry(region, country)
-                    }
-                }
+                val isFavouriteSong = isFavouriteSong(songId)
+                manageFavourite(song, it, favouriteArtist, isFavouriteSong)
+                _favourite.value = Event(Favourite(star, title, !isFavouriteSong))
+                loadFavouriteSongs()
+            }
+        }
+    }
 
-                if (isFavourite(songId).not()) {
-                    val artistExists = withContext(Dispatchers.IO) { handleFavourite.isFavouriteArtist(it.id) }
+    fun isFavouriteSong(songId: Long): Boolean = favouriteSongs.any { it.id == songId }
 
-                    if (artistExists.not())
-                        handleFavourite.insertArtist(favouriteArtist)
+    private suspend fun manageFavourite(
+        song: Song,
+        it: ArtistDetail,
+        favouriteArtist: FavouriteArtist,
+        isFavouriteSong: Boolean
+    ) {
+        if (isFavouriteSong) {
+            handleFavourite.deleteSong(song)
 
-                    try {
-                        handleFavourite.insertSong(song)
-                    } catch (e: SQLiteConstraintException) {
-                    }
+            if (!handleFavourite.artistHasSongs(it.id))
+                handleFavourite.deleteArtist(favouriteArtist)
+        } else {
+            if (!handleFavourite.isFavouriteArtist(it.id))
+                handleFavourite.insertArtist(favouriteArtist)
 
-                    _favourite.value = Event(Favourite(star, title, true))
-                    loadFavouriteSongs()
-                } else {
-                    handleFavourite.deleteSong(song)
-
-                    if (handleFavourite.artistHasSongs(it.id).not())
-                        handleFavourite.deleteArtist(favouriteArtist)
-
-                    _favourite.value = Event(Favourite(star, title, false))
-                    loadFavouriteSongs()
-                }
+            try {
+                handleFavourite.insertSong(song)
+            } catch (e: SQLiteConstraintException) {
             }
         }
     }
@@ -152,8 +148,6 @@ class ArtistDetailViewModel(
             region!!
         else
             String()
-
-    fun isFavourite(songId: Long): Boolean = favouriteSongs.any { it.id == songId }
 
     fun updateDetail(
         viewAdapter: ArtistDetailAdapter,

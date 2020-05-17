@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:titleTextColor="#FFFFFF"
-            app:toolbarTitle="@{viewmodel.artistDetailName.name}" />
+            app:toolbarTitle="@{viewmodel.artistDetailName}" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/coordinator"

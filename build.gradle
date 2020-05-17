@@ -71,11 +71,12 @@ allprojects {
                 antlr4runtime: "org.antlr:antlr4-runtime:$antlr4_version"
         ]
         testLibs = [
-                junit         : 'junit:junit:4.13',
-                roomTesting   : "androidx.room:room-testing:$room_version",
-                mockitoKotlin : 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0',
-                mockitoInline : 'org.mockito:mockito-inline:3.3.3',
-                coroutinesTest: 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.5'
+                junit          : 'junit:junit:4.13',
+                roomTesting    : "androidx.room:room-testing:$room_version",
+                mockitoKotlin  : 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0',
+                mockitoInline  : 'org.mockito:mockito-inline:3.3.3',
+                coroutinesTest : 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.5',
+                archCoreTesting: 'androidx.arch.core:core-testing:2.1.0'
         ]
         androidTestLibs = [
                 junit       : 'androidx.test.ext:junit:1.1.1',

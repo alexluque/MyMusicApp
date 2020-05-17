@@ -3,7 +3,6 @@ package com.alexluque.android.mymusicapp.mainactivity.model
 import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.deezer.ArtistData
 import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.deezer.SongData
 import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.Artist
-import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.ArtistInfo
 import com.example.android.domain.ArtistDetail
 import com.example.android.domain.FavouriteArtist
 import com.example.android.domain.Genre
@@ -13,7 +12,7 @@ import java.util.*
 import com.alexluque.android.mymusicapp.mainactivity.model.database.entities.Artist as RoomArtist
 import com.alexluque.android.mymusicapp.mainactivity.model.database.entities.Song as RoomSong
 import com.example.android.domain.Artist as DomainArtist
-import com.example.android.domain.ArtistInfo as DomainArtistInfo
+import com.example.android.domain.Artist as DomainArtistInfo
 import com.example.android.domain.Song as DomainSong
 
 
@@ -21,7 +20,7 @@ fun ArtistData.toArtistDetail(): ArtistDetail = ArtistDetail(id, name, picture_b
 
 fun SongData.toDomainSong(): DomainSong = DomainSong(id, title, album?.title, artistSongData?.id?.toLong())
 
-fun Artist.toRecommendedArtist(): RecommendedArtist = RecommendedArtist(name, genre?.toString(), country?.toString())
+fun Artist.toRecommendedArtist(): RecommendedArtist = RecommendedArtist(name, genres?.toString(), country?.toString())
 
 fun RoomArtist.toDomainArtist(): FavouriteArtist {
     val artist = FavouriteArtist(id, name, imageUrl)
@@ -36,7 +35,7 @@ fun RoomSong.toDomainSong(): DomainSong = DomainSong(id, title, album, artistId)
 
 fun DomainSong.toRoomSong(): RoomSong = RoomSong(id, title, album, artistId!!)
 
-fun Artist.toDomainArtist(): DomainArtist = DomainArtist(mbid, name, genre?.toString(), country)
+fun Artist.toDomainArtist(): DomainArtist = DomainArtist(mbid, name, genres?.toString(), country)
 
 fun LinkedTreeMap<String, String>.toDomainArtist(): DomainArtist {
     val values = this.values
@@ -58,7 +57,7 @@ fun LinkedTreeMap<String, String>.toDomainArtist(): DomainArtist {
 fun emptyDomainArtist(): DomainArtist = DomainArtist(String(), String(), String(), String())
 
 @ExperimentalStdlibApi
-fun ArtistInfo.toDomainArtistInfo(): DomainArtistInfo {
+fun Artist.toDomainArtistInfo(): DomainArtist {
     val domainGenres = if (genres != null) {
         when (genres) {
             is List<*> -> {

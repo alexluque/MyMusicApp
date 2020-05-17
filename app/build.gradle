@@ -49,6 +49,10 @@ android {
         resolutionStrategy.force "org.antlr:antlr4-runtime:$antlr4_version"
         resolutionStrategy.force "org.antlr:antlr4-tool:$antlr4_version"
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {

@@ -12,19 +12,21 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.alexluque.android.mymusicapp.mainactivity.R
+import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.hideKeyboard
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.myStartActivity
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.showKeyboard
-import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel.Companion.ARTIST_NAME
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistViewModel.UiModel
 import kotlinx.android.synthetic.main.fragment_search_artist.view.*
 import java.util.*
 
+@ExperimentalStdlibApi
 @SuppressLint("InflateParams")
 class SearchArtistFragment(
-    private val loadArtistDetail: ((retrofit: RetrofitBuilder, artistName: String) -> Unit)? = null
+    private val loadArtistDetail: ((retrofit: RetrofitBuilder, artistName: String) -> Unit)? = null,
+    private val loadArtistSongs: (() -> Unit)? = null
 ) : DialogFragment() {
 
     private val nameEditText: EditText by lazy { mainView.artistName_editText }
@@ -62,10 +64,13 @@ class SearchArtistFragment(
             is UiModel.Search -> {
                 dialog?.cancel()
 
-                if (loadArtistDetail != null)
-                    loadArtistDetail.invoke(RetrofitBuilder, retrieveEntry())
-                else
-                    activity?.myStartActivity(ArtistDetailActivity::class.java, listOf(ARTIST_NAME to retrieveEntry()))
+                loadArtistDetail?.let {
+                    it.invoke(RetrofitBuilder, retrieveEntry())
+                    loadArtistSongs?.invoke()
+                } ?: activity?.myStartActivity(
+                    ArtistDetailActivity::class.java,
+                    listOf(ARTIST_NAME to retrieveEntry())
+                )
             }
             is UiModel.Cancel -> dialog?.cancel()
         }

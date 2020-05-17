@@ -31,7 +31,7 @@
                 android:background="#107463"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:titleTextColor="#FFFFFF"
-                app:toolbarTitle="@{viewmodel.artistDetailName.name}" />
+                app:toolbarTitle="@{viewmodel.artistDetailName}" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

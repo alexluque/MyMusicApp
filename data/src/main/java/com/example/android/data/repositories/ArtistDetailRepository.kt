@@ -2,7 +2,10 @@ package com.example.android.data.repositories
 
 import com.example.android.data.datasources.LocalDataSource
 import com.example.android.data.datasources.RemoteDataSource
-import com.example.android.domain.*
+import com.example.android.domain.Artist
+import com.example.android.domain.ArtistDetail
+import com.example.android.domain.FavouriteArtist
+import com.example.android.domain.Song
 import retrofit2.Retrofit
 
 class ArtistDetailRepository(
@@ -16,7 +19,7 @@ class ArtistDetailRepository(
 
     suspend fun getArtist(retrofit: Retrofit, artistName: String): Artist = remoteDS.getArtist(retrofit, artistName)
 
-    suspend fun getArtistInfo(retrofit: Retrofit, mbid: String): ArtistInfo = remoteDS.getArtistInfo(retrofit, mbid)
+    suspend fun getArtistInfo(retrofit: Retrofit, mbid: String): Artist? = remoteDS.getArtistInfo(retrofit, mbid)
 
     suspend fun insertArtist(artist: FavouriteArtist): Long = localDS.insertArtist(artist)
 

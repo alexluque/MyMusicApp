@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.alexluque.android.mymusicapp.mainactivity.MyMusicApp
 
+@ExperimentalStdlibApi
 val Context.app: MyMusicApp
     get() = applicationContext as MyMusicApp
 

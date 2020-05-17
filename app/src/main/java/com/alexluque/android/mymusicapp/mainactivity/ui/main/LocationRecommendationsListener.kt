@@ -13,6 +13,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 
+@ExperimentalStdlibApi
 class LocationRecommendationsListener(
     private val context: Context,
     private val fusedClient: FusedLocationProviderClient
@@ -24,7 +25,7 @@ class LocationRecommendationsListener(
     override fun onPermissionGranted(response: PermissionGrantedResponse) {
         fusedClient.lastLocation
             .addOnSuccessListener { location: Location? ->
-                ConnectivityController.runIfConnected {
+                ConnectivityController.getInstance().runIfConnected {
                     showRecommendations(location)
                 }
             }

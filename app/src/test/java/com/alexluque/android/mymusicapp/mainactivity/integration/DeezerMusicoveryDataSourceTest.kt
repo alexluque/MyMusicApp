@@ -9,7 +9,7 @@ import com.alexluque.android.mymusicapp.mainactivity.model.network.services.Deez
 import com.alexluque.android.mymusicapp.mainactivity.model.network.services.MusicoveryArtistService
 import com.example.android.domain.ArtistDetail
 import com.example.android.domain.RecommendedArtist
-import com.example.android.domain.ArtistInfo as DomainArtistInfo
+import com.example.android.domain.Artist
 import com.google.gson.internal.LinkedTreeMap
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -166,7 +166,7 @@ class DeezerMusicoveryDataSourceTest {
             whenever(musicoveryArtistServiceMock.getArtistsByLocation(country.toLowerCase(Locale.ROOT).trim())).thenReturn(artistsByLocationStub)
             whenever(artistsByLocationStub.artists).thenReturn(artistsMock)
             whenever(artistMock.name).thenReturn(artistName)
-            whenever(artistMock.genre).thenReturn(fakeGenre)
+            whenever(artistMock.genres).thenReturn(fakeGenre)
             whenever(artistMock.country).thenReturn(country)
             whenever(artistsMock.artist).thenReturn(listOf(artistMock))
 
@@ -318,14 +318,14 @@ class DeezerMusicoveryDataSourceTest {
     fun `Artist info retrieved`() {
         runBlockingTest {
             val region = "region"
-            val artistInfo = ArtistInfo(artistName, mbid, genre, country, region)
+            val artistInfo = MusicoveryArtist(artistName, mbid, genre, country, region)
 
             whenever(retrofitMusicoveryStub.create(MusicoveryArtistService::class.java)).thenReturn(musicoveryArtistServiceMock)
             whenever(musicoveryArtistServiceMock.getArtistInfo(mbid)).thenReturn(getArtistResponseStub)
             whenever(getArtistResponseStub.artist).thenReturn(artistInfo)
 
             val result = dataSourceMock.getArtistInfo(retrofitMusicoveryStub, mbid)
-            val expect = DomainArtistInfo(artistName, mbid, genre, country, region)
+            val expect = Artist(mbid, artistName, genre, country, region)
 
             Assert.assertEquals(expect, result)
         }

@@ -11,10 +11,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
-import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
-import com.alexluque.android.mymusicapp.mainactivity.ui.common.EventObserver
 import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityMainBinding
 import com.alexluque.android.mymusicapp.mainactivity.di.ListenersModule
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.EventObserver
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.*
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel
@@ -24,6 +24,7 @@ import com.example.android.domain.FavouriteArtist
 import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.app_actionbar.view.*
 
+@ExperimentalStdlibApi
 @Suppress("UNCHECKED_CAST")
 class MainActivity : AppCompatActivity() {
 
@@ -54,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.artists.observe(this, Observer(::observeContent))
         observeSearch()
 
-        ConnectivityController.registerCallback(this, mainView)
+        ConnectivityController.getInstance().registerCallback(this, mainView)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -77,7 +78,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        ConnectivityController.view = mainView
+        ConnectivityController.getInstance().view = mainView
         viewModel.loadArtists()
     }
 

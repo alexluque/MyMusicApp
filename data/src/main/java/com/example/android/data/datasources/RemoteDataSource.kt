@@ -1,6 +1,9 @@
 package com.example.android.data.datasources
 
-import com.example.android.domain.*
+import com.example.android.domain.Artist
+import com.example.android.domain.ArtistDetail
+import com.example.android.domain.RecommendedArtist
+import com.example.android.domain.Song
 import retrofit2.Retrofit
 
 interface RemoteDataSource {
@@ -13,5 +16,5 @@ interface RemoteDataSource {
 
     suspend fun getArtist(retrofit: Retrofit, artistName: String): Artist
 
-    suspend fun getArtistInfo(retrofit: Retrofit, mbid: String): ArtistInfo
+    suspend fun getArtistInfo(retrofit: Retrofit, mbid: String): Artist?
 }

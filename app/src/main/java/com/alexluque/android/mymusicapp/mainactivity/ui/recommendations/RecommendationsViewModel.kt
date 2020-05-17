@@ -52,7 +52,7 @@ class RecommendationsViewModel(
     }
 
     fun loadImage(artistName: String, imageView: ImageView, retrofit: Retrofit) {
-        ConnectivityController.runIfConnected {
+        ConnectivityController.getInstance().runIfConnected {
             launch {
                 val artist = withContext(Dispatchers.IO) { getArtistDetail.invoke(retrofit, artistName) }
                 imageView.loadImage(artist?.mediumImageUrl ?: RANDOM_IMAGE)
@@ -65,19 +65,21 @@ class RecommendationsViewModel(
     }
 
     fun loadRecommendations(retrofit: Retrofit) {
-        ConnectivityController.runIfConnected {
+        ConnectivityController.getInstance().runIfConnected {
             launch {
                 _loading.value = true
+
                 val country = _country.value?.peekContent() ?: DEFAULT_COUNTRY
                 val artists = withContext(Dispatchers.IO) { getRecommendedArtists.invoke(retrofit, country) }
                 _artists.value = artists
+
                 _loading.value = false
             }
         }
     }
 
     private fun retrieveCountry(retrofit: Retrofit, latitude: String, longitude: String, mapsKey: String) {
-        ConnectivityController.runIfConnected {
+        ConnectivityController.getInstance().runIfConnected {
             launch {
                 val userCountry = withContext(Dispatchers.IO) { getCountry.invoke(retrofit, "$latitude,$longitude", mapsKey) }
                 val retrievedCountry = when (userCountry.isEmpty()) {

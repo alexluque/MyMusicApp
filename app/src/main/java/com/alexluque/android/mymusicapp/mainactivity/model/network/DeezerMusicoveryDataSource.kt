@@ -13,7 +13,6 @@ import com.google.gson.internal.LinkedTreeMap
 import retrofit2.Retrofit
 import java.util.*
 import com.example.android.domain.Artist as DomainArtist
-import com.example.android.domain.ArtistInfo as DomainArtistInfo
 import com.example.android.domain.Song as DomainSong
 
 @Suppress("UNCHECKED_CAST")
@@ -83,10 +82,10 @@ class DeezerMusicoveryDataSource : RemoteDataSource {
     }
 
     @ExperimentalStdlibApi
-    override suspend fun getArtistInfo(retrofit: Retrofit, mbid: String): DomainArtistInfo =
+    override suspend fun getArtistInfo(retrofit: Retrofit, mbid: String): DomainArtist? =
         retrofit
             .create(MusicoveryArtistService::class.java)
             .getArtistInfo(mbid)
-            .artist
-            .toDomainArtistInfo()
+            ?.artist
+            ?.toDomainArtistInfo()
 }

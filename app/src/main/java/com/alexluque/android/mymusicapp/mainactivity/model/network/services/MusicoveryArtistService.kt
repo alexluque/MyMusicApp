@@ -25,5 +25,5 @@ interface MusicoveryArtistService {
     suspend fun getArtistInfo(
         @Query("id") mbid: String,
         @Query("fct") getFromLocation: String = "getinfo"
-    ): GetArtistResponse
+    ): GetArtistResponse?
 }

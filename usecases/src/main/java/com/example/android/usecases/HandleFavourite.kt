@@ -14,7 +14,7 @@ class HandleFavourite(
 
     suspend fun getArtist(retrofit: Retrofit, artistName: String): Artist = GetArtist(repository).invoke(retrofit, artistName)
 
-    suspend fun getArtistInfo(retrofit: Retrofit, mbid: String): ArtistInfo = GetArtistInfo(repository).invoke(retrofit, mbid)
+    suspend fun getArtistInfo(retrofit: Retrofit, mbid: String): Artist? = GetArtistInfo(repository).invoke(retrofit, mbid)
 
     suspend fun getFavouriteSongs(): List<Song> = GetFavouriteSongs(repository).invoke()
 

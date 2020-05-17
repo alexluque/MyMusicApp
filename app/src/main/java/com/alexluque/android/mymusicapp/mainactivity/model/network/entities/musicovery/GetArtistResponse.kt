@@ -2,5 +2,5 @@ package com.alexluque.android.mymusicapp.mainactivity.model.network.entities.mus
 
 data class GetArtistResponse (
 	val response : Response,
-	val artist : ArtistInfo
+	val artist : Artist
 )

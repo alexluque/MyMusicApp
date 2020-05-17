@@ -29,6 +29,7 @@ class MainActivityModule {
     ) = GetFavouriteArtistSongs(favouriteArtistsRepository)
 }
 
+@ExperimentalStdlibApi
 @Subcomponent(modules = [(MainActivityModule::class), (ListenersModule::class)])
 interface MainActivityComponent {
     val mainViewModel: MainViewModel

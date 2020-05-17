@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.activity_recommendations.*
 import kotlinx.android.synthetic.main.app_actionbar.view.*
 import java.util.*
 
+@ExperimentalStdlibApi
 @Suppress("UNCHECKED_CAST")
 class RecommendationsActivity : AppCompatActivity() {
 
@@ -53,7 +54,7 @@ class RecommendationsActivity : AppCompatActivity() {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
-        ConnectivityController.view = mainView
+        ConnectivityController.getInstance().view = mainView
 
         setAdapter()
         observeArtists()

@@ -11,20 +11,22 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
+import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityArtistDetailBinding
+import com.alexluque.android.mymusicapp.mainactivity.di.ListenersModule
+import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.EventObserver
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.addLocationPermission
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.app
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.getViewModel
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.makeLongSnackbar
-import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityArtistDetailBinding
-import com.alexluque.android.mymusicapp.mainactivity.di.ListenersModule
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel.Companion.ARTIST_NAME
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment.Companion.FRAGMENT_NAME
 import com.example.android.domain.Song
 import com.google.android.gms.location.LocationServices
 
+@ExperimentalStdlibApi
 @Suppress("UNCHECKED_CAST")
 class ArtistDetailActivity : AppCompatActivity() {
 
@@ -45,7 +47,7 @@ class ArtistDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         component = app.component.plus(
-            DetailActivityModule(artistName),
+            DetailActivityModule(),
             ListenersModule(this, LocationServices.getFusedLocationProviderClient(this))
         )
 
@@ -54,11 +56,14 @@ class ArtistDetailActivity : AppCompatActivity() {
 
         setAdapter()
 
-        ConnectivityController.view = mainView
+        ConnectivityController.getInstance().view = mainView
 
         observeSongs()
         observeFavourite()
         observeArtistName()
+
+        viewModel.loadData(RetrofitBuilder, artistName)
+        viewModel.loadFavouriteSongs()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -69,7 +74,7 @@ class ArtistDetailActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_search -> {
-            SearchArtistFragment(viewModel::loadData)
+            SearchArtistFragment(viewModel::loadData, viewModel::loadFavouriteSongs)
                 .show(supportFragmentManager, FRAGMENT_NAME)
             true
         }
@@ -82,7 +87,7 @@ class ArtistDetailActivity : AppCompatActivity() {
 
     @ExperimentalStdlibApi
     private fun setAdapter() {
-        viewAdapter = ArtistDetailAdapter(mutableListOf<Song>(), viewModel::onFavouriteClicked, viewModel::isFavourite)
+        viewAdapter = ArtistDetailAdapter(mutableListOf<Song>(), viewModel::onFavouriteClicked, viewModel::isFavouriteSong)
 
         recyclerView = binding.artistDetailRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
@@ -117,7 +122,7 @@ class ArtistDetailActivity : AppCompatActivity() {
                 if (it == null) {
                     mainView.makeLongSnackbar(getString(R.string.artist_not_found))
                 } else {
-                    this.title = it.name
+                    this.title = it
                 }
             }
         )

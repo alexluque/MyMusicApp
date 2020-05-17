@@ -6,6 +6,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.Module
 import dagger.Provides
 
+@ExperimentalStdlibApi
 @Module
 class ListenersModule(
     private val context: Context,

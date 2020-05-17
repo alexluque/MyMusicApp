@@ -3,6 +3,7 @@ package com.alexluque.android.mymusicapp.mainactivity.model.network.entities.mus
 data class Artist (
 	val mbid : String,
 	val name : String,
-	val genre : Any?,
-	val country : Any?
+	val genres : Any?,
+	val country : Any?,
+	val region: Any? = null
 )
