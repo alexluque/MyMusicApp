@@ -24,3 +24,4 @@ app/src/main/res/values/google_maps_api.xml
 *.iml
 .idea/misc.xml
 .idea/.name
+app/src/androidTest/java/com/alexluque/android/mymusicapp/mainactivity/ui/common/Values.kt
