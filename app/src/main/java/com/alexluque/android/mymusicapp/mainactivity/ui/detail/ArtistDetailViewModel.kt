@@ -78,11 +78,13 @@ class ArtistDetailViewModel(
                 // Ideally, this should be placed next to variable's assignment
                 // but Musicovery's API needs at least 1sec between calls
                 musicoveryArtist?.let { ma ->
-                    val info: Artist? = handleFavourite.getArtistInfo(retrofit.musicoveryInstance, ma.mbid)
-                    info.let {
-                        ma.genres = it?.genres.toString()
-                        ma.region = it?.region?.toString()?.replace(EMPTY_OBJECT, String())?.capitalize(Locale.ROOT)
-                        ma.country = it?.country?.toString()?.replace(EMPTY_OBJECT, String())
+                    if (ma.mbid.isNotEmpty()) {
+                        val info: Artist? = handleFavourite.getArtistInfo(retrofit.musicoveryInstance, ma.mbid)
+                        info.let {
+                            ma.genres = it?.genres.toString()
+                            ma.region = it?.region?.toString()?.replace(EMPTY_OBJECT, String())?.capitalize(Locale.ROOT)
+                            ma.country = it?.country?.toString()?.replace(EMPTY_OBJECT, String())
+                        }
                     }
                 }
 
