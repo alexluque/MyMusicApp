@@ -105,9 +105,12 @@ class ArtistDetailViewModel(
             launch {
                 val song = Song(songId, title, album, it.id)
                 val favouriteArtist = FavouriteArtist(it.id, it.name, it.bigImageUrl)
-                favouriteArtist.genre = musicoveryArtist?.genres.toString()
+                favouriteArtist.genre = musicoveryArtist?.genres?.toString() ?: EMPTY
                 favouriteArtist.regionAndCountry =
-                    setRegionCountry(musicoveryArtist?.region.toString(), musicoveryArtist?.country.toString())
+                    setRegionCountry(
+                        musicoveryArtist?.region?.toString() ?: EMPTY,
+                        musicoveryArtist?.country?.toString() ?: EMPTY
+                    )
 
                 val isFavouriteSong = isFavouriteSong(songId)
                 manageFavourite(song, it, favouriteArtist, isFavouriteSong)
@@ -142,14 +145,14 @@ class ArtistDetailViewModel(
     }
 
     private fun setRegionCountry(region: String?, country: String?): String =
-        if (region.isNullOrEmpty().not() && country.isNullOrEmpty().not())
+        if (!region.isNullOrEmpty() && !country.isNullOrEmpty())
             "$region, $country"
-        else if (region.isNullOrEmpty() && country.isNullOrEmpty().not())
-            country!!
-        else if (region.isNullOrEmpty().not() && country.isNullOrEmpty())
-            region!!
+        else if (region.isNullOrEmpty() && !country.isNullOrEmpty())
+            country
+        else if (!region.isNullOrEmpty() && country.isNullOrEmpty())
+            region
         else
-            String()
+            EMPTY
 
     fun updateDetail(
         viewAdapter: ArtistDetailAdapter,
@@ -166,5 +169,6 @@ class ArtistDetailViewModel(
         const val ARTIST_NAME = "artist name"
         private const val EMPTY_OBJECT = "{}"
         private const val INITIAL_POSITION = 0
+        private const val EMPTY = ""
     }
 }
