@@ -18,7 +18,7 @@ interface MyMusicAppComponent {
 
     fun plus(mainModule: MainActivityModule, listenersModule: ListenersModule): MainActivityComponent
     fun plus(detailModule: DetailActivityModule, listenersModule: ListenersModule): DetailActivityComponent
-    fun plus(module: RecommendationsActivityModule): RecommendationsActivityComponent
+    fun plus(recommendationsModule: RecommendationsActivityModule): RecommendationsActivityComponent
 
     @Component.Factory
     interface Factory {

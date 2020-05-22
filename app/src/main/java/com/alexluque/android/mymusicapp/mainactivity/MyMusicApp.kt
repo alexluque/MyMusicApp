@@ -4,7 +4,8 @@ import android.app.Application
 import com.alexluque.android.mymusicapp.mainactivity.di.DaggerMyMusicAppComponent
 import com.alexluque.android.mymusicapp.mainactivity.di.MyMusicAppComponent
 
-@ExperimentalStdlibApi class MyMusicApp : Application() {
+@ExperimentalStdlibApi
+open class MyMusicApp : Application() {
 
     lateinit var component: MyMusicAppComponent
         private set
@@ -12,8 +13,11 @@ import com.alexluque.android.mymusicapp.mainactivity.di.MyMusicAppComponent
     override fun onCreate() {
         super.onCreate()
 
-        component = DaggerMyMusicAppComponent
+        component = initMusicAppComponent()
+    }
+
+    open fun initMusicAppComponent(): MyMusicAppComponent =
+        DaggerMyMusicAppComponent
             .factory()
             .create(this)
-    }
 }

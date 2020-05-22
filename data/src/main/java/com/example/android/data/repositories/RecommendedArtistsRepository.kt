@@ -9,5 +9,5 @@ class RecommendedArtistsRepository(
 ) {
 
     suspend fun getRecommendedArtists(retrofit: Retrofit, country: String): List<RecommendedArtist> =
-        remoteDS.getArtistsByLocation(retrofit,country)
+        remoteDS.getArtistsByLocation(retrofit, country)
 }

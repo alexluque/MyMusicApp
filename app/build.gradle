@@ -14,7 +14,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.alexluque.android.mymusicapp.mainactivity.ui.common.UiRunner"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [
@@ -70,4 +70,6 @@ dependencies {
     implementation libs.values()
     implementation testLibs.values()
     implementation androidTestLibs.values()
+    kaptTest kaptAndroidTest.values()
+    kaptAndroidTest kaptAndroidTest.values()
 }
