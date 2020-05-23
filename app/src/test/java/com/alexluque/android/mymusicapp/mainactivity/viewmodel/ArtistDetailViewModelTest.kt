@@ -121,6 +121,7 @@ class ArtistDetailViewModelTest {
             whenever(handleFavouriteStub.getArtistDetail(deezerInstanceMock, artistName)).thenReturn(artist)
             whenever(handleFavouriteStub.getArtist(retrofitMock.musicoveryInstance, artist.name)).thenReturn(musicoveryArtist)
             whenever(handleFavouriteStub.getArtistSongs(retrofitMock.deezerInstance, artistName)).thenReturn(songs)
+            whenever(musicoveryArtist.mbid).thenReturn("mbid")
 
             viewModel.currentArtist.observeForever(currentArtistObserverMock)
             viewModel.imageUrl.observeForever(imageUrlObserverMock)
