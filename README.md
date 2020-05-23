@@ -12,6 +12,8 @@ You could find different branches following different presentation patterns as w
   * Jetpack: Room and Data Binging (as well as Navigation in its specific branch)
   * Dependency Injection with Dagger2
   * Testing: Unit, Integration, ViewModels and UI with Espresso
+  * Coroutines
+  * And a lot of Kotlin (I truly do love Kotlin)
   
   ## App Funcionalities
   ### Get Recommendations
