@@ -13,15 +13,17 @@ You could find different branches following different presentation patterns as w
   * Dependency Injection with Dagger2
   * Testing: Unit, Integration, ViewModels and UI with Espresso
   * Coroutines
-  * And a lot of Kotlin (I truly do love Kotlin)
+  * ...and a lot of Kotlin (I truly do love Kotlin)
   
   ## App Funcionalities
   ### Get Recommendations
   You can easily get recommendations with the **Recommend** button
   ![Recommend](/images/recommend.png)
   
+  ### Search for artists
   Search for an artist with the **Search** button
   ![Search](/images/search.png)
   
+  ### Save artist's songs
   ...and set some song as favourite by clicking on its **star**
   ![Favourite](/images/favourite.png)
