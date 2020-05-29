@@ -1,11 +1,9 @@
 package com.alexluque.android.mymusicapp.mainactivity.ui.detail
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +24,7 @@ import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragm
 import com.example.android.domain.Song
 import com.google.android.gms.location.LocationServices
 
+
 @ExperimentalStdlibApi
 @Suppress("UNCHECKED_CAST")
 class ArtistDetailActivity : AppCompatActivity() {
@@ -45,6 +44,11 @@ class ArtistDetailActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_artist_detail)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        val window: Window = this.window
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
 
         component = app.component.plus(
             DetailActivityModule(),

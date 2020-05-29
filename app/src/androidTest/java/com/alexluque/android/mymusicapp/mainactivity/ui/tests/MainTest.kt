@@ -2,13 +2,19 @@ package com.alexluque.android.mymusicapp.mainactivity.ui.tests
 
 import android.app.Application
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.SystemClock
+import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.InstrumentationRegistry.getTargetContext
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
@@ -19,9 +25,12 @@ import com.alexluque.android.mymusicapp.mainactivity.ui.common.DaggerUiTestCompo
 import com.alexluque.android.mymusicapp.mainactivity.ui.main.MainActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.Description
+import org.hamcrest.Matcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+
 
 @ExperimentalCoroutinesApi
 @ExperimentalStdlibApi
@@ -170,6 +179,66 @@ class MainTest {
                 )
             )
         )
+    }
+
+    @Test
+    fun allActivitiesHaveSameStatusBarBackgroundColor() {
+        // Verify MainActivity's status bar background color
+        onView(
+            withId(android.R.id.statusBarBackground)
+        ).check(
+            matches(
+                withBackgroundColor(R.color.colorPrimaryDark)
+            )
+        )
+
+        // Click on the recommendations button
+        onView(
+            withId(R.id.action_recommend)
+        ).perform(
+            click()
+        )
+
+        // Verify RecommendationsActivity's status bar background color
+        onView(
+            withId(android.R.id.statusBarBackground)
+        ).check(
+            matches(
+                withBackgroundColor(R.color.colorPrimaryDark)
+            )
+        )
+
+        // Click back button to return to MainActivity
+        Espresso.pressBackUnconditionally()
+
+        // Click on first element of favourite artists list
+        onView(
+            withId(R.id.artists_recycler_view)
+        ).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(FIRST_ARTIST, click())
+        )
+
+        // Verify DetailActivity's status bar background color
+        onView(
+            withId(android.R.id.statusBarBackground)
+        ).check(
+            matches(
+                withBackgroundColor(R.color.colorPrimaryDark)
+            )
+        )
+
+    }
+
+    private fun withBackgroundColor(colorId: Int): Matcher<View?>? {
+        val colorFromResource = ContextCompat.getColor(getTargetContext(), colorId)
+        return object : BoundedMatcher<View?, View>(View::class.java) {
+            override fun matchesSafely(view: View): Boolean {
+                val backGroundColor = (view.background as ColorDrawable).color
+                return colorFromResource == backGroundColor
+            }
+
+            override fun describeTo(description: Description?) {}
+        }
     }
 
     private companion object {
