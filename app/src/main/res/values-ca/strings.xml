@@ -24,5 +24,7 @@
     <string name="artist_s_genre">Estil musical</string>
     <string name="artist_s_region_country">Regió i país de l\'artista</string>
     <string name="no_recommended_artists_found">No s\'han pogut recuperar artistes en aquest moment. Si us plau, intenta-ho més tard…</string>
+    <string name="empty_fav_list">El llistat de preferits és buit</string>
+    <string name="empty_fav_msg">Marca algunes cançons com a preferides i els seus artistes apareixeran aquí</string>
 </resources>
 

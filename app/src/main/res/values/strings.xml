@@ -24,4 +24,6 @@
     <string name="artist_s_genre">Artist\'s genre</string>
     <string name="artist_s_region_country">Artist\'s region and country</string>
     <string name="no_recommended_artists_found">No artists found at this time. Try again later…</string>
+    <string name="empty_fav_list">Favourite\'s list is empty</string>
+    <string name="empty_fav_msg">Set some songs as favourite and their artists will show up here</string>
 </resources>

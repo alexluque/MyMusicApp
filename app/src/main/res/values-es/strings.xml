@@ -24,5 +24,7 @@
     <string name="artist_s_genre">Estilo musical</string>
     <string name="artist_s_region_country">Región y país del artista</string>
     <string name="no_recommended_artists_found">No se han podido recuperar artistas en este momento. Por favor, inténtalo más tarde…</string>
+    <string name="empty_fav_list">La lista de preferidos está vacía</string>
+    <string name="empty_fav_msg">Marca algunas canciones como preferidas y sus artistas aparecerán aquí</string>
 </resources>
 

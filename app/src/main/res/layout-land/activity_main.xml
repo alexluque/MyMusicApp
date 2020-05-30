@@ -39,6 +39,45 @@
             app:layout_constraintTop_toBottomOf="@id/appBarLayout"
             tools:listitem="@layout/favourite_artist_card" />
 
+        <ImageView
+            android:id="@+id/image_emptyList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/artists_recycler_view"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+            app:layout_constraintWidth_percent="0.5"
+            app:srcCompat="@mipmap/turntable"
+            app:visible="@{viewmodel.artists.empty}"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/text_emptyList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_fav_list"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/image_emptyList"
+            app:layout_constraintTop_toTopOf="@+id/image_emptyList"
+            app:visible="@{viewmodel.artists.empty}" />
+
+        <TextView
+            android:id="@+id/text_emptyMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/empty_fav_msg"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/artists_recycler_view"
+            app:layout_constraintStart_toEndOf="@+id/image_emptyList"
+            app:layout_constraintTop_toBottomOf="@+id/text_emptyList"
+            app:visible="@{viewmodel.artists.empty}" />
+
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"

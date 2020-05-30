@@ -12,6 +12,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.BoundedMatcher
@@ -25,6 +26,7 @@ import com.alexluque.android.mymusicapp.mainactivity.ui.common.DaggerUiTestCompo
 import com.alexluque.android.mymusicapp.mainactivity.ui.main.MainActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.junit.Before
@@ -208,7 +210,36 @@ class MainTest {
 
         // Check DetailActivity's status bar background color
         checkStatusBarColor(STATUS_BAR_COLOR)
+    }
 
+    @Test
+    fun infoElementsAreGoneWhenFavouriteListNotEmpty() {
+        // Image is gone
+        onView(
+            withId(R.id.image_emptyList)
+        ).check(
+            matches(
+                not(isDisplayed())
+            )
+        )
+
+        // Title is gone
+        onView(
+            withId(R.id.text_emptyList)
+        ).check(
+            matches(
+                not(isDisplayed())
+            )
+        )
+
+        // Message is gone
+        onView(
+            withId(R.id.text_emptyMessage)
+        ).check(
+            matches(
+                not(isDisplayed())
+            )
+        )
     }
 
     private fun checkStatusBarColor(color: Int) {
