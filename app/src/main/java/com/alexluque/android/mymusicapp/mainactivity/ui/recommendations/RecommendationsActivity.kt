@@ -1,18 +1,20 @@
 package com.alexluque.android.mymusicapp.mainactivity.ui.recommendations
 
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
-import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
-import com.alexluque.android.mymusicapp.mainactivity.ui.common.EventObserver
 import com.alexluque.android.mymusicapp.mainactivity.databinding.ActivityRecommendationsBinding
 import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.EventObserver
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.*
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActivity
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel
@@ -45,10 +47,7 @@ class RecommendationsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         invalidateOptionsMenu() // Forces to redraw the layout. Needed when some change is made like hide an icon.
 
-        val window: Window = this.window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        this.setStatusBarColor(R.color.colorPrimaryDark)
 
         component = app.component.plus(RecommendationsActivityModule(latitude, longitude, getString(R.string.google_maps_key)))
 

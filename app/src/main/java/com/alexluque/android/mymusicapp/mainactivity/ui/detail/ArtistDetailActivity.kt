@@ -1,9 +1,11 @@
 package com.alexluque.android.mymusicapp.mainactivity.ui.detail
 
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,10 +16,7 @@ import com.alexluque.android.mymusicapp.mainactivity.di.ListenersModule
 import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.EventObserver
-import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.addLocationPermission
-import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.app
-import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.getViewModel
-import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.makeLongSnackbar
+import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.*
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel.Companion.ARTIST_NAME
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment.Companion.FRAGMENT_NAME
@@ -45,10 +44,7 @@ class ArtistDetailActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val window: Window = this.window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        this.setStatusBarColor(R.color.colorPrimaryDark)
 
         component = app.component.plus(
             DetailActivityModule(),

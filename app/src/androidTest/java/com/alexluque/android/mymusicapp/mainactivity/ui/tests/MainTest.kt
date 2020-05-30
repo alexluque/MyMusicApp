@@ -183,14 +183,8 @@ class MainTest {
 
     @Test
     fun allActivitiesHaveSameStatusBarBackgroundColor() {
-        // Verify MainActivity's status bar background color
-        onView(
-            withId(android.R.id.statusBarBackground)
-        ).check(
-            matches(
-                withBackgroundColor(R.color.colorPrimaryDark)
-            )
-        )
+        // Check MainActivity's status bar background color
+        checkStatusBarColor(STATUS_BAR_COLOR)
 
         // Click on the recommendations button
         onView(
@@ -199,14 +193,8 @@ class MainTest {
             click()
         )
 
-        // Verify RecommendationsActivity's status bar background color
-        onView(
-            withId(android.R.id.statusBarBackground)
-        ).check(
-            matches(
-                withBackgroundColor(R.color.colorPrimaryDark)
-            )
-        )
+        // Check RecommendationsActivity's status bar background color
+        checkStatusBarColor(STATUS_BAR_COLOR)
 
         // Click back button to return to MainActivity
         Espresso.pressBackUnconditionally()
@@ -218,15 +206,19 @@ class MainTest {
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(FIRST_ARTIST, click())
         )
 
-        // Verify DetailActivity's status bar background color
+        // Check DetailActivity's status bar background color
+        checkStatusBarColor(STATUS_BAR_COLOR)
+
+    }
+
+    private fun checkStatusBarColor(color: Int) {
         onView(
             withId(android.R.id.statusBarBackground)
         ).check(
             matches(
-                withBackgroundColor(R.color.colorPrimaryDark)
+                withBackgroundColor(color)
             )
         )
-
     }
 
     private fun withBackgroundColor(colorId: Int): Matcher<View?>? {
@@ -243,5 +235,6 @@ class MainTest {
 
     private companion object {
         private const val FIRST_ARTIST = 0
+        private const val STATUS_BAR_COLOR = R.color.colorPrimaryDark
     }
 }
