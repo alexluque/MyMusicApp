@@ -37,6 +37,7 @@ class DeezerMusicoveryDataSource : RemoteDataSource {
                 .create(DeezerArtistService::class.java)
                 .getSongs(artistName)
                 .data
+                .sortedBy { it.album?.id }
                 .map(SongData::toDomainSong)
         } catch (e: IOException) {
             emptyList<DomainSong>()

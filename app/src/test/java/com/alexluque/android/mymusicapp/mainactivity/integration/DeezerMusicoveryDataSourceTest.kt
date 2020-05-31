@@ -130,8 +130,7 @@ class DeezerMusicoveryDataSourceTest {
             whenever(artistSongData.id).thenReturn(fakeArtistId)
             whenever(songDataStub.artistSongData).thenReturn(artistSongData)
 
-            val song = DomainSong(fakeSongId, fakeTitle, fakeAlbumName, fakeArtistId.toLong())
-            val expect = listOf(song)
+            val expect = listOf(DomainSong(fakeSongId, fakeTitle, fakeAlbumName, fakeArtistId.toLong()))
             val result = dataSourceMock.getSongs(retrofitDeezerStub, artistName)
 
             val apiRetrievedArtistId = songsDataStub.data.first().artistSongData?.id?.toLong()
@@ -149,6 +148,37 @@ class DeezerMusicoveryDataSourceTest {
             whenever(songsDataStub.data).thenReturn(listOf<SongData>())
 
             val expect = listOf<DomainSong>()
+            val result = dataSourceMock.getSongs(retrofitDeezerStub, artistName)
+
+            Assert.assertEquals(expect, result)
+        }
+    }
+
+    @Test
+    fun `Songs are ordered by its album id`() {
+        runBlockingTest {
+            val songId1: Long = 1
+            val songId2: Long = 2
+            val songId3: Long = 3
+            val title1 = "title 1"
+            val title2 = "title 2"
+            val title3 = "title 3"
+
+            whenever(retrofitDeezerStub.create(DeezerArtistService::class.java)).thenReturn(deezerArtistServiceMock)
+            whenever(deezerArtistServiceMock.getSongs(artistName)).thenReturn(songsDataStub)
+            whenever(songsDataStub.data).thenReturn(
+                listOf(
+                    SongData(id = songId1, title = title1, album = AlbumData(id = 1)),
+                    SongData(id = songId2, title = title2, album = AlbumData(id = 2)),
+                    SongData(id = songId3, title = title3)
+                )
+            )
+
+            val expect = listOf(
+                DomainSong(songId3, title3, null, null),
+                DomainSong(songId1, title1, artistId = null),
+                DomainSong(songId2, title2, artistId = null)
+            )
             val result = dataSourceMock.getSongs(retrofitDeezerStub, artistName)
 
             Assert.assertEquals(expect, result)
