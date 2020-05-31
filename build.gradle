@@ -8,7 +8,7 @@ buildscript {
         lifecycle_version = '2.2.0'
         dagger_version = '2.27'
         antlr4_version = '4.8-1'
-        junit_version = '1.1.1'
+        ax_junit_version = '1.1.1'
         espresso_version = '3.2.0'
     }
 
@@ -82,8 +82,8 @@ allprojects {
                 archCoreTesting: 'androidx.arch.core:core-testing:2.1.0'
         ]
         androidTestLibs = [
-                junit          : "androidx.test.ext:junit:$junit_version",
-                junitKTX       : "androidx.test.ext:junit-ktx:$junit_version",
+                junit          : "androidx.test.ext:junit:$ax_junit_version",
+                junitKTX       : "androidx.test.ext:junit-ktx:$ax_junit_version",
                 espressoCore   : "androidx.test.espresso:espresso-core:$espresso_version",
                 espressoContrib: "androidx.test.espresso:espresso-contrib:$espresso_version",
                 rules          : 'androidx.test:rules:1.2.0'

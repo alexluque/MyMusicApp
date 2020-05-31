@@ -11,6 +11,7 @@ import com.example.android.domain.ArtistDetail
 import com.example.android.domain.RecommendedArtist
 import com.google.gson.internal.LinkedTreeMap
 import retrofit2.Retrofit
+import java.io.IOException
 import java.util.*
 import com.example.android.domain.Artist as DomainArtist
 import com.example.android.domain.Song as DomainSong
@@ -19,73 +20,88 @@ import com.example.android.domain.Song as DomainSong
 class DeezerMusicoveryDataSource : RemoteDataSource {
 
     override suspend fun getArtistDetail(retrofit: Retrofit, artistName: String): ArtistDetail? =
-        retrofit
-            .create(DeezerArtistService::class.java)
-            .getArtist(artistName)
-            .data
-            ?.firstOrNull()
-            ?.toArtistDetail()
+        try {
+            retrofit
+                .create(DeezerArtistService::class.java)
+                .getArtist(artistName)
+                .data
+                ?.firstOrNull()
+                ?.toArtistDetail()
+        } catch (e: IOException) {
+            null
+        }
 
     override suspend fun getSongs(retrofit: Retrofit, artistName: String): List<DomainSong> =
-        retrofit
-            .create(DeezerArtistService::class.java)
-            .getSongs(artistName)
-            .data
-            .map(SongData::toDomainSong)
+        try {
+            retrofit
+                .create(DeezerArtistService::class.java)
+                .getSongs(artistName)
+                .data
+                .map(SongData::toDomainSong)
+        } catch (e: IOException) {
+            emptyList<DomainSong>()
+        }
 
-    override suspend fun getArtistsByLocation(retrofit: Retrofit, country: String): List<RecommendedArtist> {
-        return try {
+    override suspend fun getArtistsByLocation(retrofit: Retrofit, country: String): List<RecommendedArtist> =
+        try {
             retrofit
                 .create(MusicoveryArtistService::class.java)
                 .getArtistsByLocation(country.toLowerCase(Locale.ROOT).trim())
                 .artists
                 .artist
                 .map(Artist::toRecommendedArtist)
-        } catch (ex: NullPointerException) {
+        } catch (e: Exception) {
             emptyList<RecommendedArtist>()
         }
-    }
 
     override suspend fun getArtist(retrofit: Retrofit, artistName: String): DomainArtist {
-        val artists = retrofit
-            .create(MusicoveryArtistService::class.java)
-            .getArtist(artistName)
-            .artists
+        try {
+            val artists = retrofit
+                .create(MusicoveryArtistService::class.java)
+                .getArtist(artistName)
+                .artists
 
-        return when (artists) {
-            is Map<*, *> -> {
-                if (artists.isNotEmpty()) {
-                    try {
-                        val map = artists as AbstractMap<*, *>
-                        val firstLevel = map.values.first() as AbstractMap<*, *>
-                        val secondLevel = firstLevel.values.first() as AbstractMap<*, *>
-                        val thirdLevel = secondLevel.values.first() as LinkedTreeMap<String, String>
-                        thirdLevel.toDomainArtist()
-                    } catch (ex1: ClassCastException) {
+            return when (artists) {
+                is Map<*, *> -> {
+                    if (artists.isNotEmpty()) {
                         try {
-                            val list = artists.values.first() as List<*>
-                            val firstLevel = list.first() as AbstractMap<*, *>
+                            val map = artists as AbstractMap<*, *>
+                            val firstLevel = map.values.first() as AbstractMap<*, *>
                             val secondLevel = firstLevel.values.first() as AbstractMap<*, *>
                             val thirdLevel = secondLevel.values.first() as LinkedTreeMap<String, String>
                             thirdLevel.toDomainArtist()
-                        } catch (ex2: ClassCastException) {
-                            emptyDomainArtist()
+                        } catch (e1: ClassCastException) {
+                            try {
+                                val list = artists.values.first() as List<*>
+                                val firstLevel = list.first() as AbstractMap<*, *>
+                                val secondLevel = firstLevel.values.first() as AbstractMap<*, *>
+                                val thirdLevel = secondLevel.values.first() as LinkedTreeMap<String, String>
+                                thirdLevel.toDomainArtist()
+                            } catch (e2: ClassCastException) {
+                                emptyDomainArtist()
+                            }
                         }
+                    } else {
+                        emptyDomainArtist()
                     }
-                } else {
-                    emptyDomainArtist()
                 }
+                is ArtistsByNameResponse -> artists.artist.artists.artist.toDomainArtist()
+                else -> emptyDomainArtist()
             }
-            is ArtistsByNameResponse -> artists.artist.artists.artist.toDomainArtist()
-            else -> emptyDomainArtist()
+        } catch (e: IOException) {
+            return emptyDomainArtist()
         }
     }
 
     @ExperimentalStdlibApi
     override suspend fun getArtistInfo(retrofit: Retrofit, mbid: String): DomainArtist? =
-        retrofit
-            .create(MusicoveryArtistService::class.java)
-            .getArtistInfo(mbid)
-            ?.artist
-            ?.toDomainArtistInfo()
+        try {
+            retrofit
+                .create(MusicoveryArtistService::class.java)
+                .getArtistInfo(mbid)
+                ?.artist
+                ?.toDomainArtistInfo()
+        } catch (e: IOException) {
+            null
+        }
 }
