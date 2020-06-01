@@ -18,12 +18,11 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#107463"
-            android:theme="@style/AppTheme.AppBarOverlay"
+            android:background="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleTextColor="#FFFFFF"
+            app:titleTextColor="@color/colorSecondaryText"
             app:toolbarTitle="@{viewmodel.artistDetailName}" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -39,7 +38,8 @@
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appBarLayout_image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/colorBackground">
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:id="@+id/collapsing_toolbar"

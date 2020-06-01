@@ -19,7 +19,6 @@
             android:id="@+id/appBarLayout_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -28,9 +27,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="#107463"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:titleTextColor="#FFFFFF"
+                app:titleTextColor="@color/colorSecondaryText"
                 app:toolbarTitle="@{viewmodel.artistDetailName}" />
 
         </com.google.android.material.appbar.AppBarLayout>

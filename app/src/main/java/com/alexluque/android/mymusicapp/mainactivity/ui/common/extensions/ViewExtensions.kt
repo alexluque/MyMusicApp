@@ -2,9 +2,11 @@ package com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
 import com.google.android.material.snackbar.Snackbar
@@ -23,7 +25,10 @@ fun ImageView.loadImage(url: String) {
     }
 }
 
-fun View.makeLongSnackbar(msg: String) = Snackbar.make(this, msg, Snackbar.LENGTH_LONG).show()
+fun View.makeLongSnackbar(msg: String) =
+    Snackbar.make(this, msg, Snackbar.LENGTH_LONG)
+        .setTextColor(ContextCompat.getColor(this.context, R.color.colorSecondaryText))
+        .show()
 
 fun <T : Any> RecyclerView.Adapter<*>.updateData(dataSet: MutableList<Any>, newData: List<T>) {
     dataSet.clear()

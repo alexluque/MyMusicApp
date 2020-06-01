@@ -8,13 +8,11 @@
         android:id="@+id/action_recommend"
         android:icon="@drawable/ic_ppl_talking_icon"
         android:title="@string/get_recommendations"
-        android:iconTint="#FFFFFF"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_search"
-        android:icon="@android:drawable/ic_menu_search"
-        android:iconTint="#FFFFFF"
+        android:icon="@drawable/ic_search"
         android:title="@string/search_button"
         app:showAsAction="ifRoom" />
 
