@@ -64,13 +64,15 @@ class SearchArtistFragment(
             is UiModel.Search -> {
                 dialog?.cancel()
 
-                loadArtistDetail?.let {
-                    it.invoke(RetrofitBuilder, retrieveEntry())
-                    loadArtistSongs?.invoke()
-                } ?: activity?.myStartActivity(
-                    ArtistDetailActivity::class.java,
-                    listOf(ARTIST_NAME to retrieveEntry())
-                )
+                val entry = retrieveEntry()
+                if (entry.isNotEmpty())
+                    loadArtistDetail?.let {
+                        it.invoke(RetrofitBuilder, entry)
+                        loadArtistSongs?.invoke()
+                    } ?: activity?.myStartActivity(
+                        ArtistDetailActivity::class.java,
+                        listOf(ARTIST_NAME to entry)
+                    )
             }
             is UiModel.Cancel -> dialog?.cancel()
         }

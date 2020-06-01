@@ -12,7 +12,6 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.BoundedMatcher
@@ -177,6 +176,45 @@ class MainTest {
                 hasDescendant(
                     withText(
                         artistName
+                    )
+                )
+            )
+        )
+    }
+
+    @Test
+    fun clickSearchArtistWhenNameIsEmpty_DoesNotNavigateToDetail() {
+        // Verify that we are in the MainActivity
+        checkIsMainActivity()
+
+        // Open Search dialog
+        onView(
+            withId(R.id.action_search)
+        ).perform(
+            click()
+        )
+
+        // Try to search without typing anything
+        onView(
+            withText(R.string.search_button)
+        ).perform(
+            click()
+        )
+
+        // Verify that we still being in the MainActivity
+        checkIsMainActivity()
+    }
+
+    private fun checkIsMainActivity() {
+        onView(
+            withId(
+                R.id.toolbar
+            )
+        ).check(
+            matches(
+                hasDescendant(
+                    withText(
+                        R.string.main_activity_title
                     )
                 )
             )
