@@ -4,9 +4,9 @@ import com.alexluque.android.mymusicapp.mainactivity.model.database.FavouritesRo
 import com.alexluque.android.mymusicapp.mainactivity.model.toDomainSong
 import com.alexluque.android.mymusicapp.mainactivity.model.toRoomArtist
 import com.alexluque.android.mymusicapp.mainactivity.model.toRoomSong
-import com.example.android.data.datasources.LocalDataSource
-import com.example.android.domain.FavouriteArtist
-import com.example.android.domain.Song
+import com.alexluque.android.data.datasources.LocalDataSource
+import com.alexluque.android.domain.FavouriteArtist
+import com.alexluque.android.domain.Song
 
 class RoomDataSourceTest(db: FavouritesRoomDatabase) : LocalDataSource {
 

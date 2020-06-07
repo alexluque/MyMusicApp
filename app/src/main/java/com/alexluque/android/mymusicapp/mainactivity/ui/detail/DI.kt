@@ -3,8 +3,8 @@ package com.alexluque.android.mymusicapp.mainactivity.ui.detail
 import com.alexluque.android.mymusicapp.mainactivity.di.ListenersModule
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.ui.main.LocationRecommendationsListener
-import com.example.android.data.repositories.ArtistDetailRepository
-import com.example.android.usecases.HandleFavourite
+import com.alexluque.android.data.repositories.ArtistDetailRepository
+import com.alexluque.android.usecases.HandleFavourite
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent

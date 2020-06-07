@@ -1,12 +1,12 @@
 package com.alexluque.android.mymusicapp.mainactivity.di
 
-import com.example.android.data.datasources.GeolocationDataSource
-import com.example.android.data.datasources.LocalDataSource
-import com.example.android.data.datasources.RemoteDataSource
-import com.example.android.data.repositories.ArtistDetailRepository
-import com.example.android.data.repositories.FavouriteArtistsRepository
-import com.example.android.data.repositories.GeolocationRepository
-import com.example.android.data.repositories.RecommendedArtistsRepository
+import com.alexluque.android.data.datasources.GeolocationDataSource
+import com.alexluque.android.data.datasources.LocalDataSource
+import com.alexluque.android.data.datasources.RemoteDataSource
+import com.alexluque.android.data.repositories.ArtistDetailRepository
+import com.alexluque.android.data.repositories.FavouriteArtistsRepository
+import com.alexluque.android.data.repositories.GeolocationRepository
+import com.alexluque.android.data.repositories.RecommendedArtistsRepository
 import dagger.Module
 import dagger.Provides
 

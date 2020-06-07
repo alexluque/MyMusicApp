@@ -10,11 +10,11 @@ import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityContr
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.Event
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.ScopedViewModel
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.updateData
-import com.example.android.domain.Artist
-import com.example.android.domain.ArtistDetail
-import com.example.android.domain.FavouriteArtist
-import com.example.android.domain.Song
-import com.example.android.usecases.HandleFavourite
+import com.alexluque.android.domain.Artist
+import com.alexluque.android.domain.ArtistDetail
+import com.alexluque.android.domain.FavouriteArtist
+import com.alexluque.android.domain.Song
+import com.alexluque.android.usecases.HandleFavourite
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch

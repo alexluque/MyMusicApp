@@ -1,7 +1,7 @@
 package com.alexluque.android.mymusicapp.mainactivity.di
 
-import com.example.android.data.repositories.ArtistDetailRepository
-import com.example.android.usecases.*
+import com.alexluque.android.data.repositories.ArtistDetailRepository
+import com.alexluque.android.usecases.*
 import dagger.Module
 import dagger.Provides
 

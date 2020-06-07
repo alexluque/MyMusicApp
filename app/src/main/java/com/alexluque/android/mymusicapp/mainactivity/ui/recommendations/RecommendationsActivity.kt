@@ -21,7 +21,7 @@ import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewM
 import com.alexluque.android.mymusicapp.mainactivity.ui.main.LocationRecommendationsListener.Companion.LATITUDE
 import com.alexluque.android.mymusicapp.mainactivity.ui.main.LocationRecommendationsListener.Companion.LONGITUDE
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment
-import com.example.android.domain.RecommendedArtist
+import com.alexluque.android.domain.RecommendedArtist
 import kotlinx.android.synthetic.main.activity_recommendations.*
 import kotlinx.android.synthetic.main.app_actionbar.view.*
 import java.util.*

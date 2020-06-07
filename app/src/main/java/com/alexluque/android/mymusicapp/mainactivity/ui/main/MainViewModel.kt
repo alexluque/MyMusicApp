@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.Event
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.ScopedViewModel
-import com.example.android.domain.FavouriteArtist
-import com.example.android.usecases.GetFavouriteArtistSongs
-import com.example.android.usecases.GetFavouriteArtists
+import com.alexluque.android.domain.FavouriteArtist
+import com.alexluque.android.usecases.GetFavouriteArtistSongs
+import com.alexluque.android.usecases.GetFavouriteArtists
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 

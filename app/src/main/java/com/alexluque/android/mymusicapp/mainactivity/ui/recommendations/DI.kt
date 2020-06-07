@@ -1,11 +1,11 @@
 package com.alexluque.android.mymusicapp.mainactivity.ui.recommendations
 
-import com.example.android.data.repositories.ArtistDetailRepository
-import com.example.android.data.repositories.GeolocationRepository
-import com.example.android.data.repositories.RecommendedArtistsRepository
-import com.example.android.usecases.GetArtistDetail
-import com.example.android.usecases.GetCountry
-import com.example.android.usecases.GetRecommendedArtists
+import com.alexluque.android.data.repositories.ArtistDetailRepository
+import com.alexluque.android.data.repositories.GeolocationRepository
+import com.alexluque.android.data.repositories.RecommendedArtistsRepository
+import com.alexluque.android.usecases.GetArtistDetail
+import com.alexluque.android.usecases.GetCountry
+import com.alexluque.android.usecases.GetRecommendedArtists
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent

@@ -6,15 +6,15 @@ import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musi
 import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.ArtistsByNameResponse
 import com.alexluque.android.mymusicapp.mainactivity.model.network.services.DeezerArtistService
 import com.alexluque.android.mymusicapp.mainactivity.model.network.services.MusicoveryArtistService
-import com.example.android.data.datasources.RemoteDataSource
-import com.example.android.domain.ArtistDetail
-import com.example.android.domain.RecommendedArtist
+import com.alexluque.android.data.datasources.RemoteDataSource
+import com.alexluque.android.domain.ArtistDetail
+import com.alexluque.android.domain.RecommendedArtist
 import com.google.gson.internal.LinkedTreeMap
 import retrofit2.Retrofit
 import java.io.IOException
 import java.util.*
-import com.example.android.domain.Artist as DomainArtist
-import com.example.android.domain.Song as DomainSong
+import com.alexluque.android.domain.Artist as DomainArtist
+import com.alexluque.android.domain.Song as DomainSong
 
 @Suppress("UNCHECKED_CAST")
 class DeezerMusicoveryDataSource : RemoteDataSource {

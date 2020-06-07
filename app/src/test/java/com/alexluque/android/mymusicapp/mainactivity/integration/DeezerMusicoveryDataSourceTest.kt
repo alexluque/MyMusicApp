@@ -7,9 +7,9 @@ import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.deez
 import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.*
 import com.alexluque.android.mymusicapp.mainactivity.model.network.services.DeezerArtistService
 import com.alexluque.android.mymusicapp.mainactivity.model.network.services.MusicoveryArtistService
-import com.example.android.domain.ArtistDetail
-import com.example.android.domain.RecommendedArtist
-import com.example.android.domain.Artist
+import com.alexluque.android.domain.ArtistDetail
+import com.alexluque.android.domain.RecommendedArtist
+import com.alexluque.android.domain.Artist
 import com.google.gson.internal.LinkedTreeMap
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,8 +26,8 @@ import org.mockito.junit.MockitoJUnitRunner
 import java.util.*
 import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.deezer.Artist as DeezerArtist
 import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.Artist as MusicoveryArtist
-import com.example.android.domain.Artist as DomainArtist
-import com.example.android.domain.Song as DomainSong
+import com.alexluque.android.domain.Artist as DomainArtist
+import com.alexluque.android.domain.Song as DomainSong
 
 @ExperimentalStdlibApi
 @Suppress("UNCHECKED_CAST")

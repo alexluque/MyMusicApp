@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
-import com.example.android.domain.Song
+import com.alexluque.android.domain.Song
 import kotlinx.android.synthetic.main.artist_detail.view.*
 
 class ArtistDetailAdapter(

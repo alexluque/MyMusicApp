@@ -20,7 +20,7 @@ import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailActiv
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment.Companion.FRAGMENT_NAME
-import com.example.android.domain.FavouriteArtist
+import com.alexluque.android.domain.FavouriteArtist
 import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.app_actionbar.view.*
 

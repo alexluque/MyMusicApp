@@ -20,7 +20,7 @@ import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.*
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel.Companion.ARTIST_NAME
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment
 import com.alexluque.android.mymusicapp.mainactivity.ui.search.SearchArtistFragment.Companion.FRAGMENT_NAME
-import com.example.android.domain.Song
+import com.alexluque.android.domain.Song
 import com.google.android.gms.location.LocationServices
 
 

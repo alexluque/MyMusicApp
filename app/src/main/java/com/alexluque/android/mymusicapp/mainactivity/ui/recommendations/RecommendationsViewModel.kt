@@ -8,10 +8,10 @@ import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityContr
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.Event
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.ScopedViewModel
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.extensions.loadImage
-import com.example.android.domain.RecommendedArtist
-import com.example.android.usecases.GetArtistDetail
-import com.example.android.usecases.GetCountry
-import com.example.android.usecases.GetRecommendedArtists
+import com.alexluque.android.domain.RecommendedArtist
+import com.alexluque.android.usecases.GetArtistDetail
+import com.alexluque.android.usecases.GetCountry
+import com.alexluque.android.usecases.GetRecommendedArtists
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

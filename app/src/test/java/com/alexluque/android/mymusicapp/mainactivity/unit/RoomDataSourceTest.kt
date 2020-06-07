@@ -1,8 +1,8 @@
 package com.alexluque.android.mymusicapp.mainactivity.unit
 
 import com.alexluque.android.mymusicapp.mainactivity.model.database.RoomDataSource
-import com.example.android.domain.FavouriteArtist
-import com.example.android.domain.Song
+import com.alexluque.android.domain.FavouriteArtist
+import com.alexluque.android.domain.Song
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest

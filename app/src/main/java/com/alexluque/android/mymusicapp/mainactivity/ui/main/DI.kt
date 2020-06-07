@@ -1,9 +1,9 @@
 package com.alexluque.android.mymusicapp.mainactivity.ui.main
 
 import com.alexluque.android.mymusicapp.mainactivity.di.ListenersModule
-import com.example.android.data.repositories.FavouriteArtistsRepository
-import com.example.android.usecases.GetFavouriteArtistSongs
-import com.example.android.usecases.GetFavouriteArtists
+import com.alexluque.android.data.repositories.FavouriteArtistsRepository
+import com.alexluque.android.usecases.GetFavouriteArtistSongs
+import com.alexluque.android.usecases.GetFavouriteArtists
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent

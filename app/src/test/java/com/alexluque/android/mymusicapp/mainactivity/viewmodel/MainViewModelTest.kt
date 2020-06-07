@@ -3,9 +3,9 @@ package com.alexluque.android.mymusicapp.mainactivity.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.alexluque.android.mymusicapp.mainactivity.ui.main.MainViewModel
-import com.example.android.domain.FavouriteArtist
-import com.example.android.usecases.GetFavouriteArtistSongs
-import com.example.android.usecases.GetFavouriteArtists
+import com.alexluque.android.domain.FavouriteArtist
+import com.alexluque.android.usecases.GetFavouriteArtistSongs
+import com.alexluque.android.usecases.GetFavouriteArtists
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers

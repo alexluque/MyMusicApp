@@ -1,8 +1,7 @@
 package com.alexluque.android.mymusicapp.mainactivity.model.network
 
 import com.alexluque.android.mymusicapp.mainactivity.model.network.services.MapsGeocodingService
-import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
-import com.example.android.data.datasources.GeolocationDataSource
+import com.alexluque.android.data.datasources.GeolocationDataSource
 import retrofit2.Retrofit
 import java.lang.Exception
 

@@ -6,10 +6,10 @@ import androidx.lifecycle.Observer
 import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
 import com.alexluque.android.mymusicapp.mainactivity.ui.common.ConnectivityController
 import com.alexluque.android.mymusicapp.mainactivity.ui.detail.ArtistDetailViewModel
-import com.example.android.domain.Artist
-import com.example.android.domain.ArtistDetail
-import com.example.android.domain.Song
-import com.example.android.usecases.HandleFavourite
+import com.alexluque.android.domain.Artist
+import com.alexluque.android.domain.ArtistDetail
+import com.alexluque.android.domain.Song
+import com.alexluque.android.usecases.HandleFavourite
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

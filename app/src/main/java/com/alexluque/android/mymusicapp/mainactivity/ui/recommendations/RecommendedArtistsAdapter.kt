@@ -7,7 +7,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.alexluque.android.mymusicapp.mainactivity.R
 import com.alexluque.android.mymusicapp.mainactivity.model.network.RetrofitBuilder
-import com.example.android.domain.RecommendedArtist
+import com.alexluque.android.domain.RecommendedArtist
 import kotlinx.android.synthetic.main.recommended_artist.view.*
 import retrofit2.Retrofit
 

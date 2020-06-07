@@ -3,17 +3,17 @@ package com.alexluque.android.mymusicapp.mainactivity.model
 import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.deezer.ArtistData
 import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.deezer.SongData
 import com.alexluque.android.mymusicapp.mainactivity.model.network.entities.musicovery.Artist
-import com.example.android.domain.ArtistDetail
-import com.example.android.domain.FavouriteArtist
-import com.example.android.domain.Genre
-import com.example.android.domain.RecommendedArtist
+import com.alexluque.android.domain.ArtistDetail
+import com.alexluque.android.domain.FavouriteArtist
+import com.alexluque.android.domain.Genre
+import com.alexluque.android.domain.RecommendedArtist
 import com.google.gson.internal.LinkedTreeMap
 import java.util.*
 import com.alexluque.android.mymusicapp.mainactivity.model.database.entities.Artist as RoomArtist
 import com.alexluque.android.mymusicapp.mainactivity.model.database.entities.Song as RoomSong
-import com.example.android.domain.Artist as DomainArtist
-import com.example.android.domain.Artist as DomainArtistInfo
-import com.example.android.domain.Song as DomainSong
+import com.alexluque.android.domain.Artist as DomainArtist
+import com.alexluque.android.domain.Artist as DomainArtistInfo
+import com.alexluque.android.domain.Song as DomainSong
 
 
 fun ArtistData.toArtistDetail(): ArtistDetail = ArtistDetail(id, name, picture_big, picture_medium)

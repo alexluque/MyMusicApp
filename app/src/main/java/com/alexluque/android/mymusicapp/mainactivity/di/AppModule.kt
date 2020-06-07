@@ -6,9 +6,9 @@ import com.alexluque.android.mymusicapp.mainactivity.model.database.FavouritesRo
 import com.alexluque.android.mymusicapp.mainactivity.model.database.RoomDataSource
 import com.alexluque.android.mymusicapp.mainactivity.model.network.DeezerMusicoveryDataSource
 import com.alexluque.android.mymusicapp.mainactivity.model.network.GoogleMapsDataSource
-import com.example.android.data.datasources.GeolocationDataSource
-import com.example.android.data.datasources.LocalDataSource
-import com.example.android.data.datasources.RemoteDataSource
+import com.alexluque.android.data.datasources.GeolocationDataSource
+import com.alexluque.android.data.datasources.LocalDataSource
+import com.alexluque.android.data.datasources.RemoteDataSource
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
