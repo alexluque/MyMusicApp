@@ -81,7 +81,7 @@ class ArtistDetailViewModel(
                     if (ma.mbid.isNotEmpty()) {
                         val info: Artist? = handleFavourite.getArtistInfo(retrofit.musicoveryInstance, ma.mbid)
                         info.let {
-                            ma.genres = it?.genres.toString()
+                            ma.genres = it?.genres.toString().replace(NULL_STRING, EMPTY)
                             ma.region = it?.region?.toString()?.replace(EMPTY_OBJECT, String())?.capitalize(Locale.ROOT)
                             ma.country = it?.country?.toString()?.replace(EMPTY_OBJECT, String())
                         }
@@ -170,5 +170,6 @@ class ArtistDetailViewModel(
         private const val EMPTY_OBJECT = "{}"
         private const val INITIAL_POSITION = 0
         private const val EMPTY = ""
+        private const val NULL_STRING = "null"
     }
 }
