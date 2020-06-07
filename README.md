@@ -13,6 +13,7 @@ You could find different branches following different presentation patterns as w
   * Dependency Injection with Dagger2
   * Testing: Unit, Integration, ViewModels and UI with Espresso
   * Coroutines
+  * Multi-language support: English, Spanish & Catalan
   * ...and a lot of Kotlin (I truly do love Kotlin)
   
   ## App Funcionalities
